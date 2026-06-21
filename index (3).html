@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NestTrack — The all-in-one platform for real estate teams</title>
+<meta name="description" content="NestTrack runs the three things that grow a real estate business — generating quality leads, delivering a standout client experience, and staying in touch to add value — in one platform. Built for agents and teams." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0F1B33; --ink-soft:#42506B; --ink-faint:#7B8699;
+    --paper:#FBF8F3; --paper-2:#F4EEE3; --card:#FFFFFF;
+    --emerald:#1D9E75; --emerald-deep:#0B5E45; --emerald-dk:#065F46;
+    --mist:#E7F1EB; --gold:#BE9C44; --gold-soft:#EFE4C6;
+    --line:#E4DBCD; --line-soft:#EFE9DD;
+    --shadow:0 1px 2px rgba(15,27,51,.04), 0 12px 32px -12px rgba(15,27,51,.12);
+    --shadow-lg:0 2px 4px rgba(15,27,51,.05), 0 30px 60px -24px rgba(15,27,51,.22);
+    --r:18px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'DM Sans',system-ui,sans-serif; font-size:17px; line-height:1.6;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif; font-weight:400; line-height:1.08; margin:0; letter-spacing:-.01em;}
+  p{margin:0;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1140px; margin:0 auto; padding:0 26px;}
+  .eyebrow{font-size:12.5px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:var(--emerald-deep);}
+  .eyebrow.on-dark{color:var(--gold);}
+
+  /* buttons */
+  .btn{display:inline-flex; align-items:center; gap:9px; font-family:'DM Sans',sans-serif; font-weight:600; font-size:15.5px; padding:14px 26px; border-radius:999px; border:1px solid transparent; cursor:pointer; transition:transform .15s ease, box-shadow .15s ease, background .15s ease; white-space:nowrap;}
+  .btn-primary{background:var(--emerald); color:#fff; box-shadow:0 10px 22px -10px rgba(29,158,117,.7);}
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 16px 30px -12px rgba(29,158,117,.75);}
+  .btn-ghost{background:transparent; color:var(--ink); border-color:var(--line);}
+  .btn-ghost:hover{border-color:var(--emerald); color:var(--emerald-deep);}
+  .btn-ghost.on-dark{color:#fff; border-color:rgba(255,255,255,.28);}
+  .btn-ghost.on-dark:hover{border-color:var(--gold); color:var(--gold);}
+  .btn-lg{padding:16px 32px; font-size:16.5px;}
+
+  /* header */
+  header.nav{position:sticky; top:0; z-index:50; background:rgba(251,248,243,.82); backdrop-filter:blur(12px); border-bottom:1px solid transparent; transition:border-color .2s, box-shadow .2s;}
+  header.nav.scrolled{border-color:var(--line-soft); box-shadow:0 6px 20px -16px rgba(15,27,51,.4);}
+  .nav-in{display:flex; align-items:center; justify-content:space-between; height:72px;}
+  .brand{display:flex; align-items:center; gap:11px; font-family:'Fraunces',serif; font-size:23px; font-weight:500; letter-spacing:-.02em; color:var(--ink);}
+  .brand .mark{width:30px; height:30px; flex:none;}
+  .nav-links{display:flex; align-items:center; gap:30px;}
+  .nav-links a.link{font-size:15px; color:var(--ink-soft); font-weight:500; transition:color .15s;}
+  .nav-links a.link:hover{color:var(--emerald-deep);}
+  .nav-toggle{display:none; background:none; border:none; cursor:pointer; padding:8px; color:var(--ink);}
+
+  /* hero */
+  .hero{position:relative; padding:78px 0 64px;}
+  .hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:54px; align-items:center;}
+  .hero h1{font-size:clamp(40px,5.4vw,64px); letter-spacing:-.025em;}
+  .hero h1 em{font-style:italic; color:var(--emerald-deep);}
+  .hero .lead{margin-top:24px; font-size:19px; color:var(--ink-soft); max-width:33ch;}
+  .hero .cta-row{margin-top:34px; display:flex; gap:14px; flex-wrap:wrap;}
+  .hero .micro{margin-top:18px; font-size:13.5px; color:var(--ink-faint); display:flex; align-items:center; gap:8px;}
+  .hero .micro b{color:var(--emerald-deep); font-weight:600;}
+
+  /* hero panel — the lifecycle preview */
+  .stage{position:relative; background:var(--ink); border-radius:24px; padding:30px 28px; box-shadow:var(--shadow-lg); overflow:hidden;}
+  .stage::before{content:""; position:absolute; inset:0; background:radial-gradient(120% 90% at 85% 0%, rgba(29,158,117,.28), transparent 60%); pointer-events:none;}
+  .stage-label{position:relative; font-size:11.5px; letter-spacing:.16em; text-transform:uppercase; color:rgba(255,255,255,.55); font-weight:600; margin-bottom:18px;}
+  .flow{position:relative; display:flex; flex-direction:column; gap:14px;}
+  .flow-rail{position:absolute; left:19px; top:8px; bottom:8px; width:2px; background:linear-gradient(var(--emerald), var(--gold)); opacity:.55;}
+  .step{position:relative; display:flex; gap:15px; align-items:flex-start; padding-left:0;}
+  .step .node{width:40px; height:40px; flex:none; border-radius:11px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); display:flex; align-items:center; justify-content:center; font-size:19px; backdrop-filter:blur(2px);}
+  .step .body{padding-top:2px;}
+  .step .t{color:#fff; font-weight:600; font-size:15px; font-family:'DM Sans',sans-serif;}
+  .step .d{color:rgba(255,255,255,.62); font-size:13px; line-height:1.45; margin-top:2px;}
+
+  /* trust strip */
+  .strip{border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft); background:var(--paper-2);}
+  .strip-in{display:flex; flex-wrap:wrap; gap:14px 40px; align-items:center; justify-content:center; padding:18px 0; font-size:14.5px; color:var(--ink-soft);}
+  .strip-in .pill{display:inline-flex; align-items:center; gap:9px; font-weight:500;}
+  .strip-in .dot{width:6px; height:6px; border-radius:50%; background:var(--emerald);}
+
+  /* section scaffold */
+  section{position:relative;}
+  .sec-pad{padding:88px 0;}
+  .sec-head{max-width:680px;}
+  .sec-head h2{font-size:clamp(30px,3.8vw,42px); margin-top:14px;}
+  .sec-head .sub{margin-top:16px; color:var(--ink-soft); font-size:18px;}
+
+  /* PILLARS — the spine */
+  .pillars{background:linear-gradient(var(--paper), #fff 60%);}
+  .pillar{position:relative; display:grid; grid-template-columns:96px 1fr; gap:8px; padding:30px 0;}
+  .pillar + .pillar{border-top:1px solid var(--line-soft);}
+  .rail{position:relative;}
+  .rail .num{font-family:'Fraunces',serif; font-size:30px; color:var(--emerald-deep); font-weight:500; position:relative; z-index:2;}
+  .rail .tag{font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); font-weight:700; margin-top:4px;}
+  .rail::before{content:""; position:absolute; left:13px; top:46px; bottom:-30px; width:2px; background:var(--line); z-index:0;}
+  .pillar:last-child .rail::before{display:none;}
+  .rail .ring{position:absolute; left:5px; top:50px; width:18px; height:18px; border-radius:50%; border:2px solid var(--emerald); background:var(--paper); z-index:1;}
+  .pillar-body h3{font-size:27px; letter-spacing:-.015em;}
+  .pillar-body .pain{margin-top:10px; color:var(--ink-soft); font-size:17px; max-width:60ch;}
+  .pillar-body .pain b{color:var(--ink); font-weight:600;}
+  .feat{margin-top:22px; display:grid; grid-template-columns:1fr 1fr; gap:13px;}
+  .feat .f{display:flex; gap:12px; align-items:flex-start; background:var(--card); border:1px solid var(--line-soft); border-radius:14px; padding:15px 16px; box-shadow:var(--shadow);}
+  .feat .f .ic{width:34px; height:34px; flex:none; border-radius:9px; background:var(--mist); color:var(--emerald-deep); display:flex; align-items:center; justify-content:center; font-size:17px;}
+  .feat .f .ft{font-weight:600; font-size:15px; color:var(--ink);}
+  .feat .f .fd{font-size:13.5px; color:var(--ink-soft); line-height:1.45; margin-top:2px;}
+
+  /* stack / replaces */
+  .stack{background:var(--ink); color:#fff;}
+  .stack .sec-head h2{color:#fff;}
+  .stack .sec-head .sub{color:rgba(255,255,255,.66);}
+  .stack-grid{margin-top:42px; display:grid; grid-template-columns:1.1fr .9fr; gap:46px; align-items:center;}
+  .replace-list{display:flex; flex-wrap:wrap; gap:10px;}
+  .replace-list .chip{font-size:14px; padding:9px 15px; border-radius:999px; border:1px solid rgba(255,255,255,.16); color:rgba(255,255,255,.82); position:relative;}
+  .replace-list .chip s{color:rgba(255,255,255,.4); text-decoration-color:var(--gold);}
+  .merge{background:linear-gradient(180deg, rgba(29,158,117,.16), rgba(29,158,117,.04)); border:1px solid rgba(29,158,117,.4); border-radius:20px; padding:30px; text-align:center;}
+  .merge .big{font-family:'Fraunces',serif; font-size:46px; color:#fff; line-height:1;}
+  .merge .big span{color:var(--emerald); font-style:italic;}
+  .merge .cap{margin-top:10px; color:rgba(255,255,255,.7); font-size:15px;}
+  .merge .note{margin-top:18px; font-size:13px; color:rgba(255,255,255,.5);}
+
+  /* teams */
+  .teams-grid{margin-top:42px; display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  .tcard{background:var(--card); border:1px solid var(--line-soft); border-radius:var(--r); padding:26px; box-shadow:var(--shadow);}
+  .tcard .ic{width:44px; height:44px; border-radius:12px; background:var(--mist); color:var(--emerald-deep); display:flex; align-items:center; justify-content:center; font-size:21px; margin-bottom:16px;}
+  .tcard h3{font-size:21px;}
+  .tcard p{margin-top:9px; color:var(--ink-soft); font-size:15px;}
+
+  /* pricing */
+  .pricing{background:var(--paper-2);}
+  .price-grid{margin-top:42px; display:grid; grid-template-columns:repeat(2,1fr); gap:20px; max-width:760px; margin-left:auto; margin-right:auto;}
+  .pcard{background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:30px; position:relative;}
+  .pcard.feature{border-color:var(--emerald); box-shadow:0 24px 50px -24px rgba(29,158,117,.45);}
+  .pcard .badge{position:absolute; top:-12px; left:30px; background:var(--emerald); color:#fff; font-size:11.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:5px 13px; border-radius:999px;}
+  .pcard .pname{font-family:'Fraunces',serif; font-size:24px;}
+  .pcard .pwho{color:var(--ink-faint); font-size:14px; margin-top:2px;}
+  .pcard .pprice{margin-top:18px; display:flex; align-items:baseline; gap:6px;}
+  .pcard .pprice .amt{font-family:'Fraunces',serif; font-size:42px; color:var(--ink);}
+  .pcard .pprice .per{color:var(--ink-faint); font-size:14px;}
+  .pcard .pmeta{font-size:13.5px; color:var(--ink-soft); margin-top:6px;}
+  .pcard ul{list-style:none; padding:0; margin:20px 0 0;}
+  .pcard li{display:flex; gap:10px; align-items:flex-start; font-size:14.5px; color:var(--ink-soft); padding:6px 0;}
+  .pcard li svg{flex:none; margin-top:3px;}
+  .price-foot{text-align:center; margin-top:26px; color:var(--ink-soft); font-size:15px;}
+  .price-foot b{color:var(--ink);}
+
+  /* CTA band */
+  .cta-band{background:linear-gradient(120deg, var(--emerald-deep), var(--emerald)); color:#fff; border-radius:28px; padding:58px 40px; text-align:center; box-shadow:var(--shadow-lg);}
+  .cta-band h2{color:#fff; font-size:clamp(28px,3.6vw,40px);}
+  .cta-band p{margin-top:14px; color:rgba(255,255,255,.85); max-width:46ch; margin-left:auto; margin-right:auto; font-size:17px;}
+  .cta-band .cta-row{margin-top:28px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap;}
+  .cta-band .btn-primary{background:#fff; color:var(--emerald-deep);}
+  .cta-band .btn-primary:hover{background:var(--gold-soft);}
+
+  /* footer */
+  footer{background:var(--ink); color:rgba(255,255,255,.7); padding:56px 0 34px; margin-top:0;}
+  .foot-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:34px; padding-bottom:30px; border-bottom:1px solid rgba(255,255,255,.12);}
+  footer .brand{color:#fff; margin-bottom:14px;}
+  footer .fblurb{font-size:14.5px; color:rgba(255,255,255,.6); max-width:38ch;}
+  footer h4{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.45); margin:0 0 14px; font-weight:700; font-family:'DM Sans',sans-serif;}
+  footer .fcol a, footer .fcol p{display:block; font-size:14.5px; color:rgba(255,255,255,.72); padding:5px 0;}
+  footer .fcol a:hover{color:var(--gold);}
+  .foot-bottom{display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; padding-top:22px; font-size:13px; color:rgba(255,255,255,.45);}
+
+  /* ===== workflow showcase (faithful to the real app) ===== */
+  .work{background:linear-gradient(180deg,#fff, var(--paper));}
+  .video-frame{position:relative; margin:36px auto 0; max-width:880px; aspect-ratio:16/9; border-radius:20px; overflow:hidden; background:var(--ink); box-shadow:var(--shadow-lg); display:flex; align-items:center; justify-content:center; border:1px solid var(--line); text-decoration:none;}
+  .video-frame::before{content:""; position:absolute; inset:0; background:radial-gradient(120% 90% at 50% 28%, rgba(29,158,117,.28), transparent 60%);}
+  .video-frame .play{position:relative; display:flex; flex-direction:column; align-items:center; gap:13px; color:#fff;}
+  .video-frame .pbtn{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.13);border:1.5px solid rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);transition:transform .2s, background .2s, border-color .2s;}
+  .video-frame:hover .pbtn{transform:scale(1.06);background:var(--emerald);border-color:var(--emerald);}
+  .video-frame .vlabel{font-size:15.5px;font-weight:600;}
+  .video-frame .vsub{font-size:12.5px;color:rgba(255,255,255,.62);}
+
+  /* vertical connected flow — the spine literally links each tool */
+  .flow{position:relative; max-width:780px; margin:38px auto 0;}
+  .flow::before{content:""; position:absolute; left:23px; top:18px; bottom:120px; width:2px; background:linear-gradient(#2E7D6B,#BE6A2E); opacity:.4;}
+  .fstep{position:relative; padding:0 0 34px 60px;}
+  .fstep .sd{position:absolute; left:12px; top:2px; width:24px; height:24px; border-radius:50%; background:#fff; border:2px solid #2E7D6B; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#2E7D6B; z-index:2;}
+  .fstep .sl{font-family:'Fraunces',serif; font-size:21px; color:var(--ink); line-height:1.15;}
+  .fstep .sx{font-size:14.5px; color:var(--ink-soft); margin:6px 0 16px; max-width:62ch; line-height:1.55;}
+  .fstep .sx b{color:#1F6B5C; font-weight:600;}
+
+  /* app frame */
+  .app{background:#FBF8F2; border:1px solid #E8E1D3; border-radius:14px; overflow:hidden; box-shadow:var(--shadow);}
+  .appbar{display:flex; align-items:center; gap:8px; padding:9px 13px; background:#F2ECE0; border-bottom:1px solid #E8E1D3;}
+  .appbar .dots{display:flex; gap:5px;}
+  .appbar .dots i{width:9px;height:9px;border-radius:50%;background:#D8CFBE;}
+  .appbar .at{font-size:11.5px; font-weight:600; color:#8A8275;}
+  .apppad{padding:14px;}
+  .mcap{margin-top:11px; font-size:13px; color:var(--ink-soft); line-height:1.5;}
+  .mcap b{color:#1F6B5C; font-weight:600;}
+
+  /* badges */
+  .bdg{font-size:10.5px; font-weight:700; padding:3px 8px; border-radius:6px; white-space:nowrap; display:inline-block;}
+  .bdg.amber{background:#FBEFD6; color:#96651B;} .bdg.blue{background:#E7F0FB; color:#2B6CB0;}
+  .bdg.green{background:#E1F0E9; color:#1F6B5C;} .bdg.red{background:#FCE7E5; color:#B23A36;}
+  .bdg.terra{background:#F6E6D6; color:#A85A22;}
+
+  /* deal tracker */
+  .deal-hd{background:linear-gradient(120deg,#C47A33,#A65821); color:#fff; border-radius:11px; padding:13px 15px; display:flex; justify-content:space-between; align-items:flex-start; gap:12px;}
+  .deal-hd .addr{font-family:'Fraunces',serif; font-size:17px; line-height:1.15;}
+  .deal-hd .sub{font-size:11.5px; opacity:.86; margin-top:3px;}
+  .deal-hd .uc{font-size:10.5px; font-weight:700; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.45); padding:5px 10px; border-radius:8px; white-space:nowrap;}
+  .stagebar{display:flex; align-items:center; gap:9px; margin:11px 0;}
+  .stagebar .lab{font-size:10px; letter-spacing:.05em; color:#9A917F; font-weight:700;}
+  .stagebar .sel{flex:1; background:#fff; border:1px solid #E3DACB; border-radius:8px; padding:7px 11px; font-weight:600; color:#26303A; font-size:12.5px; display:flex; justify-content:space-between;}
+  .dgrid{display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin-bottom:12px;}
+  .dgrid .dc{background:#fff; border:1px solid #ECE5D8; border-radius:8px; padding:6px 8px;}
+  .dgrid .dc .k{font-size:8.5px; letter-spacing:.03em; color:#A99F8B; font-weight:700; text-transform:uppercase;}
+  .dgrid .dc .v{font-size:12px; color:#26303A; font-weight:600; margin-top:1px;}
+  .dtabs{display:flex; border-bottom:1px solid #ECE5D8; margin-bottom:11px;}
+  .dtabs .dt{font-size:12px; padding:7px 12px; color:#8A8275; font-weight:500;}
+  .dtabs .dt.on{color:#1F6B5C; border-bottom:2px solid #2E7D6B; font-weight:700;}
+  .needed{display:flex;align-items:center;justify-content:space-between;font-size:12.5px;font-weight:700;color:#26303A;margin-bottom:7px;}
+  .needed .ct{font-size:10.5px;color:#8A8275;font-weight:600;background:#F2ECE0;padding:2px 8px;border-radius:10px;}
+  .chk{display:flex;align-items:center;gap:9px;padding:5px 0;font-size:12.5px;color:#3A4048;}
+  .chk .box{width:14px;height:14px;border-radius:4px;border:1.5px solid #CFC5B0;flex:none;}
+  .tcbox{margin-top:11px;border:1px solid #E8E1D3;border-radius:10px;padding:11px 12px;background:#fff;}
+  .tcbox .tch{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:700;color:#26303A;margin-bottom:8px;}
+  .tcbox .on{font-size:10px;font-weight:700;color:#1F6B5C;background:#E1F0E9;padding:2px 9px;border-radius:10px;}
+  .tcrow{display:flex;align-items:center;gap:8px;font-size:12px;padding:5px 0;border-top:1px dashed #EFE8DA;}
+  .tcrow:first-of-type{border-top:none;}
+  .tcrow .when{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:2px 7px;border-radius:6px;flex:none;}
+  .tcrow .when.now{background:#E1F0E9;color:#1F6B5C;} .tcrow .when.up{background:#F2ECE0;color:#8A8275;}
+  .tcrow .tt{color:#3A4048;flex:1;} .tcrow .tt b{color:#26303A;}
+
+  /* offer manager */
+  .om-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}
+  .om-hd .t{font-family:'Fraunces',serif;font-size:17px;color:#26303A;}
+  .om-hd .nb{font-size:11px;font-weight:700;color:#fff;background:#2E7D6B;padding:6px 11px;border-radius:8px;}
+  .olist{background:#fff;border:1px solid #ECE5D8;border-radius:11px;padding:12px;margin-bottom:9px;}
+  .olist .top{display:flex;gap:11px;align-items:flex-start;}
+  .olist .ph{width:46px;height:46px;border-radius:9px;flex:none;background:linear-gradient(135deg,#D8E3DA,#C2D2C6);display:flex;align-items:center;justify-content:center;font-size:20px;}
+  .olist .oa{font-weight:700;font-size:13.5px;color:#26303A;}
+  .olist .oc{font-size:12px;color:#8A8275;margin-top:1px;}
+  .obtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .obtns .ob{font-size:11px;font-weight:600;padding:5px 10px;border-radius:7px;border:1px solid #E3DACB;color:#5A5346;background:#fff;}
+  .obtns .ob.g{background:#2E7D6B;color:#fff;border-color:#2E7D6B;}
+  .obtns .ob.cd{color:#1F6B5C;border-color:#BFD9CD;background:#EEF6F1;}
+
+  /* client timeline */
+  .ct-hd{background:linear-gradient(120deg,#C47A33,#A65821);color:#fff;border-radius:11px;padding:14px 16px;}
+  .ct-hd .kick{font-size:10px;font-weight:700;letter-spacing:.07em;opacity:.85;}
+  .ct-hd .big{font-family:'Fraunces',serif;font-size:24px;margin-top:3px;}
+  .ct-hd .ca{font-size:11.5px;opacity:.85;margin-top:2px;}
+  .mile{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 2px;border-bottom:1px solid #EFE8DA;font-size:12.5px;}
+  .mile .mn{display:flex;align-items:center;gap:9px;color:#26303A;font-weight:600;}
+  .mile .mn .em{font-size:15px;}
+  .mile .md{font-size:11px;color:#9A917F;font-weight:400;}
+  .mile .away{font-size:10.5px;font-weight:700;color:#8A8275;}
+  .mile .away.done{color:#1F6B5C;}
+  .stepper{display:flex;align-items:flex-start;gap:0;margin-top:14px;overflow-x:auto;padding-bottom:4px;}
+  .stp{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:52px;position:relative;}
+  .stp::after{content:"";position:absolute;top:13px;left:50%;width:100%;height:2px;background:#E3DACB;z-index:0;}
+  .stp:last-child::after{display:none;}
+  .stp.done::after{background:#BE6A2E;}
+  .stp .c{width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;z-index:1;position:relative;}
+  .stp.done .c{background:#BE6A2E;color:#fff;}
+  .stp.now .c{background:#fff;border:2px solid #BE6A2E;color:#BE6A2E;box-shadow:0 0 0 4px #F6E6D6;}
+  .stp.todo .c{background:#FBF1DF;border:1px solid #E8D4B0;color:#C79A4E;}
+  .stp .sn{font-size:9px;color:#8A8275;text-align:center;line-height:1.1;}
+  .stp.now .sn{color:#BE6A2E;font-weight:700;}
+
+  /* update email (branded) */
+  .em-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .em-hd .t{font-family:'Fraunces',serif;font-size:17px;color:#26303A;}
+  .em-meta{font-size:11.5px;color:#8A8275;margin-bottom:3px;}
+  .em-sub{font-size:13px;font-weight:700;color:#26303A;margin:8px 0 12px;}
+  .em-brand{background:#2E7D6B;color:#fff;border-radius:10px 10px 0 0;padding:16px;text-align:center;}
+  .em-brand .av{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.25);margin:0 auto 7px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+  .em-brand .nm{font-family:'Fraunces',serif;font-size:16px;}
+  .em-brand .br{font-size:11px;opacity:.85;}
+  .em-body{background:#fff;border:1px solid #ECE5D8;border-top:none;border-radius:0 0 10px 10px;padding:15px;}
+  .em-hero{background:#EAF5EF;border-radius:9px;padding:14px;text-align:center;}
+  .em-hero .h{font-family:'Fraunces',serif;font-size:17px;color:#1F6B5C;}
+  .em-hero .p{font-size:12px;color:#5A6B62;margin-top:3px;}
+  .em-dates{margin-top:12px;}
+  .em-dates .ed{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid #F1EADC;}
+  .em-dates .ed .l{color:#5A5346;} .em-dates .ed .v{font-weight:700;color:#26303A;}
+  .em-actions{display:flex;gap:8px;margin-top:12px;}
+  .em-actions .a{flex:1;text-align:center;font-size:12px;font-weight:700;padding:9px;border-radius:8px;}
+  .em-actions .a.send{background:#2E7D6B;color:#fff;} .em-actions .a.cx{background:#fff;border:1px solid #E3DACB;color:#5A5346;}
+
+  /* leaderboard */
+  .lb-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;flex-wrap:wrap;gap:8px;}
+  .lb-hd .t{font-family:'Fraunces',serif;font-size:17px;color:#26303A;display:flex;align-items:center;gap:7px;}
+  .lb-hd .ctrls{display:flex;gap:6px;}
+  .lb-hd .lc{font-size:10.5px;font-weight:600;padding:5px 9px;border-radius:7px;border:1px solid #E3DACB;color:#5A5346;background:#fff;}
+  .lb-hd .lc.g{background:#2E7D6B;color:#fff;border-color:#2E7D6B;}
+  .lrow{background:#fff;border:1px solid #ECE5D8;border-radius:11px;padding:13px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .lrow.you{border:1.5px solid #2E7D6B;}
+  .lrow .who{display:flex;align-items:center;gap:11px;}
+  .lrow .medal{font-size:19px;}
+  .lrow .nm{font-weight:700;color:#26303A;font-size:14px;}
+  .lrow .act{font-size:11px;color:#8A8275;margin-top:2px;}
+  .lrow .act .you-t{color:#1F6B5C;font-weight:600;}
+  .lrow .stats{text-align:right;display:flex;gap:18px;align-items:center;}
+  .lrow .st .l{font-size:9px;letter-spacing:.04em;color:#A99F8B;text-transform:uppercase;font-weight:700;}
+  .lrow .st .v{font-family:'Fraunces',serif;font-size:18px;color:#26303A;}
+  /* reveal */
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1; transform:none;}
+
+  @media (max-width:900px){
+    .hero-grid{grid-template-columns:1fr; gap:38px;}
+    .stack-grid{grid-template-columns:1fr; gap:30px;}
+    .teams-grid{grid-template-columns:1fr;}
+    .mocks{grid-template-columns:1fr;}
+    .feat{grid-template-columns:1fr;}
+    .price-grid{grid-template-columns:1fr;}
+    .foot-grid{grid-template-columns:1fr 1fr;}
+    .nav-links{position:fixed; inset:72px 0 auto 0; background:var(--paper); flex-direction:column; align-items:stretch; gap:0; padding:8px 26px 22px; border-bottom:1px solid var(--line); box-shadow:var(--shadow); transform:translateY(-130%); transition:transform .3s ease; }
+    .nav-links.open{transform:none;}
+    .nav-links a.link{padding:14px 0; border-bottom:1px solid var(--line-soft);}
+    .nav-links .btn{margin-top:14px; justify-content:center;}
+    .nav-toggle{display:block;}
+  }
+  @media (max-width:560px){
+    body{font-size:16px;}
+    .sec-pad{padding:62px 0;}
+    .pillar{grid-template-columns:62px 1fr;}
+    .rail .num{font-size:24px;}
+    .cta-band{padding:44px 24px;}
+    .foot-grid{grid-template-columns:1fr;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{scroll-behavior:auto;}
+    .reveal{opacity:1; transform:none; transition:none;}
+    .btn{transition:none;}
+  }
+  :focus-visible{outline:2.5px solid var(--emerald); outline-offset:3px; border-radius:6px;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top" aria-label="NestTrack home">
+      <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <rect width="32" height="32" rx="9" fill="#0F1B33"/>
+        <path d="M8 21V13.5L16 8l8 5.5V21" stroke="#1D9E75" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="16" cy="18.5" r="2.4" fill="#BE9C44"/>
+      </svg>
+      NestTrack
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <nav class="nav-links" id="navLinks">
+      <a class="link" href="#how">How it works</a>
+      <a class="link" href="#stack">All-in-one</a>
+      <a class="link" href="#teams">For teams</a>
+      <a class="link" href="#pricing">Pricing</a>
+      <a class="btn btn-primary" href="#get">Get founding access</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="reveal in">
+      <span class="eyebrow">All-in-one platform for agents &amp; teams</span>
+      <h1 style="margin-top:18px;">Three things grow a real estate business.<br><em>NestTrack runs all three.</em></h1>
+      <p class="lead">Generate quality leads, deliver a client experience that earns referrals, and stay in touch long after closing — from one platform instead of six.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary btn-lg" href="#get">Get founding access</a>
+        <a class="btn btn-ghost btn-lg" href="#workflow">See how it works</a>
+      </div>
+      <p class="micro"><span>✓</span> <b>30-day free trial</b> &nbsp;·&nbsp; No long-term contract &nbsp;·&nbsp; Built by a producing agent</p>
+    </div>
+    <div class="reveal in" aria-hidden="true">
+      <div class="stage">
+        <div class="stage-label">One connected client lifecycle</div>
+        <div class="flow">
+          <div class="flow-rail"></div>
+          <div class="step"><div class="node">🎯</div><div class="body"><div class="t">Lead comes in</div><div class="d">Open house, referral, or your capture link — routed instantly with a push + email.</div></div></div>
+          <div class="step"><div class="node">📂</div><div class="body"><div class="t">Goes under contract</div><div class="d">A deal auto-builds, dates sync, the client gets branded updates at every milestone.</div></div></div>
+          <div class="step"><div class="node">🤝</div><div class="body"><div class="t">Closes &amp; stays close</div><div class="d">Moves to past-client nurture — mail, voicemail, and newsletters on autopilot.</div></div></div>
+          <div class="step"><div class="node">🔁</div><div class="body"><div class="t">Refers the next one</div><div class="d">Because you never went quiet. The cycle starts again.</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="strip">
+  <div class="wrap strip-in">
+    <span class="pill"><span class="dot"></span> Lead capture &amp; routing</span>
+    <span class="pill"><span class="dot"></span> Deal &amp; transaction pipeline</span>
+    <span class="pill"><span class="dot"></span> Seller reporting</span>
+    <span class="pill"><span class="dot"></span> Automated follow-up</span>
+    <span class="pill"><span class="dot"></span> Direct mail &amp; voicemail</span>
+    <span class="pill"><span class="dot"></span> Team accountability</span>
+  </div>
+</div>
+
+<!-- PILLARS -->
+<section class="pillars sec-pad" id="how">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">The three pillars</span>
+      <h2>A business is won in three places. So that's how NestTrack is built.</h2>
+      <p class="sub">These aren't features bolted together — they're the lifecycle of every client you'll ever serve, run as one connected system.</p>
+    </div>
+
+    <div style="margin-top:46px;">
+
+      <!-- PILLAR 1 -->
+      <div class="pillar reveal">
+        <div class="rail"><div class="num">01</div><div class="tag">Attract</div><span class="ring"></span></div>
+        <div class="pillar-body">
+          <h3>Generate high-quality leads</h3>
+          <p class="pain">Leads arrive from everywhere — and that's exactly how they slip through the cracks. <b>NestTrack catches every one and puts it in front of the right agent in seconds</b>, so speed-to-lead stops being a wish.</p>
+          <div class="feat">
+            <div class="f"><div class="ic">🏡</div><div><div class="ft">Open house &amp; capture pages</div><div class="fd">Branded sign-in and landing pages that turn foot traffic into contacts.</div></div></div>
+            <div class="f"><div class="ic">⚡</div><div><div class="ft">Instant lead routing</div><div class="fd">New leads fire a push + email the moment they land — no inbox archaeology.</div></div></div>
+            <div class="f"><div class="ic">🔗</div><div><div class="ft">Personal capture links</div><div class="fd">Every agent gets their own lead link for ads, bios, and QR codes.</div></div></div>
+            <div class="f"><div class="ic">📥</div><div><div class="ft">Referral &amp; pool distribution</div><div class="fd">Pull in referral-network leads and auto-distribute to the team.</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILLAR 2 -->
+      <div class="pillar reveal">
+        <div class="rail"><div class="num">02</div><div class="tag">Serve</div><span class="ring"></span></div>
+        <div class="pillar-body">
+          <h3>Deliver a high-level client experience</h3>
+          <p class="pain">Most deals lose the client somewhere in the middle — the silent stretch between offer and keys. <b>NestTrack runs the transaction on rails and keeps clients in the loop automatically</b>, so "what's happening with my home?" stops being a text you dread.</p>
+          <div class="feat">
+            <div class="f"><div class="ic">📊</div><div><div class="ft">Auto-building deal pipeline</div><div class="fd">A deal creates itself on contract — key dates sync, nothing gets forgotten.</div></div></div>
+            <div class="f"><div class="ic">✉️</div><div><div class="ft">Branded milestone updates</div><div class="fd">Clients get polished, on-brand emails at every step of the transaction.</div></div></div>
+            <div class="f"><div class="ic">📝</div><div><div class="ft">Seller reports</div><div class="fd">Showing feedback pulled in and summarized into reports that win renewals.</div></div></div>
+            <div class="f"><div class="ic">🗂️</div><div><div class="ft">Built-in transaction coordination</div><div class="fd">Document auto-fill and party emails so the paperwork runs itself.</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILLAR 3 -->
+      <div class="pillar reveal">
+        <div class="rail"><div class="num">03</div><div class="tag">Retain</div><span class="ring"></span></div>
+        <div class="pillar-body">
+          <h3>Stay in touch &amp; keep adding value</h3>
+          <p class="pain">Every agent knows the past database is where the next deal lives — and almost nobody works it consistently. <b>NestTrack keeps you in front of past clients without you lifting a finger</b>, so referrals become a system, not a hope.</p>
+          <div class="feat">
+            <div class="f"><div class="ic">🤖</div><div><div class="ft">Smart Plans automation</div><div class="fd">Set-and-forget touch sequences that run for every contact, every stage.</div></div></div>
+            <div class="f"><div class="ic">📮</div><div><div class="ft">Direct mail &amp; voicemail drops</div><div class="fd">Send physical mail and ringless voicemails right from the platform.</div></div></div>
+            <div class="f"><div class="ic">📰</div><div><div class="ft">Newsletters &amp; database cadence</div><div class="fd">Keep a steady, valuable rhythm in front of your whole sphere.</div></div></div>
+            <div class="f"><div class="ic">♻️</div><div><div class="ft">Past-client conversion</div><div class="fd">Closed clients roll into nurture automatically — and come back.</div></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WORKFLOW SHOWCASE -->
+<section class="work sec-pad" id="workflow">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-left:auto;margin-right:auto;text-align:center;">
+      <span class="eyebrow">See it in action</span>
+      <h2>One record. Your whole business.</h2>
+      <p class="sub" style="margin-left:auto;margin-right:auto;">Watch a single deal move through the platform — and notice how nothing is ever entered twice. Update the deal once, and your client's view, your team's numbers, and the next email all update themselves.</p>
+    </div>
+
+    <a class="video-frame reveal" href="https://youtu.be/REPLACE_WITH_YOUR_VIDEO" target="_blank" rel="noopener" aria-label="Watch the NestTrack tour">
+      <span class="play">
+        <span class="pbtn"><svg width="25" height="25" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+        <span class="vlabel">Watch the 2-minute tour</span>
+        <span class="vsub">See a lead go from offer to closing</span>
+      </span>
+    </a>
+
+    <div class="flow">
+
+      <!-- STEP 1: OFFER MANAGER -->
+      <div class="fstep reveal">
+        <span class="sd">1</span>
+        <div class="sl">It starts in the Offer Manager.</div>
+        <div class="sx">Every listing and its offers live in one place. Compare terms, send the MLS offer link, generate an open-house QR — then <b>hit Create Deal and the transaction file builds itself.</b></div>
+        <div class="app">
+          <div class="appbar"><span class="dots"><i></i><i></i><i></i></span><span class="at">Offers</span></div>
+          <div class="apppad">
+            <div class="om-hd"><span class="t">Offer Management</span><span class="nb">+ New Listing</span></div>
+            <div class="olist">
+              <div class="top"><span class="ph">🏡</span><div><div class="oa">20514 Mountville Ave</div><div class="oc">Listing client · <span class="bdg red" style="margin-left:2px;">5 offers</span></div></div></div>
+              <div class="obtns"><span class="ob g">View Offers</span><span class="ob">MLS Offer Link</span><span class="ob">Open House QR</span><span class="ob">Seller Reports</span><span class="ob cd">Create Deal</span></div>
+            </div>
+            <div class="olist">
+              <div class="top"><span class="ph">🏠</span><div><div class="oa">1622 Winchester Ave</div><div class="oc">Listing client · <span class="bdg red" style="margin-left:2px;">1 offer</span></div></div></div>
+              <div class="obtns"><span class="ob g">View Offers</span><span class="ob">MLS Offer Link</span><span class="ob">Open House QR</span><span class="ob cd">Create Deal</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="mcap"><b>Connects to:</b> Deal Tracker — the accepted offer becomes the deal, terms and parties carried over.</div>
+      </div>
+
+      <!-- STEP 2: DEAL TRACKER -->
+      <div class="fstep reveal">
+        <span class="sd">2</span>
+        <div class="sl">The deal is your command center.</div>
+        <div class="sx">Stage, key dates, and a live checklist — all in one view. Your <b>AI Transaction Coordinator</b> watches the dates and drafts what's next: schedule the inspection, confirm the appraisal, send the response — even drafts the documents.</div>
+        <div class="app">
+          <div class="appbar"><span class="dots"><i></i><i></i><i></i></span><span class="at">Deal Tracker</span></div>
+          <div class="apppad">
+            <div class="deal-hd"><div><div class="addr">1622 Winchester Ave</div><div class="sub">Listing client · Seller · Step 10</div></div><span class="uc">Under Contract</span></div>
+            <div class="stagebar"><span class="lab">STAGE</span><span class="sel">10 · Inspection Phase <span style="color:#A99F8B;">▾</span></span></div>
+            <div class="dgrid">
+              <div class="dc"><div class="k">Contract</div><div class="v">06/15</div></div>
+              <div class="dc"><div class="k">Earnest</div><div class="v">06/19</div></div>
+              <div class="dc"><div class="k">Inspection</div><div class="v">06/22</div></div>
+              <div class="dc"><div class="k">Appraisal</div><div class="v">06/26</div></div>
+              <div class="dc"><div class="k">Financing</div><div class="v">07/05</div></div>
+              <div class="dc"><div class="k">Walkthrough</div><div class="v">07/09</div></div>
+              <div class="dc"><div class="k">Closing</div><div class="v">07/10</div></div>
+              <div class="dc" style="background:#F4EEE3;border-style:dashed;"><div class="k">&nbsp;</div><div class="v" style="color:#A99F8B;">+ add</div></div>
+            </div>
+            <div class="dtabs"><span class="dt on">Timeline</span><span class="dt">Parties</span><span class="dt">Docs</span><span class="dt">Comms</span></div>
+            <div class="needed"><span>✅ What's Needed</span><span class="ct">5 / 11</span></div>
+            <div class="chk"><span class="box"></span> Inspection</div>
+            <div class="chk"><span class="box"></span> Appraisal</div>
+            <div class="chk"><span class="box"></span> Clear to close</div>
+            <div class="tcbox">
+              <div class="tch"><span>🤖 AI Transaction Coordinator</span><span class="on">On</span></div>
+              <div class="tcrow"><span class="when now">Now</span><span class="tt"><b>Inspection resolution / repairs</b> · by 6/25</span><span class="bdg green">Draft</span></div>
+              <div class="tcrow"><span class="when now">Now</span><span class="tt"><b>Confirm appraisal ordered</b> · by 6/23</span><span class="bdg green">Draft</span></div>
+              <div class="tcrow"><span class="when up">Soon</span><span class="tt">Financing check-in · by 7/3</span></div>
+              <div class="tcrow"><span class="when up">Soon</span><span class="tt">Closing check-in (all parties) · by 7/8</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="mcap"><b>Connects to:</b> the Client Timeline + auto-emails — the moment you update a date or stage here, the client's view updates too.</div>
+      </div>
+
+      <!-- STEP 3: CLIENT TIMELINE -->
+      <div class="fstep reveal">
+        <span class="sd">3</span>
+        <div class="sl">Your client sees it — automatically.</div>
+        <div class="sx">This is the magic: <b>update the deal and the client's own timeline updates itself.</b> Same dates, same stage, zero re-entry. They always know what's done, what's next, and how many days to closing — without a single "any update?" text.</div>
+        <div class="app">
+          <div class="appbar"><span class="dots"><i></i><i></i><i></i></span><span class="at">Client View · live</span></div>
+          <div class="apppad">
+            <div class="ct-hd"><div class="kick">🏡 SELLING — UNDER CONTRACT</div><div class="big">28 days to closing</div><div class="ca">179 Marina Point Drive</div></div>
+            <div style="margin-top:12px;">
+              <div class="mile"><span class="mn"><span class="em">✍️</span> Acceptance Date <span class="md">· Jun 18</span></span><span class="away done">✓ Done</span></div>
+              <div class="mile"><span class="mn"><span class="em">💰</span> Earnest Money Due <span class="md">· Jun 25</span></span><span class="away">5d away</span></div>
+              <div class="mile"><span class="mn"><span class="em">🔍</span> Inspection Deadline <span class="md">· Jun 25</span></span><span class="away">5d away</span></div>
+              <div class="mile"><span class="mn"><span class="em">🏛️</span> Appraisal Deadline <span class="md">· Jul 9</span></span><span class="away">19d away</span></div>
+              <div class="mile" style="border:none;"><span class="mn"><span class="em">🔑</span> Closing Date <span class="md">· Jul 18</span></span><span class="away">28d away</span></div>
+            </div>
+            <div class="stepper">
+              <div class="stp done"><span class="c">✓</span><span class="sn">Listing</span></div>
+              <div class="stp done"><span class="c">✓</span><span class="sn">Go Live</span></div>
+              <div class="stp done"><span class="c">✓</span><span class="sn">Showings</span></div>
+              <div class="stp done"><span class="c">✓</span><span class="sn">Under<br>Contract</span></div>
+              <div class="stp now"><span class="c">🔍</span><span class="sn">Inspection</span></div>
+              <div class="stp todo"><span class="c">🏛️</span><span class="sn">Appraisal</span></div>
+              <div class="stp todo"><span class="c">🏁</span><span class="sn">Final</span></div>
+              <div class="stp todo"><span class="c">🔑</span><span class="sn">Closing</span></div>
+            </div>
+            <div style="font-size:10px;letter-spacing:.06em;color:#A99F8B;font-weight:700;margin-top:12px;">STEP 9 OF 13</div>
+          </div>
+        </div>
+        <div class="mcap"><b>Fed by:</b> your Deal Tracker. One source of truth — you update it, they see it.</div>
+      </div>
+
+      <!-- STEP 4: UPDATE EMAIL -->
+      <div class="fstep reveal">
+        <span class="sd">4</span>
+        <div class="sl">And the updates write themselves.</div>
+        <div class="sx">When the deal hits a milestone, NestTrack drafts a polished, on-brand email — pulling the real dates straight from the deal and spelling out exactly what happens next. <b>You review and approve; it goes out in your brand,</b> with a video if you want one.</div>
+        <div class="app">
+          <div class="appbar"><span class="dots"><i></i><i></i><i></i></span><span class="at">Review Email</span></div>
+          <div class="apppad">
+            <div class="em-hd"><span class="t">Review Email</span></div>
+            <div class="em-meta">To: client@email.com · CC: you@brokerage.com</div>
+            <div class="em-sub">🎉 You're Under Contract — Here's What Happens Next</div>
+            <div class="em-brand"><div class="av">🧑</div><div class="nm">Your Name</div><div class="br">Real Brokerage · #UncompromisingService</div></div>
+            <div class="em-body">
+              <div class="em-hero"><div class="h">Your home is under contract.</div><div class="p">Congratulations — this is a big deal.</div></div>
+              <div class="em-dates">
+                <div class="ed"><span class="l">✍️ Acceptance Date</span><span class="v">Mon, Jun 15</span></div>
+                <div class="ed"><span class="l">🔍 Inspection Deadline</span><span class="v">Mon, Jun 22</span></div>
+                <div class="ed"><span class="l">🏛️ Appraisal Deadline</span><span class="v">Fri, Jun 26</span></div>
+                <div class="ed"><span class="l">🔑 Closing Date</span><span class="v">Fri, Jul 10</span></div>
+              </div>
+              <div class="em-actions"><span class="a cx">Cancel</span><span class="a send">✓ Approve &amp; Send</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="mcap"><b>Built from:</b> the same deal dates and your auto-filled docs — so what you tell the client always matches the file.</div>
+      </div>
+
+      <!-- STEP 5: LEADERBOARD -->
+      <div class="fstep reveal">
+        <span class="sd">5</span>
+        <div class="sl">And every win rolls up to your team.</div>
+        <div class="sx">Closings, volume, showings, listing appointments, pipeline — it all flows into the <b>Team Leaderboard</b> automatically. Real accountability built from the actual work, plus team chat, lead routing, and onboarding in the same place.</div>
+        <div class="app">
+          <div class="appbar"><span class="dots"><i></i><i></i><i></i></span><span class="at">Team</span></div>
+          <div class="apppad">
+            <div class="lb-hd"><span class="t">🏆 Team Leaderboard</span><span class="ctrls"><span class="lc">2026 ▾</span><span class="lc g">Send to Team</span><span class="lc">Lead Routing</span></span></div>
+            <div class="lrow">
+              <div class="who"><span class="medal">🥇</span><div><div class="nm">Agent One</div><div class="act">Adjust activity</div></div></div>
+              <div class="stats"><div class="st"><div class="l">Units</div><div class="v">17</div></div><div class="st"><div class="l">Volume</div><div class="v">$5.26M</div></div></div>
+            </div>
+            <div class="lrow you">
+              <div class="who"><span class="medal">🥈</span><div><div class="nm">You</div><div class="act"><span class="you-t">15 showings · 3 listing appts · 7 under contract</span></div></div></div>
+              <div class="stats"><div class="st"><div class="l">Units</div><div class="v">15</div></div><div class="st"><div class="l">Volume</div><div class="v">$4.56M</div></div></div>
+            </div>
+            <div class="lrow">
+              <div class="who"><span class="medal">🥉</span><div><div class="nm">Agent Three</div><div class="act">Adjust activity</div></div></div>
+              <div class="stats"><div class="st"><div class="l">Units</div><div class="v">11</div></div><div class="st"><div class="l">Volume</div><div class="v">$3.24M</div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="mcap"><b>Fed by:</b> every deal your team closes — no spreadsheets, no manual tallying.</div>
+      </div>
+
+    </div>
+
+    <p class="reveal" style="text-align:center;max-width:60ch;margin:18px auto 0;color:var(--ink-soft);font-size:15.5px;">That's the whole point: <strong style="color:var(--emerald-deep);">your To-Do list, deals, offers, client timelines, appointments, team, and marketing all share one source of truth</strong> — so the work you do once shows up everywhere it needs to.</p>
+  </div>
+</section>
+
+<!-- STACK / ALL-IN-ONE -->
+<section class="stack sec-pad" id="stack">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow on-dark">One platform, not a pile of tabs</span>
+      <h2>Stop renting six tools that don't talk to each other.</h2>
+      <p class="sub">A CRM here, a transaction tool there, a mailing service, a video host, a feedback portal, three spreadsheets. NestTrack folds the whole stack into one place — everything except your MLS search.</p>
+    </div>
+    <div class="stack-grid">
+      <div class="reveal">
+        <div class="replace-list">
+          <span class="chip"><s>Standalone CRM</s></span>
+          <span class="chip"><s>Transaction manager</s></span>
+          <span class="chip"><s>Offer-management tool</s></span>
+          <span class="chip"><s>Client-update portal</s></span>
+          <span class="chip"><s>To-do / task app</s></span>
+          <span class="chip"><s>Appointment scheduler</s></span>
+          <span class="chip"><s>Direct-mail service</s></span>
+          <span class="chip"><s>Ringless voicemail tool</s></span>
+          <span class="chip"><s>Email &amp; newsletter app</s></span>
+          <span class="chip"><s>Landing-page builder</s></span>
+          <span class="chip"><s>Showing-feedback portal</s></span>
+          <span class="chip"><s>Team leaderboard &amp; chat</s></span>
+          <span class="chip"><s>Open-house sign-in app</s></span>
+          <span class="chip"><s>Agent onboarding tool</s></span>
+        </div>
+        <p style="margin-top:22px; color:rgba(255,255,255,.6); font-size:15px;">All-in-one means the lead you captured this morning is the same record that emails your seller, mails your past client, and reports to your team — no exports, no copy-paste, no "which tool was that in?"</p>
+      </div>
+      <div class="reveal">
+        <div class="merge">
+          <div class="big">→ <span>One login.</span></div>
+          <div class="cap">Everything above, working as a single system.</div>
+          <div class="note">Comparable all-in-one platforms run $449–$1,500/mo. NestTrack does the same job — minus the IDX search you already have — for a fraction of it.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAMS -->
+<section class="sec-pad" id="teams">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Solo to scaled</span>
+      <h2>Built for the way teams actually run.</h2>
+      <p class="sub">Start solo and grow into a full team without changing platforms. Leaders get oversight; agents get a system that makes them look great.</p>
+    </div>
+    <div class="teams-grid">
+      <div class="tcard reveal"><div class="ic">👥</div><h3>Add &amp; onboard agents</h3><p>Invite agents, assign their setup, and get them productive on day one with guided onboarding.</p></div>
+      <div class="tcard reveal"><div class="ic">📈</div><h3>Accountability at a glance</h3><p>See every agent's pipeline and activity, so coaching conversations start with facts, not guesses.</p></div>
+      <div class="tcard reveal"><div class="ic">📨</div><h3>Everyone sends as themselves</h3><p>Each agent emails from their own address while the team keeps one consistent, branded experience.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing sec-pad" id="pricing">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-left:auto;margin-right:auto;text-align:center;">
+      <span class="eyebrow">Simple, per-seat pricing</span>
+      <h2>Priced to be a no-brainer.</h2>
+      <p class="sub" style="margin-left:auto;margin-right:auto;">One rate for the lead or solo agent, a lower rate for each member. Every plan starts with a 30-day free trial — no card required to begin.</p>
+    </div>
+    <div class="price-grid">
+      <div class="pcard feature reveal">
+        <span class="badge">Founding — limited</span>
+        <div class="pname">Founding Member</div>
+        <div class="pwho">Locked-in rate for early teams</div>
+        <div class="pprice"><span class="amt">$39.99</span><span class="per">/mo · lead or solo agent</span></div>
+        <div class="pmeta">+ $25.99/mo per team member</div>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> All three pillars — leads, transactions, follow-up</li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Smart Plans, direct mail &amp; voicemail included</li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Team tools &amp; accountability dashboard</li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Founding price locked for the life of your account</li>
+        </ul>
+      </div>
+      <div class="pcard reveal">
+        <div class="pname">Standard</div>
+        <div class="pwho">After founding spots fill</div>
+        <div class="pprice"><span class="amt">$59.99</span><span class="per">/mo · lead or solo agent</span></div>
+        <div class="pmeta">+ $35.99/mo per team member</div>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> The complete NestTrack platform</li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Unlimited contacts, deals &amp; automations</li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Add or remove member seats anytime</li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Brokerage &amp; volume pricing available</li>
+        </ul>
+      </div>
+    </div>
+    <p class="price-foot reveal"><b>Friends &amp; Family and brokerage rates</b> available by arrangement. Questions on pricing? <a href="#get" style="color:var(--emerald-deep);font-weight:600;text-decoration:underline;">Get in touch</a>.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="sec-pad" id="get" style="padding-top:30px;">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <span class="eyebrow on-dark">Founding access is open</span>
+      <h2 style="margin-top:14px;">Run your whole business from one place.</h2>
+      <p>We're onboarding a limited group of founding teams now — with pricing locked for life. Tell us about your team and we'll get you set up.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary btn-lg" href="mailto:hello@nesttrack.io?subject=NestTrack%20Founding%20Access&amp;body=Tell%20us%20a%20bit%20about%20your%20team%20(name%2C%20brokerage%2C%20%23%20of%20agents)%20and%20we'll%20reach%20out.">Get founding access</a>
+        <a class="btn btn-ghost on-dark btn-lg" href="mailto:hello@nesttrack.io?subject=NestTrack%20Demo%20Request">Book a quick demo</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand">
+          <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true" style="width:28px;height:28px;">
+            <rect width="32" height="32" rx="9" fill="#16233E"/>
+            <path d="M8 21V13.5L16 8l8 5.5V21" stroke="#1D9E75" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="16" cy="18.5" r="2.4" fill="#BE9C44"/>
+          </svg>
+          NestTrack
+        </div>
+        <p class="fblurb">The all-in-one platform that runs the three things that grow a real estate business — leads, client experience, and follow-up — in one place.</p>
+      </div>
+      <div class="fcol">
+        <h4>Product</h4>
+        <a href="#how">How it works</a>
+        <a href="#stack">All-in-one</a>
+        <a href="#teams">For teams</a>
+        <a href="#pricing">Pricing</a>
+      </div>
+      <div class="fcol">
+        <h4>Company</h4>
+        <a href="#get">Get founding access</a>
+        <a href="mailto:hello@nesttrack.io">hello@nesttrack.io</a>
+        <p>Cleveland, Ohio</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="yr"></span> NestTrack. All rights reserved.</span>
+      <span>NestTrack is a real estate productivity platform. Not a multiple listing service.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // year
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  // sticky nav shadow
+  var nav = document.getElementById('nav');
+  var onScroll = function(){ nav.classList.toggle('scrolled', window.scrollY > 8); };
+  onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+  // mobile menu
+  var t = document.getElementById('navToggle'), links = document.getElementById('navLinks');
+  t.addEventListener('click', function(){
+    var open = links.classList.toggle('open');
+    t.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  links.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ links.classList.remove('open'); t.setAttribute('aria-expanded','false'); }); });
+  // reveal on scroll
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.12, rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+</script>
+</body>
+</html>
