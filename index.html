@@ -333,9 +333,53 @@
     .btn{transition:none;}
   }
   :focus-visible{outline:2.5px solid var(--emerald); outline-offset:3px; border-radius:6px;}
+
+  /* ===== Demo / lead form ===== */
+  .get-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:30px; align-items:stretch; margin-top:6px;}
+  .form-card{background:#fff; border:1px solid var(--line); border-radius:22px; padding:32px 30px; box-shadow:var(--shadow-lg); text-align:left;}
+  .form-card h3{font-family:'Fraunces',serif; font-size:24px; color:var(--ink); margin:0 0 6px;}
+  .form-card .fhint{color:var(--ink-soft); font-size:14.5px; margin:0 0 20px;}
+  .frow{display:grid; gap:14px;}
+  .frow.two{grid-template-columns:1fr 1fr;}
+  .field label{display:block; font-size:13px; font-weight:600; color:var(--ink); margin:0 0 6px; letter-spacing:.01em;}
+  .field input,.field textarea,.field select{width:100%; box-sizing:border-box; font:inherit; font-size:15px; color:var(--ink); background:var(--paper); border:1.5px solid var(--line); border-radius:11px; padding:11px 13px; transition:border-color .15s, box-shadow .15s;}
+  .field textarea{min-height:84px; resize:vertical;}
+  .field input:focus,.field textarea:focus,.field select:focus{outline:none; border-color:var(--emerald); box-shadow:0 0 0 3px rgba(29,158,117,.14);}
+  .form-card .btn-primary{width:100%; margin-top:4px; justify-content:center;}
+  .form-foot{margin-top:14px; font-size:12.5px; color:var(--ink-soft); text-align:center;}
+  .form-success{display:none; text-align:center; padding:24px 8px;}
+  .form-success .chk{width:54px; height:54px; border-radius:50%; background:var(--mist); color:var(--emerald-deep); display:flex; align-items:center; justify-content:center; margin:0 auto 14px;}
+  .form-success h3{font-family:'Fraunces',serif; font-size:23px; color:var(--ink); margin:0 0 6px;}
+  .form-success p{color:var(--ink-soft); font-size:15px; max-width:34ch; margin:0 auto;}
+  .get-side{display:flex; flex-direction:column; gap:18px;}
+  .side-card{background:linear-gradient(120deg, var(--emerald-deep), var(--emerald)); color:#fff; border-radius:22px; padding:28px 26px; box-shadow:var(--shadow-lg);}
+  .side-card h3{color:#fff; font-family:'Fraunces',serif; font-size:22px; margin:0 0 8px;}
+  .side-card p{color:rgba(255,255,255,.86); font-size:15px; margin:0 0 18px; line-height:1.5;}
+  .side-card .btn{width:100%; justify-content:center; background:#fff; color:var(--emerald-deep);}
+  .side-card .btn:hover{background:var(--gold-soft);}
+  .side-vid{position:relative; flex:1; min-height:200px; border-radius:18px; overflow:hidden; background:var(--ink); display:flex; align-items:center; justify-content:center; border:1px solid var(--line); text-decoration:none;}
+  .side-vid::before{content:""; position:absolute; inset:0; background:radial-gradient(120% 90% at 50% 30%, rgba(29,158,117,.30), transparent 62%);}
+  .side-vid .play{position:relative; display:flex; flex-direction:column; align-items:center; gap:10px; color:#fff;}
+  .side-vid .pbtn{width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.13);border:1.5px solid rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);transition:transform .2s, background .2s, border-color .2s;}
+  .side-vid:hover .pbtn{transform:scale(1.06);background:var(--emerald);border-color:var(--emerald);}
+  .side-vid .vlabel{font-size:14.5px;font-weight:600;}
+  .side-vid .vsub{font-size:12px;color:rgba(255,255,255,.62);}
+  @media (max-width:820px){
+    .get-grid{grid-template-columns:1fr;}
+    .frow.two{grid-template-columns:1fr;}
+    .side-vid{min-height:200px;}
+  }
 </style>
 </head>
 <body>
+
+<form name="demo-request" netlify netlify-honeypot="bot-field" hidden>
+  <input type="text" name="name" />
+  <input type="email" name="email" />
+  <input type="text" name="brokerage" />
+  <input type="text" name="team_size" />
+  <textarea name="message"></textarea>
+</form>
 
 <!-- NAV -->
 <header class="nav" id="nav">
@@ -729,17 +773,102 @@
 <!-- CTA -->
 <section class="sec-pad" id="get" style="padding-top:30px;">
   <div class="wrap">
-    <div class="cta-band reveal">
-      <span class="eyebrow on-dark">Founding access is open</span>
+    <div class="reveal" style="text-align:center; margin-bottom:34px;">
+      <span class="eyebrow">Founding access is open</span>
       <h2 style="margin-top:14px;">Run your whole business from one place.</h2>
-      <p>We're onboarding a limited group of founding teams now — with pricing locked for life. Tell us about your team and we'll get you set up.</p>
-      <div class="cta-row">
-        <a class="btn btn-primary btn-lg" href="mailto:hello@nesttrack.io?subject=NestTrack%20Founding%20Access&amp;body=Tell%20us%20a%20bit%20about%20your%20team%20(name%2C%20brokerage%2C%20%23%20of%20agents)%20and%20we'll%20reach%20out.">Get founding access</a>
-        <a class="btn btn-ghost on-dark btn-lg" href="mailto:hello@nesttrack.io?subject=NestTrack%20Demo%20Request">Book a quick demo</a>
+      <p class="sub" style="max-width:52ch; margin:14px auto 0;">We're onboarding a limited group of founding teams now — with pricing locked for life. Tell us about your team and we'll reach out, or grab a time on the calendar.</p>
+    </div>
+
+    <div class="get-grid">
+      <!-- Lead form -->
+      <div class="form-card reveal">
+        <div id="getForm">
+          <h3>Request founding access</h3>
+          <p class="fhint">Takes 30 seconds. We'll get you set up.</p>
+          <form name="demo-request" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="ntSubmit(event)">
+            <input type="hidden" name="form-name" value="demo-request" />
+            <p style="display:none;"><label>Don't fill this out: <input name="bot-field" /></label></p>
+            <div class="frow two">
+              <div class="field">
+                <label for="f-name">Your name</label>
+                <input id="f-name" type="text" name="name" required placeholder="Tom Garuccio" />
+              </div>
+              <div class="field">
+                <label for="f-email">Email</label>
+                <input id="f-email" type="email" name="email" required placeholder="you@brokerage.com" />
+              </div>
+            </div>
+            <div class="frow two" style="margin-top:14px;">
+              <div class="field">
+                <label for="f-brokerage">Brokerage</label>
+                <input id="f-brokerage" type="text" name="brokerage" placeholder="Your brokerage" />
+              </div>
+              <div class="field">
+                <label for="f-agents">How many agents?</label>
+                <select id="f-agents" name="team_size">
+                  <option value="">Select…</option>
+                  <option>Just me</option>
+                  <option>2–5</option>
+                  <option>6–15</option>
+                  <option>16–40</option>
+                  <option>40+</option>
+                </select>
+              </div>
+            </div>
+            <div class="frow" style="margin-top:14px;">
+              <div class="field">
+                <label for="f-msg">Anything you want us to know? <span style="font-weight:400;color:var(--ink-soft);">(optional)</span></label>
+                <textarea id="f-msg" name="message" placeholder="What are you using now? What's the biggest headache?"></textarea>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg" style="margin-top:18px;">Request founding access</button>
+            <p class="form-foot">We'll only use this to reach out about NestTrack. No spam.</p>
+          </form>
+        </div>
+        <div class="form-success" id="getSuccess">
+          <div class="chk"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 12.5l5 5 11-12" stroke="#0B5E45" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>Got it — thank you!</h3>
+          <p>We'll be in touch shortly. Want to skip the wait? Grab a time on the calendar to your right.</p>
+        </div>
+      </div>
+
+      <!-- Side: schedule + demo video -->
+      <div class="get-side">
+        <div class="side-card reveal">
+          <h3>Rather just talk?</h3>
+          <p>Book a quick call and we'll walk you through NestTrack live — and answer anything about pricing or setup.</p>
+          <a class="btn btn-lg" href="https://calendly.com/tomgaruccio_realtor/tom-garuccio-appointment-call" target="_blank" rel="noopener">Book a demo call →</a>
+        </div>
+        <a class="side-vid reveal" href="https://youtu.be/REPLACE_WITH_YOUR_VIDEO" target="_blank" rel="noopener" aria-label="Watch the NestTrack demo">
+          <span class="play">
+            <span class="pbtn"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="vlabel">Watch the 3-min demo</span>
+            <span class="vsub">See the whole platform in action</span>
+          </span>
+        </a>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  function ntSubmit(e){
+    e.preventDefault();
+    var form = e.target;
+    var data = new FormData(form);
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(data).toString()
+    }).then(function(){
+      document.getElementById('getForm').style.display = 'none';
+      document.getElementById('getSuccess').style.display = 'block';
+    }).catch(function(){
+      document.getElementById('getForm').style.display = 'none';
+      document.getElementById('getSuccess').style.display = 'block';
+    });
+  }
+</script>
 
 </main>
 
@@ -768,7 +897,7 @@
       <div class="fcol">
         <h4>Company</h4>
         <a href="#get">Get founding access</a>
-        <a href="mailto:hello@nesttrack.io">hello@nesttrack.io</a>
+        <a href="mailto:tom@garucciogroup.com">tom@garucciogroup.com</a>
         <p>Cleveland, Ohio</p>
       </div>
     </div>
