@@ -1164,33 +1164,21 @@
       <h2>Priced to be a no-brainer.</h2>
       <p class="sub" style="margin-left:auto;margin-right:auto;">One rate for the lead or solo agent, a lower rate for each member. Every plan starts with a 30-day free trial — no card required to begin.</p>
     </div>
-    <div class="price-grid">
-      <div class="pcard feature reveal">
-        <span class="badge">Founding — limited</span>
-        <div class="pname">Founding Member</div>
-        <div class="pwho">Lock your rate for life</div>
-        <div class="pprice"><span class="amt">$39</span><span class="per">/mo · solo or lead</span></div>
-        <div class="pmeta">+ a lower per-member rate as you add your team</div>
-        <ul>
-          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Founding price locked for the life of your account</li>
+    <div style="max-width:460px;margin:34px auto 0;">
+      <div class="pcard feature reveal" style="text-align:center;">
+        <span class="badge">Founding rate — limited</span>
+        <div class="pname" style="margin-top:8px;">All of NestTrack</div>
+        <div class="pwho">Everything. One login. No feature gates.</div>
+        <div id="price-anchor" style="font-size:16px;color:var(--ink-faint);text-decoration:line-through;margin-top:18px;">$59.99/mo</div>
+        <div class="pprice" style="justify-content:center;margin-top:2px;"><span class="amt" id="price-amount">$39.99</span><span class="per">/mo · solo or lead</span></div>
+        <div class="pmeta" id="price-member">+ $25.99/mo for each team member you add</div>
+        <ul style="text-align:left;display:inline-block;margin-top:18px;">
           <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> The entire platform — leads, deals, follow-up, team</li>
           <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> AI Transaction Coordinator included</li>
+          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Add team members anytime — one simple bill</li>
           <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> 30-day free trial, no card required</li>
         </ul>
         <a class="btn btn-primary" href="https://app.nesttrack.io/signup.html" style="width:100%;justify-content:center;margin-top:22px;">Start free trial</a>
-      </div>
-      <div class="pcard reveal">
-        <div class="pname">Standard</div>
-        <div class="pwho">After founding spots fill</div>
-        <div class="pprice"><span class="amt">$59</span><span class="per">/mo · solo or lead</span></div>
-        <div class="pmeta">+ a lower per-member rate for your team</div>
-        <ul>
-          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Everything in the platform, no feature gates</li>
-          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Add team members anytime — one bill</li>
-          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Lender sponsorship available</li>
-          <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> 30-day free trial, no card required</li>
-        </ul>
-        <a class="btn btn-ghost" href="https://app.nesttrack.io/signup.html" style="width:100%;justify-content:center;margin-top:22px;">Start free trial</a>
       </div>
     </div>
     <p class="price-foot reveal"><b>Friends &amp; Family and brokerage rates</b> available by arrangement. Questions on pricing? <a href="#get" style="color:var(--emerald-deep);font-weight:600;text-decoration:underline;">Get in touch</a>.</p>
@@ -1309,6 +1297,38 @@
     window.addEventListener('load', function(){ setTimeout(ntRevealAll, 500); });
     setTimeout(ntRevealAll, 2500);
   } else { ntRevealAll(); }
+</script>
+<script>
+/* Dynamic pricing — reads the tier you checked "Public signup" in NestTrack billing.
+   Falls back silently to the static prices above if anything is unavailable. */
+(function(){
+  var FB_KEY='AIzaSyCy5ZkbPcGtk7I_88dVbNsX40LY-M4R_sY', PROJ='buyers-880bc', ANCHOR=59.99;
+  function money(n){ return '$'+(Math.round(n*100)/100).toFixed(2); }
+  function num(f){ return f ? (f.integerValue!==undefined?parseInt(f.integerValue,10):(f.doubleValue!==undefined?f.doubleValue:0)) : 0; }
+  function fill(solo, member, comp){
+    var aEl=document.getElementById('price-amount'), mEl=document.getElementById('price-member'), anchEl=document.getElementById('price-anchor');
+    if(comp){ if(aEl)aEl.textContent='Free'; if(mEl)mEl.style.display='none'; if(anchEl)anchEl.style.display='none'; return; }
+    if(aEl && solo>0) aEl.textContent=money(solo);
+    if(mEl){ if(member>0){ mEl.textContent='+ '+money(member)+'/mo for each team member you add'; mEl.style.display=''; } else mEl.style.display='none'; }
+    if(anchEl){ if(solo>0 && solo<ANCHOR){ anchEl.textContent=money(ANCHOR)+'/mo'; anchEl.style.display=''; } else anchEl.style.display='none'; }
+  }
+  try {
+    fetch('https://firestore.googleapis.com/v1/projects/'+PROJ+'/databases/(default)/documents/billing_config/tiers?key='+FB_KEY)
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if(!d || !d.fields) return;
+        var pub = (d.fields.publicTierKey && d.fields.publicTierKey.stringValue) || '';
+        if(!pub) return; // no public tier chosen → keep static defaults
+        var vals = (d.fields.tiers && d.fields.tiers.arrayValue && d.fields.tiers.arrayValue.values) || [];
+        var tier=null;
+        vals.forEach(function(v){ var f=v.mapValue&&v.mapValue.fields; if(f&&f.key&&f.key.stringValue===pub) tier=f; });
+        if(!tier) return;
+        var comp = !!(tier.comp && tier.comp.booleanValue);
+        fill(num(tier.leadAmount)/100, num(tier.memberAmount)/100, comp);
+      })
+      .catch(function(){});
+  } catch(e){}
+})();
 </script>
 </body>
 </html>
