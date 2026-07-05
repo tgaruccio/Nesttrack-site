@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>NestTrack API Documentation</title>
+<style>
+  :root{
+    --pine:#0F6E56; --green:#1D9E75; --ink:#14211c; --muted:#5b6b64;
+    --line:#e3ebe7; --bg:#f7faf9; --code-bg:#0f1c17; --code-ink:#d7f0e6;
+    --amber:#92400E; --amber-bg:#FEF3C7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;}
+  .wrap{max-width:860px;margin:0 auto;padding:40px 22px 80px;}
+  header{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:8px;}
+  h1{font-size:30px;margin:0 0 6px;color:var(--pine);letter-spacing:-0.02em;}
+  .sub{color:var(--muted);font-size:15px;margin:0;}
+  h2{font-size:22px;margin:44px 0 10px;color:var(--ink);letter-spacing:-0.01em;border-top:1px solid var(--line);padding-top:32px;}
+  h3{font-size:16px;margin:26px 0 8px;color:var(--pine);}
+  p{margin:10px 0;}
+  code{background:#eef4f1;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;color:#0d4d3c;}
+  pre{background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:16px 18px;overflow:auto;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;line-height:1.55;}
+  pre code{background:none;border:none;color:inherit;padding:0;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{background:#eef4f1;font-weight:700;color:var(--ink);}
+  td code{font-size:12.5px;}
+  .method{display:inline-block;background:var(--green);color:#fff;font-weight:700;font-size:12px;padding:3px 9px;border-radius:6px;letter-spacing:0.03em;margin-right:8px;vertical-align:middle;}
+  .endpoint{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:14px;color:#0d4d3c;word-break:break-all;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:16px 0;}
+  .note{background:var(--amber-bg);border:1px solid #f3d894;border-radius:10px;padding:12px 16px;font-size:14px;color:var(--amber);margin:16px 0;}
+  .req{color:#B91C1C;font-weight:700;font-size:12px;}
+  .opt{color:var(--muted);font-size:12px;}
+  a{color:var(--green);}
+  footer{margin-top:60px;border-top:1px solid var(--line);padding-top:20px;color:var(--muted);font-size:13px;}
+  .toc{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 22px;margin:22px 0;}
+  .toc ul{margin:6px 0;padding-left:20px;}
+  .toc a{text-decoration:none;}
+  .toc a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>NestTrack API</h1>
+    <p class="sub">REST API reference for the NestTrack real-estate CRM integration. Version 1.0 &middot; Base URL <code>https://app.tom-b52.workers.dev</code></p>
+  </header>
+
+  <div class="toc">
+    <strong>Contents</strong>
+    <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#auth">Authentication</a></li>
+      <li><a href="#create-contact">Create Contact / Inbound Lead</a> (Action)</li>
+      <li><a href="#smartplan-trigger">Smart Plan Step Reached</a> (Trigger)</li>
+      <li><a href="#errors">Errors &amp; Status Codes</a></li>
+    </ul>
+  </div>
+
+  <h2 id="overview">Overview</h2>
+  <p>The NestTrack API lets external services create and update contacts (leads) in an agent&rsquo;s NestTrack account, and lets NestTrack notify external services when a contact reaches a step in an automated follow-up sequence (a &ldquo;Smart Plan&rdquo;). It powers NestTrack&rsquo;s Zapier integration.</p>
+  <p>All requests are made over HTTPS to the base URL <code>https://app.tom-b52.workers.dev</code>. All request and response bodies are JSON.</p>
+
+  <h2 id="auth">Authentication</h2>
+  <p>Each agent has a unique API key (their <em>lead token</em>), found in NestTrack under <strong>Profile &rarr; Integrations</strong>. Include it with every request in any one of these ways:</p>
+  <table>
+    <tr><th>Method</th><th>Example</th></tr>
+    <tr><td>Authorization header <span class="opt">(recommended)</span></td><td><code>Authorization: Bearer {API_KEY}</code></td></tr>
+    <tr><td>Custom header</td><td><code>X-Api-Key: {API_KEY}</code></td></tr>
+    <tr><td>Query parameter</td><td><code>?api_key={API_KEY}</code></td></tr>
+  </table>
+  <p>The API key identifies which agent&rsquo;s account the request applies to. Requests with a missing or invalid key are rejected with <code>401 Unauthorized</code>.</p>
+  <div class="note">Keep API keys private. Anyone with an agent&rsquo;s key can create contacts in that agent&rsquo;s account. Keys can be regenerated in NestTrack if compromised.</div>
+
+  <h2 id="create-contact">Create Contact / Inbound Lead</h2>
+  <p><span class="opt">Zapier Action</span> &mdash; Creates a new contact (lead) in the authenticated agent&rsquo;s account, or updates a matching existing contact. Used to push leads from ad platforms, forms, portals, or other CRMs into NestTrack.</p>
+
+  <div class="card">
+    <p><span class="method">POST</span> <span class="endpoint">/</span></p>
+    <p><strong>Required header:</strong> <code>X-Action: inbound-lead</code></p>
+    <p><strong>Content-Type:</strong> <code>application/json</code></p>
+  </div>
+
+  <h3>Request body</h3>
+  <p>At least one of <code>firstName</code>, <code>email</code>, or <code>phone</code> is required. All other fields are optional. Unrecognized fields are preserved and appended to the contact&rsquo;s notes.</p>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+    <tr><td><code>firstName</code></td><td>string</td><td><span class="req">one of these</span></td><td>Contact&rsquo;s first name. Aliases: <code>first</code>, <code>fname</code>, <code>name</code>.</td></tr>
+    <tr><td><code>lastName</code></td><td>string</td><td><span class="opt">optional</span></td><td>Contact&rsquo;s last name. Aliases: <code>last</code>, <code>lname</code>.</td></tr>
+    <tr><td><code>email</code></td><td>string</td><td><span class="req">one of these</span></td><td>Contact&rsquo;s email address.</td></tr>
+    <tr><td><code>phone</code></td><td>string</td><td><span class="req">one of these</span></td><td>Contact&rsquo;s phone number. Aliases: <code>mobile</code>, <code>tel</code>.</td></tr>
+    <tr><td><code>address</code></td><td>string</td><td><span class="opt">optional</span></td><td>Property or mailing address. Aliases: <code>propertyAddress</code>, <code>mailingAddress</code>.</td></tr>
+    <tr><td><code>source</code></td><td>string</td><td><span class="opt">optional</span></td><td>Lead source label (e.g. &ldquo;Zillow&rdquo;, &ldquo;Facebook&rdquo;). Defaults to <code>Zapier</code>.</td></tr>
+    <tr><td><code>notes</code></td><td>string</td><td><span class="opt">optional</span></td><td>Free-text notes. Aliases: <code>message</code>, <code>comments</code>, <code>description</code>.</td></tr>
+  </table>
+
+  <h3>Example request</h3>
+<pre><code>curl -X POST https://app.tom-b52.workers.dev/ \
+  -H "Authorization: Bearer {API_KEY}" \
+  -H "X-Action: inbound-lead" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "email": "jane@example.com",
+    "phone": "440-555-0100",
+    "address": "123 Main St, Westlake, OH 44145",
+    "source": "Zillow",
+    "notes": "Looking to buy in the $400-500k range, 3+ beds"
+  }'</code></pre>
+
+  <h3>Example response <span class="opt">(200 OK)</span></h3>
+<pre><code>{
+  "success": true,
+  "id": "aBc123XyZ",
+  "agentId": "youragentid"
+}</code></pre>
+
+  <h2 id="smartplan-trigger">Smart Plan Step Reached</h2>
+  <p><span class="opt">Zapier Trigger</span> &mdash; NestTrack fires an outbound event when a contact reaches a Zapier step inside an automated follow-up sequence (&ldquo;Smart Plan&rdquo;). Each step has a unique Trigger ID, so each can drive a different downstream action (send a text, start an AI call, mail a letter, add to an audience, etc.).</p>
+
+  <div class="card">
+    <p><strong>Delivery:</strong> outbound <code>POST</code> to the agent&rsquo;s configured Zapier &ldquo;Catch Hook&rdquo; URL (set in NestTrack under Profile &rarr; Integrations), or to the Zapier trigger subscribed to the matching Trigger ID.</p>
+    <p><strong>Fires when:</strong> a live contact in an active Smart Plan reaches a step of type &ldquo;Zapier&rdquo; on its scheduled date.</p>
+  </div>
+
+  <h3>Example payload</h3>
+<pre><code>{
+  "triggerId": "fsbo-text-1",
+  "planName": "FSBO Nurture",
+  "stepLabel": "FSBO Text 1",
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane@example.com",
+  "phone": "440-555-0100",
+  "address": "123 Main St, Westlake, OH 44145",
+  "agentId": "youragentid"
+}</code></pre>
+  <p>To connect: in Zapier, create a Zap with the trigger <em>NestTrack &rarr; Smart Plan Step Reached</em>, paste the Trigger ID copied from the NestTrack Smart Plan step, run the test, then map the fields to your chosen action.</p>
+
+  <h2 id="errors">Errors &amp; Status Codes</h2>
+  <table>
+    <tr><th>Code</th><th>Meaning</th></tr>
+    <tr><td><code>200 OK</code></td><td>Request succeeded. Response body contains the result.</td></tr>
+    <tr><td><code>400 Bad Request</code></td><td>Missing required fields (e.g. no name, email, or phone) or malformed JSON.</td></tr>
+    <tr><td><code>401 Unauthorized</code></td><td>Missing or invalid API key.</td></tr>
+    <tr><td><code>404 Not Found</code></td><td>Unknown lead token / agent could not be resolved.</td></tr>
+    <tr><td><code>500 Server Error</code></td><td>Unexpected server-side error. Retry; if it persists, contact support.</td></tr>
+  </table>
+  <p>Error responses are JSON of the form:</p>
+<pre><code>{ "error": "contact needs a name, email, or phone" }</code></pre>
+
+  <footer>
+    NestTrack API v1.0 &middot; Base URL <code>https://app.tom-b52.workers.dev</code> &middot; Support: tom@garucciogroup.com
+  </footer>
+</div>
+</body>
+</html>
