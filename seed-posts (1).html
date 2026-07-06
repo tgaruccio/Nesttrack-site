@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="robots" content="noindex,nofollow"/>
+<title>Seed starter posts — NestTrack</title>
+<style>
+  body{font-family:-apple-system,system-ui,sans-serif;max-width:640px;margin:60px auto;padding:0 24px;color:#0F1B33;background:#FBF8F3;line-height:1.6;}
+  h1{font-size:24px;}
+  button{background:#1D9E75;color:#fff;border:none;border-radius:10px;padding:12px 22px;font-size:15px;font-weight:600;cursor:pointer;margin-top:16px;}
+  .log{margin-top:20px;font-size:14px;white-space:pre-wrap;background:#fff;border:1px solid #E4DBCD;border-radius:10px;padding:16px;}
+  input{width:100%;padding:10px;border:1px solid #E4DBCD;border-radius:8px;margin:6px 0;}
+</style>
+</head>
+<body>
+<h1>Seed starter posts</h1>
+<p>This writes 4 starter posts into your Journal as <b>drafts</b>. Sign in, click the button once, then delete this file. You'll edit the drafts (add your screenshots, tweak wording) in the admin before publishing.</p>
+<input id="email" type="email" placeholder="admin email"/>
+<input id="pass" type="password" placeholder="password"/>
+<button id="go">Sign in &amp; seed posts</button>
+<div class="log" id="log" style="display:none;"></div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyB9hCijkzRnafdehcYyYxc9kS3KuVwek4o",
+  authDomain: "nesttrack-sales-page.firebaseapp.com",
+  projectId: "nesttrack-sales-page",
+  storageBucket: "nesttrack-sales-page.firebasestorage.app",
+  messagingSenderId: "440961032614",
+  appId: "1:440961032614:web:5f9ec4a5089d1219c9ef67"
+};
+const app = initializeApp(FIREBASE_CONFIG);
+const auth = getAuth(app); const db = getFirestore(app);
+const log = m => { const l=document.getElementById('log'); l.style.display='block'; l.textContent += m + '\n'; };
+
+const IMG = '\n<!-- [ADD SCREENSHOT HERE: use the "Insert photo" button in the editor to drop in a real app screenshot] -->\n';
+
+const POSTS = [
+  {
+    id:'three-jobs-every-agent-tool',
+    title:'The three jobs every agent tool should do',
+    category:'Systems', readMins:5, date:'2026-07-01', published:false,
+    excerpt:'Most real estate software does one thing well and eleven things badly. Here is the shape the problem actually has — and the three jobs that matter.',
+    body:`<p>I have bought, trialed, and abandoned more real estate software than I care to admit. Somewhere along the way I realized the tools were not the problem. The <em>shape</em> was. Every product wanted to own one slice of my business and left the rest to fall through the cracks. So when I finally built my own, I started from a different question: what are the jobs that actually matter?</p>
+<p>There are three. Get them in. Wow them through the deal. Keep them for life.</p>
+<h2>1. Get them in</h2>
+<p>A lead is only worth something if it reaches you before it goes cold. Not in an inbox you check twice a day — on the phone in your pocket, the second it comes in. That means capture that works from anywhere a lead might come from (a landing page, a portal, an ad) and a notification that actually lands.</p>${IMG}
+<p>The tools should not care where the lead came from. Zillow, Facebook, a yard-sign QR code — it all funnels to the same place, tagged and ready, with whatever the source gave you already attached so you can decide how to work it.</p>
+<h2>2. Wow them through the deal</h2>
+<p>This is where most agents win or lose the referral. A client who feels lost during their transaction will not send you their sister, no matter how the deal turns out. A client who always knows what is happening next will.</p>
+<p>That means giving them their own view — their timeline, their dates, their next steps — instead of making them text you for every update. When the client can see the deal moving, you look organized, responsive, and in control. Which you are, because the system is doing the remembering for you.</p>${IMG}
+<h2>3. Keep them for life</h2>
+<p>The money is not in the closing. It is in the years after. The agent who stays genuinely, usefully in touch is the agent who gets the next sale and the referral. But "stay in touch" is exactly the thing that slips when you are busy — which is always.</p>
+<p>So it has to be automatic and it has to feel personal. Home-value updates that give the client a real reason to open the email. Timed, human-sounding follow-ups that go out whether or not you remembered. The goal is simple: never be the agent they forgot.</p>
+<blockquote>Chasing volume leads to burnout. Building relationships leads to a business that feeds itself.</blockquote>
+<p>Those are the three jobs. If a tool does not serve all three, it is quietly costing you repeat business — and repeat business is the whole game.</p>`
+  },
+  {
+    id:'automate-seller-follow-up',
+    title:'How I automate seller follow-up without sounding like a robot',
+    category:'Follow-up', readMins:6, date:'2026-06-24', published:false,
+    excerpt:'The exact follow-up sequence I run after a listing goes live — timed touches that feel personal at scale, because they are built from how I actually talk.',
+    body:`<p>Sellers do not leave because you did a bad job. They leave because they felt forgotten between the exciting parts. The listing goes live, then there is a quiet stretch, and quiet reads as "my agent stopped caring." The fix is not working harder. It is building the follow-up once and letting it run.</p>
+<h2>Start from how you actually talk</h2>
+<p>The reason most automated follow-up sounds like a robot is that it was written like marketing. I write mine the way I would text a client I like: short, plain, one thing at a time. "Hey — showings are picking up, wanted you to see the feedback so far." That is it.</p>${IMG}
+<h2>Space the touches to the deal, not the calendar</h2>
+<p>A good sequence is tied to where the deal actually is, not a blind weekly blast. New listing gets one rhythm; under contract gets another; the stretch before closing gets another. Each step earns its place — a real update, a real next step — so the client never feels spammed.</p>
+<h2>Let the system remember so you do not have to</h2>
+<p>The point of automating it is not to remove yourself. It is to make sure the baseline never slips on your busy weeks, so your actual attention can go to the moments that need a real call. The sequence carries the floor; you bring the ceiling.</p>${IMG}
+<p>Set it up once, in your own voice, tied to the deal's real stages. Then the quiet stretches stop being quiet — and sellers stop feeling forgotten.</p>`
+  },
+  {
+    id:'nesttrack-vs-homebot',
+    title:'NestTrack vs. Homebot: an honest comparison',
+    category:'Tools', readMins:7, date:'2026-06-18', published:false,
+    excerpt:'A home-value digest is one of the best retention tools an agent has. Here is what changes when it is built into your CRM instead of a separate subscription.',
+    body:`<p>Let me be fair up front: a recurring home-value email is a genuinely good retention play. Homebot proved that. Giving a past client a reason to think about their home — and about you — every month is smart, and if a bolt-on tool is what gets you doing it, that beats not doing it.</p>
+<h2>What a separate subscription costs you (beyond the fee)</h2>
+<p>The friction is not just the monthly bill. It is that the digest lives in a different system from the rest of your client relationship. The lead is in one place, the deal history in another, the home-value email in a third. Nothing talks to anything.</p>${IMG}
+<h2>What changes when it is built in</h2>
+<p>When the home-value digest is part of the same system as your contacts and deals, a past client is not a separate list to maintain — they are already there, and the digest just turns on. The branding is yours automatically. And when the client engages, you see it in the same place you see everything else about them.</p>${IMG}
+<h2>The honest take</h2>
+<p>If you are already paying for a standalone digest and it is working, do not fix what is not broken. But if you are choosing fresh, a built-in tool removes the seam — one system, one login, one brand, the retention play running quietly in the background of the CRM you already live in.</p>
+<blockquote>The best retention tool is the one that actually runs. Fewer seams means fewer reasons it stops.</blockquote>`
+  },
+  {
+    id:'what-paid-leads-actually-cost',
+    title:'What paid leads actually cost you (it is not the lead price)',
+    category:'Lead gen', readMins:5, date:'2026-06-10', published:false,
+    excerpt:'Zillow and the rest can work. But the real cost of a paid lead is not the price tag — it is what happens in the ten minutes after it arrives.',
+    body:`<p>Agents love to argue about lead prices. It is the wrong argument. A $40 lead and a $12 lead convert at roughly the same rate if you do the same thing with them — and most agents do the same thing with both: nothing, fast enough.</p>
+<h2>Speed is the whole game</h2>
+<p>The single biggest factor in whether a paid lead becomes a closing is how fast you respond. Minutes, not hours. That is not a discipline problem you can willpower your way through on a busy day — it is a systems problem. The lead has to reach you instantly, on your phone, with enough context to act.</p>${IMG}
+<h2>The follow-up is where the money leaks</h2>
+<p>Most leads do not convert on the first touch. They convert on the seventh. The agent who has a follow-up sequence running — real, spaced, human — catches the ones who were not ready on day one. The agent relying on memory catches the ones who happened to call back. Guess which pipeline is bigger.</p>${IMG}
+<h2>So before you spend a dollar</h2>
+<p>Do not ask "is this lead source cheap enough." Ask "do I have the system to answer in minutes and follow up for months." If the answer is no, the lead price is irrelevant — you are lighting money on fire either way. If the answer is yes, even mediocre leads start paying off.</p>`
+  }
+];
+
+document.getElementById('go').onclick = async ()=>{
+  try{
+    await signInWithEmailAndPassword(auth, document.getElementById('email').value.trim(), document.getElementById('pass').value);
+    log('Signed in. Writing posts…');
+    for(const p of POSTS){
+      const {id, ...data} = p;
+      data.updated = data.date;
+      await setDoc(doc(db,'blog_posts',id), data, {merge:true});
+      log('✓ ' + p.title);
+    }
+    log('\nDone. Open admin.html → Posts. All four are drafts, ready to edit + add screenshots. You can delete this seed file now.');
+  }catch(e){ log('Error: ' + (e && e.message)); }
+};
+</script>
+</body>
+</html>
