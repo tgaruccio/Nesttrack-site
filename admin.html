@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <meta name="robots" content="noindex,nofollow"/>
-<title>Journal Admin — NestTrack</title>
+<title>Journal Studio — NestTrack</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
 <style>
@@ -12,121 +12,213 @@
     --ink:#0F1B33; --ink-soft:#42506B; --ink-faint:#7B8699;
     --paper:#FBF8F3; --paper-2:#F4EEE3; --card:#FFFFFF;
     --emerald:#1D9E75; --emerald-deep:#0B5E45; --emerald-dk:#065F46;
-    --mist:#E7F1EB; --gold:#BE9C44; --line:#E4DBCD; --line-soft:#EFE9DD;
-    --r:14px; --danger:#B91C1C;
+    --mist:#E7F1EB; --gold:#BE9C44; --gold-soft:#EFE4C6;
+    --line:#E4DBCD; --line-soft:#EFE9DD; --danger:#B91C1C;
+    --shadow:0 1px 2px rgba(15,27,51,.04), 0 12px 32px -12px rgba(15,27,51,.12);
+    --r:14px;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--paper);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;line-height:1.55;}
-  .wrap{max-width:900px;margin:0 auto;padding:24px;}
-  h1{font-family:'Fraunces',serif;font-weight:500;font-size:28px;letter-spacing:-0.01em;}
-  .sub{color:var(--ink-faint);font-size:14px;margin-top:2px;}
-  .row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
-  .btn{background:var(--emerald);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
+  body{background:var(--paper);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  input,textarea,select,button{font-family:inherit;}
+  .login{max-width:400px;margin:70px auto;padding:0 22px;}
+  .login h1{font-family:'Fraunces',serif;font-weight:500;font-size:30px;text-align:center;}
+  .login .sub{text-align:center;color:var(--ink-faint);font-size:14px;margin:6px 0 24px;}
+  .shell{display:flex;min-height:100vh;}
+  .side{width:230px;background:var(--ink);color:#fff;flex-shrink:0;padding:24px 16px;display:flex;flex-direction:column;}
+  .side .logo{font-family:'Fraunces',serif;font-weight:600;font-size:21px;display:flex;align-items:center;gap:9px;padding:0 8px 22px;letter-spacing:-0.01em;}
+  .side .logo .dot{width:26px;height:26px;border-radius:8px;background:var(--emerald);display:flex;align-items:center;justify-content:center;font-size:15px;}
+  .side .subtle{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);padding:0 8px 8px;}
+  .navitem{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:10px;color:rgba(255,255,255,.75);font-size:14.5px;font-weight:500;cursor:pointer;margin-bottom:3px;transition:all .15s;}
+  .navitem:hover{background:rgba(255,255,255,.07);color:#fff;}
+  .navitem.active{background:var(--emerald);color:#fff;}
+  .navitem .ic{font-size:16px;width:20px;text-align:center;}
+  .side .foot{margin-top:auto;padding:0 8px;}
+  .side .who{font-size:12.5px;color:rgba(255,255,255,.5);margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .side .out{font-size:13px;color:rgba(255,255,255,.7);cursor:pointer;}
+  .side .out:hover{color:#fff;}
+  .side .viewsite{display:block;font-size:13px;color:rgba(255,255,255,.6);margin-bottom:8px;text-decoration:none;}
+  .side .viewsite:hover{color:var(--gold);}
+  .main{flex:1;min-width:0;padding:32px 40px 80px;overflow-x:hidden;}
+  @media(max-width:820px){ .side{width:64px;padding:20px 8px;} .side .logo span:not(.dot),.side .subtle,.side .navitem span:not(.ic),.side .who,.side .out,.side .viewsite{display:none;} .navitem{justify-content:center;} .main{padding:24px 20px 60px;} }
+  .head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:26px;}
+  .head h1{font-family:'Fraunces',serif;font-weight:500;font-size:29px;letter-spacing:-0.01em;}
+  .head p{color:var(--ink-faint);font-size:14px;margin-top:2px;}
+  .btn{background:var(--emerald);color:#fff;border:none;border-radius:11px;padding:11px 20px;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;}
   .btn:hover{background:var(--emerald-dk);}
   .btn.ghost{background:var(--card);color:var(--ink-soft);border:1px solid var(--line);}
   .btn.ghost:hover{border-color:var(--emerald);color:var(--emerald-dk);}
   .btn.danger{background:transparent;color:var(--danger);border:1px solid #F1C4C4;}
-  .card{background:var(--card);border:1px solid var(--line-soft);border-radius:var(--r);padding:20px;margin-top:16px;}
-  label{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);margin:14px 0 6px;}
-  input,textarea,select{width:100%;font-family:inherit;font-size:14px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px;}
-  textarea{resize:vertical;line-height:1.55;}
+  .btn.sm{padding:7px 13px;font-size:13px;border-radius:9px;}
+  .card{background:var(--card);border:1px solid var(--line-soft);border-radius:var(--r);padding:22px;box-shadow:var(--shadow);}
+  label{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);margin:16px 0 6px;}
+  label:first-child{margin-top:0;}
+  input[type=text],input[type=email],input[type=password],input[type=number],input[type=url],textarea,select{width:100%;font-size:14px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:11px 13px;}
+  textarea{resize:vertical;line-height:1.6;}
   input:focus,textarea:focus,select:focus{outline:2px solid var(--emerald);outline-offset:1px;border-color:transparent;}
-  .hint{font-size:12px;color:var(--ink-faint);margin-top:4px;}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  @media(max-width:600px){.grid2{grid-template-columns:1fr;}}
-  .post-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line-soft);}
-  .post-item:last-child{border-bottom:none;}
-  .post-item .t{flex:1;min-width:0;}
-  .post-item .t b{font-size:15px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .post-item .t span{font-size:12.5px;color:var(--ink-faint);}
-  .pill{font-size:11px;font-weight:600;padding:3px 9px;border-radius:6px;text-transform:uppercase;letter-spacing:.05em;}
+  .hint{font-size:12px;color:var(--ink-faint);margin-top:5px;font-weight:400;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:640px){.grid2{grid-template-columns:1fr;}}
+  .plist{display:grid;gap:12px;}
+  .prow{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--line-soft);border-radius:12px;padding:12px 16px;box-shadow:var(--shadow);}
+  .prow .pthumb{width:76px;height:50px;border-radius:8px;background:var(--mist);flex-shrink:0;object-fit:cover;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;color:var(--emerald);font-size:20px;}
+  .prow .pmeta{flex:1;min-width:0;}
+  .prow .pmeta b{font-size:15px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);}
+  .prow .pmeta span{font-size:12.5px;color:var(--ink-faint);}
+  .pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;text-transform:uppercase;letter-spacing:.05em;flex-shrink:0;}
   .pill.pub{background:var(--mist);color:var(--emerald-dk);}
-  .pill.draft{background:#FDF6E3;color:var(--gold);}
-  .login{max-width:380px;margin:80px auto;text-align:center;}
-  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 20px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:99;}
+  .pill.draft{background:#FDF6E3;color:#9A7B1E;}
+  .pactions{display:flex;gap:7px;flex-shrink:0;}
+  .toolbar{display:flex;flex-wrap:wrap;gap:6px;padding:10px;background:var(--paper-2);border:1px solid var(--line);border-bottom:none;border-radius:10px 10px 0 0;}
+  .tbtn{background:var(--card);border:1px solid var(--line);border-radius:7px;padding:6px 11px;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;}
+  .tbtn:hover{border-color:var(--emerald);color:var(--emerald-dk);}
+  #f-body{border-radius:0 0 10px 10px;min-height:280px;font-family:'SF Mono',Menlo,monospace;font-size:13px;}
+  .drop{border:2px dashed var(--line);border-radius:12px;padding:26px;text-align:center;color:var(--ink-faint);cursor:pointer;transition:all .15s;background:var(--paper);}
+  .drop:hover,.drop.over{border-color:var(--emerald);background:var(--mist);color:var(--emerald-dk);}
+  .drop b{color:var(--emerald-dk);}
+  .thumb-prev{margin-top:12px;position:relative;display:inline-block;}
+  .thumb-prev img{max-height:120px;border-radius:10px;border:1px solid var(--line);}
+  .thumb-prev .rm{position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;background:var(--danger);color:#fff;border:none;cursor:pointer;font-size:14px;}
+  .uploading{font-size:13px;color:var(--emerald-dk);margin-top:8px;}
+  .preview{background:var(--card);border:1px solid var(--line-soft);border-radius:12px;padding:28px;max-height:400px;overflow:auto;}
+  .preview h2{font-family:'Fraunces',serif;font-size:22px;margin:18px 0 10px;color:var(--ink);}
+  .preview h3{font-family:'Fraunces',serif;font-size:18px;margin:14px 0 8px;}
+  .preview p{margin-bottom:14px;color:var(--ink-soft);font-size:15px;}
+  .preview ul,.preview ol{margin:0 0 14px 20px;color:var(--ink-soft);}
+  .preview img{max-width:100%;border-radius:10px;margin:8px 0;}
+  .preview blockquote{border-left:3px solid var(--emerald);padding-left:16px;font-style:italic;font-family:'Fraunces',serif;color:var(--ink);margin-bottom:14px;}
+  .preview iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:10px;margin:8px 0;}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 22px;border-radius:11px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:200;box-shadow:var(--shadow);}
   .toast.show{opacity:1;}
   .hide{display:none!important;}
-  .tabs{display:flex;gap:8px;margin:16px 0;}
-  .tab{padding:8px 16px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);}
-  .tab.active{background:var(--emerald);border-color:var(--emerald);color:#fff;}
+  .empty{text-align:center;padding:60px 20px;color:var(--ink-faint);}
+  .empty .big{font-family:'Fraunces',serif;font-size:40px;color:var(--emerald);opacity:.4;margin-bottom:12px;}
+  :focus-visible{outline:2px solid var(--emerald);outline-offset:2px;}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;}}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="login-view" class="wrap login">
-  <h1>Journal Admin</h1>
-  <p class="sub" style="margin-bottom:24px;">Sign in to manage posts.</p>
-  <div class="card" style="text-align:left;">
+<div id="login-view" class="login">
+  <h1>Journal Studio</h1>
+  <p class="sub">Sign in to manage your content.</p>
+  <div class="card">
     <label>Email</label>
     <input id="li-email" type="email" autocomplete="username" placeholder="you@email.com"/>
     <label>Password</label>
     <input id="li-pass" type="password" autocomplete="current-password" placeholder="••••••••"/>
-    <button class="btn" style="width:100%;margin-top:18px;" id="li-btn">Sign in</button>
-    <p id="li-err" class="hint" style="color:var(--danger);margin-top:10px;"></p>
+    <button class="btn" style="width:100%;margin-top:20px;" id="li-btn">Sign in</button>
+    <p id="li-err" class="hint" style="color:var(--danger);margin-top:12px;text-align:center;"></p>
   </div>
 </div>
 
-<!-- ADMIN -->
-<div id="admin-view" class="wrap hide">
-  <div class="row">
-    <div><h1>Journal Admin</h1><p class="sub" id="who"></p></div>
-    <div style="display:flex;gap:10px;">
-      <button class="btn ghost" id="signout">Sign out</button>
-      <button class="btn" id="new-post">+ New post</button>
+<div id="app-view" class="shell hide">
+  <aside class="side">
+    <div class="logo"><span class="dot">◆</span><span>Journal Studio</span></div>
+    <div class="subtle">Content</div>
+    <div class="navitem active" data-tab="posts"><span class="ic">✎</span><span>Posts</span></div>
+    <div class="navitem" data-tab="videos"><span class="ic">▶</span><span>Videos</span></div>
+    <div class="subtle" style="margin-top:16px;">Setup</div>
+    <div class="navitem" data-tab="settings"><span class="ic">⚙</span><span>Social &amp; Settings</span></div>
+    <div class="foot">
+      <a class="viewsite" href="/blog.html" target="_blank">↗ View live Journal</a>
+      <div class="who" id="who"></div>
+      <div class="out" id="signout">Sign out</div>
     </div>
-  </div>
+  </aside>
 
-  <!-- EDITOR (hidden until New/Edit) -->
-  <div id="editor" class="card hide">
-    <div class="tabs">
-      <div class="tab active" data-type="article">Written post</div>
-      <div class="tab" data-type="embed">Social embed (IG / TikTok)</div>
-    </div>
-
-    <div id="fields-article">
-      <label>Title</label>
-      <input id="f-title" placeholder="How I automate seller follow-up"/>
-      <div class="grid2">
-        <div><label>Category</label>
-          <select id="f-cat"><option>Systems</option><option>Follow-up</option><option>Tools</option><option>Lead gen</option><option>Guides</option></select>
+  <main class="main">
+    <section id="tab-posts">
+      <div class="head">
+        <div><h1>Posts</h1><p>Write articles for the Journal. Save as draft or publish live.</p></div>
+        <button class="btn" id="new-post">+ New post</button>
+      </div>
+      <div id="editor" class="card hide" style="margin-bottom:22px;">
+        <label>Title</label>
+        <input id="f-title" type="text" placeholder="How I automate seller follow-up"/>
+        <div class="grid2">
+          <div><label>Category</label>
+            <select id="f-cat"><option>Systems</option><option>Follow-up</option><option>Tools</option><option>Lead gen</option><option>Guides</option></select>
+          </div>
+          <div><label>Read time (minutes)</label><input id="f-read" type="number" min="1" value="5"/></div>
         </div>
-        <div><label>Read time (min)</label><input id="f-read" type="number" min="1" value="5"/></div>
+        <label>Excerpt <span class="hint" style="display:inline;">— 1–2 sentences. Shows on the list and in Google/AI results.</span></label>
+        <textarea id="f-excerpt" rows="2" placeholder="A short, honest summary. No hype."></textarea>
+        <label>Cover image</label>
+        <div class="drop" id="drop-cover">Drag a photo here, or <b>click to choose</b><input type="file" id="file-cover" accept="image/*" class="hide"/></div>
+        <div id="cover-prev"></div>
+        <label>Body</label>
+        <div class="toolbar" id="toolbar">
+          <button class="tbtn" data-ins="h2">Heading</button>
+          <button class="tbtn" data-ins="h3">Subhead</button>
+          <button class="tbtn" data-ins="p">Paragraph</button>
+          <button class="tbtn" data-ins="ul">List</button>
+          <button class="tbtn" data-ins="quote">Quote</button>
+          <button class="tbtn" data-ins="img">Insert photo</button>
+          <button class="tbtn" data-ins="yt">YouTube</button>
+          <button class="tbtn" data-ins="b">Bold</button>
+        </div>
+        <textarea id="f-body" placeholder="<p>Write here, or paste HTML. Use the buttons above to insert headings, photos, and videos.</p>"></textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+          <span class="hint">HTML is allowed. The buttons insert the right tags for you.</span>
+          <button class="btn ghost sm" id="toggle-preview">Preview</button>
+        </div>
+        <div id="preview-wrap" class="hide" style="margin-top:14px;"><div class="preview" id="preview"></div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:22px;flex-wrap:wrap;gap:12px;">
+          <label style="display:flex;align-items:center;gap:9px;margin:0;cursor:pointer;font-weight:500;">
+            <input type="checkbox" id="f-pub" style="width:auto;"/> Publish live (uncheck to keep as draft)
+          </label>
+          <div style="display:flex;gap:10px;">
+            <button class="btn ghost" id="cancel">Cancel</button>
+            <button class="btn" id="save">Save post</button>
+          </div>
+        </div>
       </div>
-      <label>Excerpt <span class="hint" style="font-weight:400;">— 1–2 sentences, shows on the list + in search results</span></label>
-      <textarea id="f-excerpt" rows="2" placeholder="A short, honest summary. No hype."></textarea>
-      <label>Thumbnail image URL <span class="hint" style="font-weight:400;">— optional</span></label>
-      <input id="f-thumb" placeholder="https://…"/>
-      <label>Body <span class="hint" style="font-weight:400;">— HTML allowed: &lt;h2&gt; &lt;p&gt; &lt;ul&gt;&lt;li&gt; &lt;blockquote&gt; &lt;a&gt; &lt;img&gt;</span></label>
-      <textarea id="f-body" rows="14" placeholder="<p>Write your post here…</p>"></textarea>
-    </div>
+      <div id="post-list" class="plist"><p class="hint">Loading…</p></div>
+    </section>
 
-    <div id="fields-embed" class="hide">
-      <label>Title</label>
-      <input id="e-title" placeholder="Quick tip: pricing a move-up listing"/>
-      <label>Platform</label>
-      <select id="e-platform"><option value="Instagram">Instagram</option><option value="TikTok">TikTok</option></select>
-      <label>Embed code <span class="hint" style="font-weight:400;">— paste the full &lt;blockquote&gt; embed from the post's "Embed" option</span></label>
-      <textarea id="e-code" rows="6" placeholder="Paste the Instagram/TikTok embed code here"></textarea>
-      <p class="hint">On the post itself, tap ••• → Embed → copy code, and paste it above.</p>
-    </div>
-
-    <div class="row" style="margin-top:20px;">
-      <label style="display:flex;align-items:center;gap:8px;margin:0;cursor:pointer;">
-        <input type="checkbox" id="f-pub" style="width:auto;"/> Publish now (uncheck to save as draft)
-      </label>
-      <div style="display:flex;gap:10px;">
-        <button class="btn ghost" id="cancel">Cancel</button>
-        <button class="btn" id="save">Save</button>
+    <section id="tab-videos" class="hide">
+      <div class="head">
+        <div><h1>Videos</h1><p>Feature a video on the Journal. Paste a link — that's it.</p></div>
+        <button class="btn" id="new-video">+ Add video</button>
       </div>
-    </div>
-  </div>
+      <div id="veditor" class="card hide" style="margin-bottom:22px;">
+        <label>Title</label>
+        <input id="v-title" type="text" placeholder="Quick tip: pricing a move-up listing"/>
+        <label>Video link <span class="hint" style="display:inline;">— paste a YouTube, TikTok, or Instagram link</span></label>
+        <input id="v-url" type="url" placeholder="https://youtube.com/watch?v=…"/>
+        <p class="hint">YouTube videos also appear automatically once your channel is connected in Settings. Add here to feature a specific one.</p>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;">
+          <label style="display:flex;align-items:center;gap:9px;margin:0;cursor:pointer;font-weight:500;">
+            <input type="checkbox" id="v-pub" style="width:auto;" checked/> Publish live
+          </label>
+          <div style="display:flex;gap:10px;">
+            <button class="btn ghost" id="v-cancel">Cancel</button>
+            <button class="btn" id="v-save">Save video</button>
+          </div>
+        </div>
+      </div>
+      <div id="video-list" class="plist"><p class="hint">Loading…</p></div>
+    </section>
 
-  <!-- LIST -->
-  <div class="card">
-    <div class="row"><b style="font-family:'Fraunces',serif;font-size:19px;">All posts</b><span class="hint" id="count"></span></div>
-    <div id="post-list" style="margin-top:8px;"><p class="hint" style="padding:16px 0;">Loading…</p></div>
-  </div>
+    <section id="tab-settings" class="hide">
+      <div class="head"><div><h1>Social &amp; Settings</h1><p>Your links and author info. These update the live Journal instantly.</p></div></div>
+      <div class="card" style="max-width:640px;">
+        <b style="font-family:'Fraunces',serif;font-size:18px;">Author</b>
+        <label>Name</label><input id="s-name" type="text" placeholder="Tom Garuccio"/>
+        <label>Tagline <span class="hint" style="display:inline;">— shows under your name on posts</span></label>
+        <input id="s-tagline" type="text" placeholder="Broker · Founder of NestTrack"/>
+        <b style="font-family:'Fraunces',serif;font-size:18px;display:block;margin-top:28px;">Social links</b>
+        <p class="hint" style="margin-top:4px;">These power the footer icons and the auto video feed.</p>
+        <label>YouTube channel ID <span class="hint" style="display:inline;">— starts with UC… (from youtube.com/account_advanced). Drives the auto video feed.</span></label>
+        <input id="s-ytid" type="text" placeholder="UCxxxxxxxxxxxxxxxxxxxxxx"/>
+        <label>YouTube profile URL</label><input id="s-youtube" type="url" placeholder="https://youtube.com/@yourhandle"/>
+        <label>Instagram URL</label><input id="s-instagram" type="url" placeholder="https://instagram.com/yourhandle"/>
+        <label>TikTok URL</label><input id="s-tiktok" type="url" placeholder="https://tiktok.com/@yourhandle"/>
+        <label>Facebook URL</label><input id="s-facebook" type="url" placeholder="https://facebook.com/yourprofile"/>
+        <button class="btn" id="save-settings" style="margin-top:24px;">Save settings</button>
+      </div>
+    </section>
+  </main>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -134,9 +226,9 @@
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
 import { getAuth, setPersistence, browserLocalPersistence, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
-import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc, query, orderBy } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+import { getFirestore, collection, getDocs, doc, getDoc, setDoc, deleteDoc, query, orderBy } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js';
 
-// Same SEPARATE sales-site Firebase project. Paste the SAME config as blog.html/post.html.
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyB9hCijkzRnafdehcYyYxc9kS3KuVwek4o",
   authDomain: "nesttrack-sales-page.firebaseapp.com",
@@ -146,110 +238,160 @@ const FIREBASE_CONFIG = {
   appId: "1:440961032614:web:5f9ec4a5089d1219c9ef67"
 };
 
-const configured = FIREBASE_CONFIG.apiKey && !FIREBASE_CONFIG.apiKey.startsWith('PASTE');
-let db, auth, editingId = null, editType = 'article';
+const app = initializeApp(FIREBASE_CONFIG);
+const auth = getAuth(app); const db = getFirestore(app); const storage = getStorage(app);
+setPersistence(auth, browserLocalPersistence).catch(()=>{});
 
 const $ = id => document.getElementById(id);
-function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); }
+function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400); }
+function esc(s){ return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function slugify(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60) || ('post-'+Date.now()); }
+function ytId(url){ const m=String(url).match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([A-Za-z0-9_-]{11})/); return m?m[1]:''; }
 
-if(!configured){
-  $('login-view').innerHTML = '<h1>Journal Admin</h1><div class="card" style="text-align:left;margin-top:20px;"><p>Paste your sales-site Firebase config into <b>admin.html</b>, <b>blog.html</b>, and <b>post.html</b> to activate. Until then this panel is inactive.</p></div>';
-} else {
-  const app = initializeApp(FIREBASE_CONFIG);
-  auth = getAuth(app); db = getFirestore(app);
-  setPersistence(auth, browserLocalPersistence).catch(()=>{});
+let editingId=null, coverUrl='';
 
-  onAuthStateChanged(auth, user=>{
-    if(user){ $('login-view').classList.add('hide'); $('admin-view').classList.remove('hide'); $('who').textContent = 'Signed in as '+user.email; loadPosts(); }
-    else { $('login-view').classList.remove('hide'); $('admin-view').classList.add('hide'); }
-  });
+onAuthStateChanged(auth, user=>{
+  if(user){ $('login-view').classList.add('hide'); $('app-view').classList.remove('hide'); $('who').textContent=user.email; loadPosts(); loadVideos(); loadSettings(); }
+  else { $('login-view').classList.remove('hide'); $('app-view').classList.add('hide'); }
+});
+$('li-btn').onclick = async ()=>{ $('li-err').textContent='';
+  try{ await signInWithEmailAndPassword(auth,$('li-email').value.trim(),$('li-pass').value); }
+  catch(e){ $('li-err').textContent='Sign in failed. Check your email and password.'; } };
+$('li-pass').addEventListener('keydown',e=>{ if(e.key==='Enter') $('li-btn').click(); });
+$('signout').onclick = ()=> signOut(auth);
 
-  $('li-btn').onclick = async ()=>{
-    $('li-err').textContent='';
-    try{ await signInWithEmailAndPassword(auth, $('li-email').value.trim(), $('li-pass').value); }
-    catch(e){ $('li-err').textContent = 'Sign in failed. Check your email and password.'; }
-  };
-  $('li-pass').addEventListener('keydown',e=>{ if(e.key==='Enter') $('li-btn').click(); });
-  $('signout').onclick = ()=> signOut(auth);
-}
-
-// Editor type tabs
-document.querySelectorAll('.tab').forEach(t=> t.onclick=()=>{
-  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-  t.classList.add('active'); editType = t.dataset.type;
-  $('fields-article').classList.toggle('hide', editType!=='article');
-  $('fields-embed').classList.toggle('hide', editType!=='embed');
+document.querySelectorAll('.navitem').forEach(n=> n.onclick=()=>{
+  document.querySelectorAll('.navitem').forEach(x=>x.classList.remove('active'));
+  n.classList.add('active');
+  const t=n.dataset.tab;
+  ['posts','videos','settings'].forEach(x=> $('tab-'+x).classList.toggle('hide', x!==t));
 });
 
-$('new-post').onclick = ()=>{ editingId=null; clearEditor(); $('editor').classList.remove('hide'); window.scrollTo({top:0,behavior:'smooth'}); };
-$('cancel').onclick = ()=> $('editor').classList.add('hide');
+const drop=$('drop-cover'), fileCover=$('file-cover');
+drop.onclick=()=>fileCover.click();
+drop.ondragover=e=>{e.preventDefault();drop.classList.add('over');};
+drop.ondragleave=()=>drop.classList.remove('over');
+drop.ondrop=e=>{e.preventDefault();drop.classList.remove('over'); if(e.dataTransfer.files[0]) uploadCover(e.dataTransfer.files[0]);};
+fileCover.onchange=()=>{ if(fileCover.files[0]) uploadCover(fileCover.files[0]); };
 
-function clearEditor(){
-  ['f-title','f-excerpt','f-thumb','f-body','e-title','e-code'].forEach(i=>$(i).value='');
-  $('f-read').value=5; $('f-cat').value='Systems'; $('f-pub').checked=false; $('e-platform').value='Instagram';
-  document.querySelector('.tab[data-type="article"]').click();
+async function uploadImage(file){
+  const safe=file.name.replace(/[^a-zA-Z0-9.]/g,'_');
+  const r=ref(storage,`blog/${Date.now()}_${safe}`);
+  await uploadBytes(r,file);
+  return await getDownloadURL(r);
+}
+async function uploadCover(file){
+  $('cover-prev').innerHTML='<div class="uploading">Uploading…</div>';
+  try{ coverUrl=await uploadImage(file); renderCoverPrev(); }
+  catch(e){ $('cover-prev').innerHTML='<div class="hint" style="color:var(--danger)">Upload failed. Is Storage enabled?</div>'; console.log(e); }
+}
+function renderCoverPrev(){
+  $('cover-prev').innerHTML = coverUrl ? `<div class="thumb-prev"><img src="${esc(coverUrl)}"/><button class="rm" title="Remove">×</button></div>` : '';
+  const rm=$('cover-prev').querySelector('.rm'); if(rm) rm.onclick=()=>{ coverUrl=''; renderCoverPrev(); };
 }
 
-$('save').onclick = async ()=>{
-  const now = new Date().toISOString().slice(0,10);
-  let data;
-  if(editType==='article'){
-    if(!$('f-title').value.trim()){ toast('Add a title first'); return; }
-    data = { type:'article', title:$('f-title').value.trim(), category:$('f-cat').value, readMins:Number($('f-read').value)||5,
-      excerpt:$('f-excerpt').value.trim(), thumb:$('f-thumb').value.trim(), body:$('f-body').value.trim(),
-      published:$('f-pub').checked, date: now, updated: now };
-  } else {
-    if(!$('e-code').value.trim()){ toast('Paste the embed code'); return; }
-    data = { type:'embed', title:$('e-title').value.trim()||'Social post', category:$('e-platform').value,
-      embedCode:$('e-code').value.trim(), excerpt:'', published:$('f-pub').checked, date: now, updated: now };
-  }
-  const id = editingId || slugify(data.title);
-  try{ await setDoc(doc(db,'blog_posts',id), data, {merge:true}); toast(editingId?'Updated':'Saved'); $('editor').classList.add('hide'); loadPosts(); }
+$('toolbar').addEventListener('click', async e=>{
+  const b=e.target.closest('.tbtn'); if(!b) return;
+  e.preventDefault();
+  const ta=$('f-body'); const ins=b.dataset.ins;
+  let snippet='';
+  if(ins==='h2') snippet='\n<h2>Heading</h2>\n';
+  else if(ins==='h3') snippet='\n<h3>Subhead</h3>\n';
+  else if(ins==='p') snippet='\n<p>Write here…</p>\n';
+  else if(ins==='ul') snippet='\n<ul>\n  <li>First point</li>\n  <li>Second point</li>\n</ul>\n';
+  else if(ins==='quote') snippet='\n<blockquote>A line worth pulling out.</blockquote>\n';
+  else if(ins==='b') snippet='<strong>bold text</strong>';
+  else if(ins==='yt'){ const url=prompt('Paste the YouTube link:'); if(!url) return; const id=ytId(url); if(!id){ toast('Could not read that YouTube link'); return; } snippet=`\n<iframe src="https://www.youtube.com/embed/${id}" allowfullscreen></iframe>\n`; }
+  else if(ins==='img'){ const f=document.createElement('input'); f.type='file'; f.accept='image/*'; f.onchange=async()=>{ if(!f.files[0])return; toast('Uploading photo…'); try{ const u=await uploadImage(f.files[0]); insertAtCursor(ta,`\n<img src="${u}" alt=""/>\n`); toast('Photo added'); }catch(err){ toast('Upload failed'); } }; f.click(); return; }
+  insertAtCursor(ta, snippet);
+});
+function insertAtCursor(ta,text){ const s=ta.selectionStart||ta.value.length, e2=ta.selectionEnd||ta.value.length; ta.value=ta.value.slice(0,s)+text+ta.value.slice(e2); ta.focus(); ta.selectionStart=ta.selectionEnd=s+text.length; }
+
+$('toggle-preview').onclick=()=>{ const w=$('preview-wrap'); const showing=!w.classList.contains('hide'); if(showing){w.classList.add('hide');$('toggle-preview').textContent='Preview';} else {$('preview').innerHTML=$('f-body').value;w.classList.remove('hide');$('toggle-preview').textContent='Hide preview';} };
+
+$('new-post').onclick=()=>{ editingId=null; clearEditor(); $('editor').classList.remove('hide'); window.scrollTo({top:0,behavior:'smooth'}); };
+$('cancel').onclick=()=> $('editor').classList.add('hide');
+function clearEditor(){ ['f-title','f-excerpt','f-body'].forEach(i=>$(i).value=''); $('f-cat').value='Systems'; $('f-read').value=5; $('f-pub').checked=false; coverUrl=''; renderCoverPrev(); $('preview-wrap').classList.add('hide'); $('toggle-preview').textContent='Preview'; }
+
+$('save').onclick=async()=>{
+  if(!$('f-title').value.trim()){ toast('Add a title first'); return; }
+  const now=new Date().toISOString().slice(0,10);
+  const data={ type:'article', title:$('f-title').value.trim(), category:$('f-cat').value, readMins:Number($('f-read').value)||5,
+    excerpt:$('f-excerpt').value.trim(), thumb:coverUrl, body:$('f-body').value.trim(), published:$('f-pub').checked, date:now, updated:now };
+  const id=editingId||slugify(data.title);
+  try{ await setDoc(doc(db,'blog_posts',id),data,{merge:true}); toast(editingId?'Post updated':'Post saved'); $('editor').classList.add('hide'); loadPosts(); }
   catch(e){ toast('Save failed'); console.log(e); }
 };
 
 async function loadPosts(){
   try{
-    const snap = await getDocs(query(collection(db,'blog_posts'), orderBy('date','desc')));
-    const list = $('post-list'); list.innerHTML='';
-    let n=0;
-    snap.forEach(d=>{ n++; const p=d.data();
-      const el=document.createElement('div'); el.className='post-item';
-      el.innerHTML = `<div class="t"><b>${p.title||'(untitled)'}</b><span>${p.category||''} · ${p.date||''}${p.type==='embed'?' · embed':''}</span></div>
+    const snap=await getDocs(query(collection(db,'blog_posts'),orderBy('date','desc')));
+    const arts=[]; snap.forEach(d=>{ const x=d.data(); if(x.type!=='video') arts.push({id:d.id,...x}); });
+    const list=$('post-list');
+    if(!arts.length){ list.innerHTML='<div class="empty"><div class="big">✎</div><b>No posts yet.</b><p class="hint">Click “New post” to write your first.</p></div>'; return; }
+    list.innerHTML='';
+    arts.forEach(p=>{ const el=document.createElement('div'); el.className='prow';
+      el.innerHTML=`${p.thumb?`<img class="pthumb" src="${esc(p.thumb)}"/>`:`<div class="pthumb">◆</div>`}
+        <div class="pmeta"><b>${esc(p.title||'(untitled)')}</b><span>${esc(p.category||'')} · ${p.date||''} · ${p.readMins||0} min</span></div>
         <span class="pill ${p.published?'pub':'draft'}">${p.published?'Live':'Draft'}</span>
-        <button class="btn ghost" data-edit="${d.id}">Edit</button>
-        <button class="btn danger" data-del="${d.id}">Delete</button>`;
+        <div class="pactions"><button class="btn ghost sm" data-edit="${p.id}">Edit</button><button class="btn danger sm" data-del="${p.id}">Delete</button></div>`;
       list.appendChild(el);
     });
-    $('count').textContent = n+' post'+(n===1?'':'s');
-    if(!n) list.innerHTML='<p class="hint" style="padding:16px 0;">No posts yet. Click “New post”.</p>';
-    list.querySelectorAll('[data-edit]').forEach(b=> b.onclick=()=>editPost(b.dataset.edit));
-    list.querySelectorAll('[data-del]').forEach(b=> b.onclick=()=>delPost(b.dataset.del));
+    list.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editPost(b.dataset.edit));
+    list.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>delPost(b.dataset.del));
   }catch(e){ $('post-list').innerHTML='<p class="hint">Could not load posts.</p>'; console.log(e); }
 }
-
 async function editPost(id){
-  const snap = await getDocs(query(collection(db,'blog_posts')));
-  let p=null; snap.forEach(d=>{ if(d.id===id) p={id:d.id,...d.data()}; });
-  if(!p) return;
-  editingId = id;
-  $('editor').classList.remove('hide'); window.scrollTo({top:0,behavior:'smooth'});
-  if(p.type==='embed'){
-    document.querySelector('.tab[data-type="embed"]').click();
-    $('e-title').value=p.title||''; $('e-platform').value=p.category||'Instagram'; $('e-code').value=p.embedCode||'';
-  } else {
-    document.querySelector('.tab[data-type="article"]').click();
-    $('f-title').value=p.title||''; $('f-cat').value=p.category||'Systems'; $('f-read').value=p.readMins||5;
-    $('f-excerpt').value=p.excerpt||''; $('f-thumb').value=p.thumb||''; $('f-body').value=p.body||'';
-  }
-  $('f-pub').checked=!!p.published;
+  const snap=await getDoc(doc(db,'blog_posts',id)); if(!snap.exists())return; const p=snap.data();
+  editingId=id; $('editor').classList.remove('hide'); window.scrollTo({top:0,behavior:'smooth'});
+  $('f-title').value=p.title||''; $('f-cat').value=p.category||'Systems'; $('f-read').value=p.readMins||5;
+  $('f-excerpt').value=p.excerpt||''; $('f-body').value=p.body||''; $('f-pub').checked=!!p.published;
+  coverUrl=p.thumb||''; renderCoverPrev();
+}
+async function delPost(id){ if(!confirm('Delete this? This cannot be undone.'))return; try{ await deleteDoc(doc(db,'blog_posts',id)); toast('Deleted'); loadPosts(); loadVideos(); }catch(e){ toast('Delete failed'); } }
+
+$('new-video').onclick=()=>{ $('v-title').value=''; $('v-url').value=''; $('v-pub').checked=true; $('veditor').classList.remove('hide'); };
+$('v-cancel').onclick=()=> $('veditor').classList.add('hide');
+$('v-save').onclick=async()=>{
+  const url=$('v-url').value.trim(); if(!url){ toast('Paste a video link'); return; }
+  const yid=ytId(url);
+  const now=new Date().toISOString().slice(0,10);
+  const data={ type:'video', title:$('v-title').value.trim()||'Video', category:'Video', youtubeId:yid, videoUrl:url, published:$('v-pub').checked, date:now };
+  try{ await setDoc(doc(db,'blog_posts','vid_'+Date.now()),data); toast('Video saved'); $('veditor').classList.add('hide'); loadVideos(); }
+  catch(e){ toast('Save failed'); }
+};
+async function loadVideos(){
+  try{
+    const snap=await getDocs(query(collection(db,'blog_posts'),orderBy('date','desc')));
+    const vids=[]; snap.forEach(d=>{ const x=d.data(); if(x.type==='video') vids.push({id:d.id,...x}); });
+    const list=$('video-list');
+    if(!vids.length){ list.innerHTML='<div class="empty"><div class="big">▶</div><b>No featured videos.</b><p class="hint">YouTube videos flow in automatically once connected in Settings. Add one here to feature it.</p></div>'; return; }
+    list.innerHTML='';
+    vids.forEach(p=>{ const el=document.createElement('div'); el.className='prow';
+      el.innerHTML=`${p.youtubeId?`<img class="pthumb" src="https://i.ytimg.com/vi/${p.youtubeId}/default.jpg"/>`:`<div class="pthumb">▶</div>`}
+        <div class="pmeta"><b>${esc(p.title||'Video')}</b><span>${p.date||''}</span></div>
+        <span class="pill ${p.published?'pub':'draft'}">${p.published?'Live':'Draft'}</span>
+        <div class="pactions"><button class="btn danger sm" data-del="${p.id}">Delete</button></div>`;
+      list.appendChild(el);
+    });
+    list.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>delPost(b.dataset.del));
+  }catch(e){ $('video-list').innerHTML='<p class="hint">Could not load videos.</p>'; }
 }
 
-async function delPost(id){
-  if(!confirm('Delete this post? This cannot be undone.')) return;
-  try{ await deleteDoc(doc(db,'blog_posts',id)); toast('Deleted'); loadPosts(); }catch(e){ toast('Delete failed'); }
+async function loadSettings(){
+  try{ const snap=await getDoc(doc(db,'settings','site')); if(snap.exists()){ const s=snap.data();
+    $('s-name').value=s.authorName||''; $('s-tagline').value=s.authorTagline||'';
+    $('s-ytid').value=s.youtubeChannelId||''; $('s-youtube').value=s.youtube||'';
+    $('s-instagram').value=s.instagram||''; $('s-tiktok').value=s.tiktok||''; $('s-facebook').value=s.facebook||'';
+  }}catch(e){ console.log('settings load:',e); }
 }
+$('save-settings').onclick=async()=>{
+  const data={ authorName:$('s-name').value.trim(), authorTagline:$('s-tagline').value.trim(),
+    youtubeChannelId:$('s-ytid').value.trim(), youtube:$('s-youtube').value.trim(),
+    instagram:$('s-instagram').value.trim(), tiktok:$('s-tiktok').value.trim(), facebook:$('s-facebook').value.trim() };
+  try{ await setDoc(doc(db,'settings','site'),data,{merge:true}); toast('Settings saved'); }
+  catch(e){ toast('Save failed'); console.log(e); }
+};
 </script>
 </body>
 </html>
