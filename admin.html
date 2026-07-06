@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="robots" content="noindex,nofollow"/>
+<title>Journal Admin — NestTrack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --ink:#0F1B33; --ink-soft:#42506B; --ink-faint:#7B8699;
+    --paper:#FBF8F3; --paper-2:#F4EEE3; --card:#FFFFFF;
+    --emerald:#1D9E75; --emerald-deep:#0B5E45; --emerald-dk:#065F46;
+    --mist:#E7F1EB; --gold:#BE9C44; --line:#E4DBCD; --line-soft:#EFE9DD;
+    --r:14px; --danger:#B91C1C;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--paper);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;line-height:1.55;}
+  .wrap{max-width:900px;margin:0 auto;padding:24px;}
+  h1{font-family:'Fraunces',serif;font-weight:500;font-size:28px;letter-spacing:-0.01em;}
+  .sub{color:var(--ink-faint);font-size:14px;margin-top:2px;}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .btn{background:var(--emerald);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
+  .btn:hover{background:var(--emerald-dk);}
+  .btn.ghost{background:var(--card);color:var(--ink-soft);border:1px solid var(--line);}
+  .btn.ghost:hover{border-color:var(--emerald);color:var(--emerald-dk);}
+  .btn.danger{background:transparent;color:var(--danger);border:1px solid #F1C4C4;}
+  .card{background:var(--card);border:1px solid var(--line-soft);border-radius:var(--r);padding:20px;margin-top:16px;}
+  label{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);margin:14px 0 6px;}
+  input,textarea,select{width:100%;font-family:inherit;font-size:14px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px;}
+  textarea{resize:vertical;line-height:1.55;}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--emerald);outline-offset:1px;border-color:transparent;}
+  .hint{font-size:12px;color:var(--ink-faint);margin-top:4px;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:600px){.grid2{grid-template-columns:1fr;}}
+  .post-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line-soft);}
+  .post-item:last-child{border-bottom:none;}
+  .post-item .t{flex:1;min-width:0;}
+  .post-item .t b{font-size:15px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .post-item .t span{font-size:12.5px;color:var(--ink-faint);}
+  .pill{font-size:11px;font-weight:600;padding:3px 9px;border-radius:6px;text-transform:uppercase;letter-spacing:.05em;}
+  .pill.pub{background:var(--mist);color:var(--emerald-dk);}
+  .pill.draft{background:#FDF6E3;color:var(--gold);}
+  .login{max-width:380px;margin:80px auto;text-align:center;}
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 20px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:99;}
+  .toast.show{opacity:1;}
+  .hide{display:none!important;}
+  .tabs{display:flex;gap:8px;margin:16px 0;}
+  .tab{padding:8px 16px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);}
+  .tab.active{background:var(--emerald);border-color:var(--emerald);color:#fff;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-view" class="wrap login">
+  <h1>Journal Admin</h1>
+  <p class="sub" style="margin-bottom:24px;">Sign in to manage posts.</p>
+  <div class="card" style="text-align:left;">
+    <label>Email</label>
+    <input id="li-email" type="email" autocomplete="username" placeholder="you@email.com"/>
+    <label>Password</label>
+    <input id="li-pass" type="password" autocomplete="current-password" placeholder="••••••••"/>
+    <button class="btn" style="width:100%;margin-top:18px;" id="li-btn">Sign in</button>
+    <p id="li-err" class="hint" style="color:var(--danger);margin-top:10px;"></p>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin-view" class="wrap hide">
+  <div class="row">
+    <div><h1>Journal Admin</h1><p class="sub" id="who"></p></div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn ghost" id="signout">Sign out</button>
+      <button class="btn" id="new-post">+ New post</button>
+    </div>
+  </div>
+
+  <!-- EDITOR (hidden until New/Edit) -->
+  <div id="editor" class="card hide">
+    <div class="tabs">
+      <div class="tab active" data-type="article">Written post</div>
+      <div class="tab" data-type="embed">Social embed (IG / TikTok)</div>
+    </div>
+
+    <div id="fields-article">
+      <label>Title</label>
+      <input id="f-title" placeholder="How I automate seller follow-up"/>
+      <div class="grid2">
+        <div><label>Category</label>
+          <select id="f-cat"><option>Systems</option><option>Follow-up</option><option>Tools</option><option>Lead gen</option><option>Guides</option></select>
+        </div>
+        <div><label>Read time (min)</label><input id="f-read" type="number" min="1" value="5"/></div>
+      </div>
+      <label>Excerpt <span class="hint" style="font-weight:400;">— 1–2 sentences, shows on the list + in search results</span></label>
+      <textarea id="f-excerpt" rows="2" placeholder="A short, honest summary. No hype."></textarea>
+      <label>Thumbnail image URL <span class="hint" style="font-weight:400;">— optional</span></label>
+      <input id="f-thumb" placeholder="https://…"/>
+      <label>Body <span class="hint" style="font-weight:400;">— HTML allowed: &lt;h2&gt; &lt;p&gt; &lt;ul&gt;&lt;li&gt; &lt;blockquote&gt; &lt;a&gt; &lt;img&gt;</span></label>
+      <textarea id="f-body" rows="14" placeholder="<p>Write your post here…</p>"></textarea>
+    </div>
+
+    <div id="fields-embed" class="hide">
+      <label>Title</label>
+      <input id="e-title" placeholder="Quick tip: pricing a move-up listing"/>
+      <label>Platform</label>
+      <select id="e-platform"><option value="Instagram">Instagram</option><option value="TikTok">TikTok</option></select>
+      <label>Embed code <span class="hint" style="font-weight:400;">— paste the full &lt;blockquote&gt; embed from the post's "Embed" option</span></label>
+      <textarea id="e-code" rows="6" placeholder="Paste the Instagram/TikTok embed code here"></textarea>
+      <p class="hint">On the post itself, tap ••• → Embed → copy code, and paste it above.</p>
+    </div>
+
+    <div class="row" style="margin-top:20px;">
+      <label style="display:flex;align-items:center;gap:8px;margin:0;cursor:pointer;">
+        <input type="checkbox" id="f-pub" style="width:auto;"/> Publish now (uncheck to save as draft)
+      </label>
+      <div style="display:flex;gap:10px;">
+        <button class="btn ghost" id="cancel">Cancel</button>
+        <button class="btn" id="save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIST -->
+  <div class="card">
+    <div class="row"><b style="font-family:'Fraunces',serif;font-size:19px;">All posts</b><span class="hint" id="count"></span></div>
+    <div id="post-list" style="margin-top:8px;"><p class="hint" style="padding:16px 0;">Loading…</p></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+import { getAuth, setPersistence, browserLocalPersistence, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc, query, orderBy } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+
+// Same SEPARATE sales-site Firebase project. Paste the SAME config as blog.html/post.html.
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyB9hCijkzRnafdehcYyYxc9kS3KuVwek4o",
+  authDomain: "nesttrack-sales-page.firebaseapp.com",
+  projectId: "nesttrack-sales-page",
+  storageBucket: "nesttrack-sales-page.firebasestorage.app",
+  messagingSenderId: "440961032614",
+  appId: "1:440961032614:web:5f9ec4a5089d1219c9ef67"
+};
+
+const configured = FIREBASE_CONFIG.apiKey && !FIREBASE_CONFIG.apiKey.startsWith('PASTE');
+let db, auth, editingId = null, editType = 'article';
+
+const $ = id => document.getElementById(id);
+function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); }
+function slugify(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60) || ('post-'+Date.now()); }
+
+if(!configured){
+  $('login-view').innerHTML = '<h1>Journal Admin</h1><div class="card" style="text-align:left;margin-top:20px;"><p>Paste your sales-site Firebase config into <b>admin.html</b>, <b>blog.html</b>, and <b>post.html</b> to activate. Until then this panel is inactive.</p></div>';
+} else {
+  const app = initializeApp(FIREBASE_CONFIG);
+  auth = getAuth(app); db = getFirestore(app);
+  setPersistence(auth, browserLocalPersistence).catch(()=>{});
+
+  onAuthStateChanged(auth, user=>{
+    if(user){ $('login-view').classList.add('hide'); $('admin-view').classList.remove('hide'); $('who').textContent = 'Signed in as '+user.email; loadPosts(); }
+    else { $('login-view').classList.remove('hide'); $('admin-view').classList.add('hide'); }
+  });
+
+  $('li-btn').onclick = async ()=>{
+    $('li-err').textContent='';
+    try{ await signInWithEmailAndPassword(auth, $('li-email').value.trim(), $('li-pass').value); }
+    catch(e){ $('li-err').textContent = 'Sign in failed. Check your email and password.'; }
+  };
+  $('li-pass').addEventListener('keydown',e=>{ if(e.key==='Enter') $('li-btn').click(); });
+  $('signout').onclick = ()=> signOut(auth);
+}
+
+// Editor type tabs
+document.querySelectorAll('.tab').forEach(t=> t.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active'); editType = t.dataset.type;
+  $('fields-article').classList.toggle('hide', editType!=='article');
+  $('fields-embed').classList.toggle('hide', editType!=='embed');
+});
+
+$('new-post').onclick = ()=>{ editingId=null; clearEditor(); $('editor').classList.remove('hide'); window.scrollTo({top:0,behavior:'smooth'}); };
+$('cancel').onclick = ()=> $('editor').classList.add('hide');
+
+function clearEditor(){
+  ['f-title','f-excerpt','f-thumb','f-body','e-title','e-code'].forEach(i=>$(i).value='');
+  $('f-read').value=5; $('f-cat').value='Systems'; $('f-pub').checked=false; $('e-platform').value='Instagram';
+  document.querySelector('.tab[data-type="article"]').click();
+}
+
+$('save').onclick = async ()=>{
+  const now = new Date().toISOString().slice(0,10);
+  let data;
+  if(editType==='article'){
+    if(!$('f-title').value.trim()){ toast('Add a title first'); return; }
+    data = { type:'article', title:$('f-title').value.trim(), category:$('f-cat').value, readMins:Number($('f-read').value)||5,
+      excerpt:$('f-excerpt').value.trim(), thumb:$('f-thumb').value.trim(), body:$('f-body').value.trim(),
+      published:$('f-pub').checked, date: now, updated: now };
+  } else {
+    if(!$('e-code').value.trim()){ toast('Paste the embed code'); return; }
+    data = { type:'embed', title:$('e-title').value.trim()||'Social post', category:$('e-platform').value,
+      embedCode:$('e-code').value.trim(), excerpt:'', published:$('f-pub').checked, date: now, updated: now };
+  }
+  const id = editingId || slugify(data.title);
+  try{ await setDoc(doc(db,'blog_posts',id), data, {merge:true}); toast(editingId?'Updated':'Saved'); $('editor').classList.add('hide'); loadPosts(); }
+  catch(e){ toast('Save failed'); console.log(e); }
+};
+
+async function loadPosts(){
+  try{
+    const snap = await getDocs(query(collection(db,'blog_posts'), orderBy('date','desc')));
+    const list = $('post-list'); list.innerHTML='';
+    let n=0;
+    snap.forEach(d=>{ n++; const p=d.data();
+      const el=document.createElement('div'); el.className='post-item';
+      el.innerHTML = `<div class="t"><b>${p.title||'(untitled)'}</b><span>${p.category||''} · ${p.date||''}${p.type==='embed'?' · embed':''}</span></div>
+        <span class="pill ${p.published?'pub':'draft'}">${p.published?'Live':'Draft'}</span>
+        <button class="btn ghost" data-edit="${d.id}">Edit</button>
+        <button class="btn danger" data-del="${d.id}">Delete</button>`;
+      list.appendChild(el);
+    });
+    $('count').textContent = n+' post'+(n===1?'':'s');
+    if(!n) list.innerHTML='<p class="hint" style="padding:16px 0;">No posts yet. Click “New post”.</p>';
+    list.querySelectorAll('[data-edit]').forEach(b=> b.onclick=()=>editPost(b.dataset.edit));
+    list.querySelectorAll('[data-del]').forEach(b=> b.onclick=()=>delPost(b.dataset.del));
+  }catch(e){ $('post-list').innerHTML='<p class="hint">Could not load posts.</p>'; console.log(e); }
+}
+
+async function editPost(id){
+  const snap = await getDocs(query(collection(db,'blog_posts')));
+  let p=null; snap.forEach(d=>{ if(d.id===id) p={id:d.id,...d.data()}; });
+  if(!p) return;
+  editingId = id;
+  $('editor').classList.remove('hide'); window.scrollTo({top:0,behavior:'smooth'});
+  if(p.type==='embed'){
+    document.querySelector('.tab[data-type="embed"]').click();
+    $('e-title').value=p.title||''; $('e-platform').value=p.category||'Instagram'; $('e-code').value=p.embedCode||'';
+  } else {
+    document.querySelector('.tab[data-type="article"]').click();
+    $('f-title').value=p.title||''; $('f-cat').value=p.category||'Systems'; $('f-read').value=p.readMins||5;
+    $('f-excerpt').value=p.excerpt||''; $('f-thumb').value=p.thumb||''; $('f-body').value=p.body||'';
+  }
+  $('f-pub').checked=!!p.published;
+}
+
+async function delPost(id){
+  if(!confirm('Delete this post? This cannot be undone.')) return;
+  try{ await deleteDoc(doc(db,'blog_posts',id)); toast('Deleted'); loadPosts(); }catch(e){ toast('Delete failed'); }
+}
+</script>
+</body>
+</html>
