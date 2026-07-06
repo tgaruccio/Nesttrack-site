@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>NestTrack Journal</title>
+<meta name="description" content="A NestTrack Journal article."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --ink:#0F1B33; --ink-soft:#42506B; --ink-faint:#7B8699;
+    --paper:#FBF8F3; --paper-2:#F4EEE3; --card:#FFFFFF;
+    --emerald:#1D9E75; --emerald-deep:#0B5E45; --emerald-dk:#065F46;
+    --mist:#E7F1EB; --gold:#BE9C44; --gold-soft:#EFE4C6;
+    --line:#E4DBCD; --line-soft:#EFE9DD;
+    --shadow:0 1px 2px rgba(15,27,51,.04), 0 12px 32px -12px rgba(15,27,51,.12);
+    --r:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--paper);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased;}
+  a{color:var(--emerald-dk);}
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px;}
+
+  nav{position:sticky;top:0;z-index:50;background:rgba(251,248,243,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line-soft);}
+  .nav-inner{max-width:1140px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:66px;}
+  .brand{font-family:'Fraunces',serif;font-weight:600;font-size:22px;letter-spacing:-0.02em;color:var(--ink);display:flex;align-items:center;gap:9px;text-decoration:none;}
+  .brand .dot{width:26px;height:26px;border-radius:8px;background:var(--emerald);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:15px;}
+  .nav-cta{background:var(--emerald);color:#fff;padding:9px 18px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;}
+
+  article{padding:52px 0 80px;}
+  .back{display:inline-block;font-size:14px;font-weight:500;color:var(--ink-soft);margin-bottom:32px;text-decoration:none;}
+  .back:hover{color:var(--emerald-dk);}
+  .cat{font-size:12.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+  h1{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(30px,5vw,46px);line-height:1.08;letter-spacing:-0.02em;color:var(--ink);}
+  .byline{display:flex;align-items:center;gap:12px;margin:26px 0 32px;padding-bottom:26px;border-bottom:1px solid var(--line);}
+  .byline .av{width:44px;height:44px;border-radius:50%;background:var(--emerald);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:18px;flex-shrink:0;}
+  .byline .who{font-size:14px;}
+  .byline .who b{color:var(--ink);font-weight:600;}
+  .byline .who span{color:var(--ink-faint);}
+  .hero-img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:var(--r);margin-bottom:36px;background:var(--mist);}
+
+  .content{font-size:18px;color:var(--ink-soft);}
+  .content > *{margin-bottom:22px;}
+  .content h2{font-family:'Fraunces',serif;font-weight:500;font-size:27px;color:var(--ink);margin-top:44px;letter-spacing:-0.01em;}
+  .content h3{font-family:'Fraunces',serif;font-weight:500;font-size:21px;color:var(--ink);margin-top:32px;}
+  .content ul,.content ol{padding-left:24px;}
+  .content li{margin-bottom:8px;}
+  .content blockquote{border-left:3px solid var(--emerald);padding:4px 0 4px 22px;font-family:'Fraunces',serif;font-style:italic;font-size:21px;color:var(--ink);}
+  .content img{max-width:100%;border-radius:12px;}
+  .content a{text-decoration:underline;}
+  .content iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;}
+
+  .cta-box{margin-top:56px;padding:34px;border-radius:var(--r);background:var(--emerald-deep);color:#fff;text-align:center;}
+  .cta-box h3{font-family:'Fraunces',serif;font-weight:500;font-size:24px;margin-bottom:10px;color:#fff;}
+  .cta-box p{color:rgba(255,255,255,.85);font-size:15px;margin-bottom:20px;}
+  .cta-box a{display:inline-block;background:#fff;color:var(--emerald-dk);font-weight:600;padding:12px 26px;border-radius:11px;text-decoration:none;}
+
+  footer{border-top:1px solid var(--line);padding:40px 0;background:var(--paper-2);text-align:center;font-size:13px;color:var(--ink-faint);}
+  .state{text-align:center;padding:100px 20px;color:var(--ink-faint);}
+  .state h2{font-family:'Fraunces',serif;font-size:26px;color:var(--ink-soft);margin-bottom:8px;}
+  :focus-visible{outline:2px solid var(--emerald);outline-offset:2px;}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+<script type="application/ld+json" id="ld"></script>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="brand" href="/"><span class="dot">◆</span> NestTrack</a>
+    <a class="nav-cta" href="https://app.nesttrack.io">Open app</a>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap" id="root">
+    <div class="state"><h2>Loading…</h2></div>
+  </div>
+</article>
+
+<footer>© <span id="yr"></span> NestTrack. Built by an agent, for agents.</footer>
+
+<script type="module">
+// Same separate sales-site Firebase project as blog.html. Paste the SAME config here.
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyB9hCijkzRnafdehcYyYxc9kS3KuVwek4o",
+  authDomain: "nesttrack-sales-page.firebaseapp.com",
+  projectId: "nesttrack-sales-page",
+  storageBucket: "nesttrack-sales-page.firebasestorage.app",
+  messagingSenderId: "440961032614",
+  appId: "1:440961032614:web:5f9ec4a5089d1219c9ef67"
+};
+
+// Author identity for E-E-A-T (search + AI authority). EDIT THIS.
+const AUTHOR = { name: "Tom Garuccio", tagline: "Broker · Founder of NestTrack", initials: "TG" };
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+const params = new URLSearchParams(location.search);
+const id = params.get('id');
+
+function esc(s){ return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function fmtDate(d){ try{ return new Date(d).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); }catch(e){ return d; } }
+
+function render(p){
+  document.title = `${p.title} — NestTrack Journal`;
+  const md = document.querySelector('meta[name="description"]'); if(md) md.setAttribute('content', p.excerpt||'');
+  // JSON-LD Article schema — this is what search + AI models read to understand + cite the post.
+  document.getElementById('ld').textContent = JSON.stringify({
+    "@context":"https://schema.org","@type":"Article",
+    "headline":p.title,"description":p.excerpt||"",
+    "datePublished":p.date,"dateModified":p.updated||p.date,
+    "author":{"@type":"Person","name":AUTHOR.name},
+    "publisher":{"@type":"Organization","name":"NestTrack","url":"https://nesttrack.io"},
+    "mainEntityOfPage":{"@type":"WebPage","@id":`https://nesttrack.io/post.html?id=${id}`},
+    ...(p.thumb?{"image":p.thumb}:{})
+  });
+
+  const hero = p.thumb ? `<img class="hero-img" src="${esc(p.thumb)}" alt="${esc(p.title)}"/>` : '';
+  document.getElementById('root').innerHTML = `
+    <a class="back" href="blog.html">← All posts</a>
+    <div class="cat">${esc(p.category||'Post')}</div>
+    <h1>${esc(p.title)}</h1>
+    <div class="byline">
+      <div class="av">${esc(AUTHOR.initials)}</div>
+      <div class="who"><b>${esc(AUTHOR.name)}</b> · <span>${esc(AUTHOR.tagline)}</span><br><span>${fmtDate(p.date)}${p.readMins?` · ${p.readMins} min read`:''}</span></div>
+    </div>
+    ${hero}
+    <div class="content">${p.body || '<p>'+esc(p.excerpt||'')+'</p>'}</div>
+    <div class="cta-box">
+      <h3>Run your business on NestTrack</h3>
+      <p>The tools in these posts are built into the app. See it for yourself.</p>
+      <a href="https://app.nesttrack.io">Open NestTrack →</a>
+    </div>`;
+}
+
+const DEMO = {
+  demo1:{ title:'The three jobs every agent tool should do', category:'Systems', date:'2026-07-01', readMins:5, excerpt:'Get them in, wow them through the deal, keep them for life.', body:'<p>Most real estate software is built to do one thing well and eleven things badly. That is the wrong shape for the problem.</p><h2>Get them in</h2><p>Lead capture that actually reaches you, fast, on the device in your pocket.</p><h2>Wow them through the deal</h2><p>A client who can see their own timeline, dates, and next steps is a client who refers you.</p><h2>Keep them for life</h2><p>The money is in the years after closing. Automated, personal touches are how you stay top of mind.</p>' }
+};
+
+async function boot(){
+  if(!id){ document.getElementById('root').innerHTML='<div class="state"><h2>Post not found</h2><p><a href="blog.html">Back to the Journal</a></p></div>'; return; }
+  const hasConfig = FIREBASE_CONFIG.apiKey && !FIREBASE_CONFIG.apiKey.startsWith('PASTE');
+  let post = null;
+  if(hasConfig){
+    try{
+      const { initializeApp } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js');
+      const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js');
+      const app = initializeApp(FIREBASE_CONFIG);
+      const db = getFirestore(app);
+      const snap = await getDoc(doc(db,'blog_posts',id));
+      if(snap.exists()) post = { id, ...snap.data() };
+    }catch(e){ console.log('load failed:', e && e.message); }
+  }
+  if(!post) post = DEMO[id];
+  if(!post){ document.getElementById('root').innerHTML='<div class="state"><h2>Post not found</h2><p><a href="blog.html">Back to the Journal</a></p></div>'; return; }
+  render(post);
+}
+boot();
+</script>
+</body>
+</html>
