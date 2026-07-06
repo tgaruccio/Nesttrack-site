@@ -159,10 +159,10 @@
       <a href="/terms.html">Terms</a>
     </div>
     <div class="foot-social">
-      <!-- TODO: replace # with your real handles -->
-      <a href="#" title="YouTube" id="soc-yt">▶</a>
-      <a href="#" title="Instagram" id="soc-ig">◎</a>
-      <a href="#" title="TikTok" id="soc-tt">♪</a>
+      <a href="#" title="YouTube" id="soc-yt" style="display:none;">▶</a>
+      <a href="#" title="Instagram" id="soc-ig" style="display:none;">◎</a>
+      <a href="#" title="TikTok" id="soc-tt" style="display:none;">♪</a>
+      <a href="#" title="Facebook" id="soc-fb" style="display:none;">f</a>
     </div>
   </div>
   <div class="wrap" style="margin-top:18px;"><div class="copy">© <span id="yr"></span> NestTrack. Built by an agent, for agents.</div></div>
@@ -240,10 +240,10 @@ function renderFeed(){
 }
 
 // ── YouTube auto-feed (free, via RSS; no API key needed) ──
-async function loadYouTube(){
-  if(!YOUTUBE_CHANNEL_ID || YOUTUBE_CHANNEL_ID.startsWith('PASTE')) return [];
+async function loadYouTube(channelId){
+  if(!channelId || channelId.startsWith('PASTE')) return [];
   try{
-    const rss = `https://www.youtube.com/feeds/videos.xml?channel_id=${YOUTUBE_CHANNEL_ID}`;
+    const rss = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
     // Public CORS-friendly reader for the RSS feed:
     const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(rss)}`);
     const xml = new DOMParser().parseFromString(await res.text(), 'text/xml');
@@ -262,14 +262,19 @@ async function loadYouTube(){
 async function boot(){
   renderFilters();
   let posts = [];
+  let settings = {};
 
   const hasConfig = FIREBASE_CONFIG.apiKey && !FIREBASE_CONFIG.apiKey.startsWith('PASTE');
+  let db = null;
   if(hasConfig){
     try{
       const { initializeApp } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js');
-      const { getFirestore, collection, getDocs, query, where, orderBy } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js');
+      const { getFirestore, collection, getDocs, doc, getDoc, query, where, orderBy } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js');
       const app = initializeApp(FIREBASE_CONFIG);
-      const db = getFirestore(app);
+      db = getFirestore(app);
+      // Settings (social links + YouTube channel), managed from the admin
+      try{ const ss = await getDoc(doc(db,'settings','site')); if(ss.exists()) settings = ss.data(); }catch(e){}
+      // Published posts
       const snap = await getDocs(query(collection(db,'blog_posts'), where('published','==',true), orderBy('date','desc')));
       snap.forEach(d=>{ const x=d.data(); posts.push({ id:d.id, ...x }); });
     }catch(e){ console.log('Firestore load failed, showing demo:', e && e.message); }
@@ -277,12 +282,21 @@ async function boot(){
 
   if(!posts.length) posts = DEMO_POSTS;   // fall back to demo until real posts exist
 
-  // Merge in YouTube videos (auto)
-  const yt = await loadYouTube();
+  // Wire footer social links from settings
+  applySocial(settings);
+
+  // Merge in YouTube videos (auto) — channel ID comes from settings, or the hardcoded fallback
+  const channelId = settings.youtubeChannelId || YOUTUBE_CHANNEL_ID;
+  const yt = await loadYouTube(channelId);
   posts = posts.concat(yt);
 
   activePosts = posts;
   renderFeed();
+}
+
+function applySocial(s){
+  const map = { 'soc-yt':s.youtube, 'soc-ig':s.instagram, 'soc-tt':s.tiktok, 'soc-fb':s.facebook };
+  Object.keys(map).forEach(id=>{ const el=document.getElementById(id); if(!el) return; if(map[id]){ el.href=map[id]; el.style.display='flex'; } else { el.style.display='none'; } });
 }
 boot();
 </script>
