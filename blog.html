@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>The NestTrack Journal — Real estate systems, tools, and straight talk for agents</title>
+<meta name="description" content="Practical guides, product deep-dives, and honest takes on running a modern real estate business — from a working broker who built the tools. No fluff."/>
+<link rel="canonical" href="https://nesttrack.io/blog.html"/>
+<!-- Open Graph / social -->
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="NestTrack"/>
+<meta property="og:title" content="The NestTrack Journal"/>
+<meta property="og:description" content="Real estate systems, tools, and straight talk for agents. No fluff."/>
+<meta property="og:url" content="https://nesttrack.io/blog.html"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<!-- JSON-LD: Blog schema for search + AI discovery -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "The NestTrack Journal",
+  "description": "Real estate systems, tools, and straight talk for agents.",
+  "url": "https://nesttrack.io/blog.html",
+  "publisher": { "@type": "Organization", "name": "NestTrack", "url": "https://nesttrack.io" }
+}
+</script>
+<link rel="alternate" type="application/rss+xml" title="NestTrack Journal RSS" href="https://nesttrack.io/rss.xml"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --ink:#0F1B33; --ink-soft:#42506B; --ink-faint:#7B8699;
+    --paper:#FBF8F3; --paper-2:#F4EEE3; --card:#FFFFFF;
+    --emerald:#1D9E75; --emerald-deep:#0B5E45; --emerald-dk:#065F46;
+    --mist:#E7F1EB; --gold:#BE9C44; --gold-soft:#EFE4C6;
+    --line:#E4DBCD; --line-soft:#EFE9DD;
+    --shadow:0 1px 2px rgba(15,27,51,.04), 0 12px 32px -12px rgba(15,27,51,.12);
+    --shadow-lg:0 2px 4px rgba(15,27,51,.05), 0 30px 60px -24px rgba(15,27,51,.22);
+    --r:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 24px;}
+
+  /* Nav — mirrors the sales site */
+  nav{position:sticky;top:0;z-index:50;background:rgba(251,248,243,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line-soft);}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:66px;}
+  .brand{font-family:'Fraunces',serif;font-weight:600;font-size:22px;letter-spacing:-0.02em;color:var(--ink);display:flex;align-items:center;gap:9px;}
+  .brand .dot{width:26px;height:26px;border-radius:8px;background:var(--emerald);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:15px;}
+  .nav-links{display:flex;align-items:center;gap:30px;font-size:15px;font-weight:500;color:var(--ink-soft);}
+  .nav-links a:hover{color:var(--emerald-dk);}
+  .nav-cta{background:var(--emerald);color:#fff;padding:9px 18px;border-radius:10px;font-weight:600;font-size:14px;}
+  .nav-cta:hover{background:var(--emerald-dk);}
+  @media(max-width:720px){ .nav-links a:not(.nav-cta){display:none;} }
+
+  /* Masthead */
+  header.mast{padding:64px 0 34px;border-bottom:1px solid var(--line);}
+  .eyebrow{font-size:12.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+  h1.title{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(38px,6vw,66px);line-height:1.02;letter-spacing:-0.02em;color:var(--ink);max-width:16ch;}
+  .lede{margin-top:20px;font-size:18px;color:var(--ink-soft);max-width:56ch;}
+
+  /* Category filter */
+  .filters{display:flex;flex-wrap:wrap;gap:9px;padding:26px 0 4px;}
+  .chip{font-size:13.5px;font-weight:500;color:var(--ink-soft);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 15px;cursor:pointer;transition:all .15s;}
+  .chip:hover{border-color:var(--emerald);color:var(--emerald-dk);}
+  .chip.active{background:var(--emerald);border-color:var(--emerald);color:#fff;}
+
+  /* Feed grid */
+  main{padding:38px 0 90px;}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px 26px;}
+  @media(max-width:900px){ .grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:600px){ .grid{grid-template-columns:1fr;} }
+
+  .card{background:var(--card);border:1px solid var(--line-soft);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:transform .18s, box-shadow .18s;box-shadow:var(--shadow);}
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+  .card .thumb{aspect-ratio:16/9;background:var(--mist);position:relative;overflow:hidden;}
+  .card .thumb img,.card .thumb iframe{width:100%;height:100%;object-fit:cover;border:0;display:block;}
+  .card .thumb .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:40px;color:var(--emerald);background:linear-gradient(135deg,var(--mist),var(--paper-2));}
+  .badge{position:absolute;top:12px;left:12px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:6px;background:rgba(255,255,255,.92);color:var(--emerald-dk);}
+  .badge.video{background:rgba(15,27,51,.82);color:#fff;}
+  .card .body{padding:20px 20px 22px;display:flex;flex-direction:column;flex:1;}
+  .card .cat{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;}
+  .card h3{font-family:'Fraunces',serif;font-weight:500;font-size:21px;line-height:1.18;letter-spacing:-0.01em;color:var(--ink);margin-bottom:9px;}
+  .card p.exc{font-size:14.5px;color:var(--ink-soft);flex:1;}
+  .card .meta{margin-top:16px;font-size:13px;color:var(--ink-faint);display:flex;align-items:center;gap:8px;}
+  .card .meta .read{margin-left:auto;color:var(--emerald-dk);font-weight:600;}
+
+  /* Featured (first post spans wide) */
+  .card.feat{grid-column:1 / -1;flex-direction:row;}
+  .card.feat .thumb{width:52%;aspect-ratio:auto;}
+  .card.feat .body{width:48%;justify-content:center;padding:40px;}
+  .card.feat h3{font-size:32px;}
+  .card.feat p.exc{font-size:16px;}
+  @media(max-width:760px){ .card.feat{flex-direction:column;} .card.feat .thumb,.card.feat .body{width:100%;} .card.feat .thumb{aspect-ratio:16/9;} .card.feat h3{font-size:24px;} }
+
+  /* States */
+  .state{text-align:center;padding:80px 20px;color:var(--ink-faint);}
+  .state h2{font-family:'Fraunces',serif;font-weight:400;font-size:26px;color:var(--ink-soft);margin-bottom:8px;}
+  .skeleton{background:var(--card);border:1px solid var(--line-soft);border-radius:var(--r);height:340px;animation:pulse 1.4s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+
+  /* Footer */
+  footer{border-top:1px solid var(--line);padding:44px 0;background:var(--paper-2);}
+  .foot-inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:center;}
+  .foot-links{display:flex;gap:22px;font-size:14px;color:var(--ink-soft);}
+  .foot-links a:hover{color:var(--emerald-dk);}
+  .foot-social{display:flex;gap:14px;}
+  .foot-social a{width:36px;height:36px;border-radius:9px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink-soft);font-size:15px;background:var(--card);}
+  .foot-social a:hover{border-color:var(--emerald);color:var(--emerald-dk);}
+  .copy{font-size:13px;color:var(--ink-faint);}
+
+  :focus-visible{outline:2px solid var(--emerald);outline-offset:2px;border-radius:4px;}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href="/"><span class="dot">◆</span> NestTrack</a>
+    <div class="nav-links">
+      <a href="/#how">How it works</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/blog.html" style="color:var(--emerald-dk);font-weight:600;">Journal</a>
+      <a class="nav-cta" href="https://app.nesttrack.io">Open app</a>
+    </div>
+  </div>
+</nav>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="eyebrow">The NestTrack Journal</div>
+    <h1 class="title">Systems and straight talk for agents who'd rather sell than fuss with software.</h1>
+    <p class="lede">Guides, product walk-throughs, and honest takes on running a modern real estate business — written by a working broker who got tired of clunky tools and built better ones.</p>
+    <div class="filters" id="filters"></div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="grid" id="feed">
+      <!-- Loading skeletons -->
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <div class="foot-links">
+      <a href="/">Home</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/blog.html">Journal</a>
+      <a href="https://app.nesttrack.io">Open app</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+    <div class="foot-social">
+      <!-- TODO: replace # with your real handles -->
+      <a href="#" title="YouTube" id="soc-yt">▶</a>
+      <a href="#" title="Instagram" id="soc-ig">◎</a>
+      <a href="#" title="TikTok" id="soc-tt">♪</a>
+    </div>
+  </div>
+  <div class="wrap" style="margin-top:18px;"><div class="copy">© <span id="yr"></span> NestTrack. Built by an agent, for agents.</div></div>
+</footer>
+
+<script type="module">
+// ─────────────────────────────────────────────────────────────────────────────
+//  FIREBASE CONFIG  —  PASTE YOUR NEW SALES-SITE FIREBASE PROJECT CONFIG BELOW.
+//  (Firebase console → Project settings → "Your apps" → SDK setup → Config)
+//  This is a SEPARATE project from the app. Leave as-is and the page shows demo
+//  posts; paste real config and it loads live posts from Firestore.
+// ─────────────────────────────────────────────────────────────────────────────
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyB9hCijkzRnafdehcYyYxc9kS3KuVwek4o",
+  authDomain: "nesttrack-sales-page.firebaseapp.com",
+  projectId: "nesttrack-sales-page",
+  storageBucket: "nesttrack-sales-page.firebasestorage.app",
+  messagingSenderId: "440961032614",
+  appId: "1:440961032614:web:5f9ec4a5089d1219c9ef67"
+};
+
+// YouTube channel for the auto-feed. Paste your channel ID (starts with UC...).
+// Find it at youtube.com/account_advanced, or view-source your channel page for "channelId".
+const YOUTUBE_CHANNEL_ID = "PASTE_YOUR_CHANNEL_ID";
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// ── Demo content (shown until Firebase config is pasted) ──
+const DEMO_POSTS = [
+  { id:'demo1', type:'article', category:'Systems', title:'The three jobs every agent tool should do (and why most do none of them)', excerpt:'Get them in, wow them through the deal, keep them for life. If your stack does not serve all three, it is costing you repeat business.', thumb:'', date:'2026-07-01', readMins:5, featured:true },
+  { id:'demo2', type:'article', category:'Follow-up', title:'How I automate seller follow-up without sounding like a robot', excerpt:'A look at the exact Smart Plan I run after every listing goes live — timed touches that feel personal at scale.', thumb:'', date:'2026-06-24', readMins:6 },
+  { id:'demo3', type:'comparison', category:'Tools', title:'NestTrack vs. Homebot: an honest comparison from someone who used both', excerpt:'What a built-in home-value digest actually changes about client retention — and where a bolt-on subscription falls short.', thumb:'', date:'2026-06-18', readMins:7 },
+  { id:'demo4', type:'article', category:'Lead gen', title:'What buying paid leads actually costs you (it is not the lead price)', excerpt:'Speed-to-lead, follow-up discipline, and the system that turns a $40 lead into a closing instead of a dead end.', thumb:'', date:'2026-06-10', readMins:5 }
+];
+
+const CATEGORIES = ['All','Systems','Follow-up','Tools','Lead gen','Video'];
+let activePosts = [];
+let activeCat = 'All';
+
+function fmtDate(d){ try{ return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }catch(e){ return d; } }
+function esc(s){ return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function renderFilters(){
+  const f = document.getElementById('filters');
+  f.innerHTML = CATEGORIES.map(c=>`<button class="chip${c===activeCat?' active':''}" data-cat="${c}">${c}</button>`).join('');
+  f.querySelectorAll('.chip').forEach(b=> b.onclick=()=>{ activeCat=b.dataset.cat; renderFilters(); renderFeed(); });
+}
+
+function cardHTML(p, isFeat){
+  const thumb = p.youtubeId
+    ? `<div class="thumb"><span class="badge video">Video</span><img src="https://i.ytimg.com/vi/${esc(p.youtubeId)}/hqdefault.jpg" alt="${esc(p.title)}" loading="lazy"/></div>`
+    : p.thumb
+      ? `<div class="thumb"><span class="badge">${esc(p.category||'Post')}</span><img src="${esc(p.thumb)}" alt="${esc(p.title)}" loading="lazy"/></div>`
+      : `<div class="thumb"><span class="badge">${esc(p.category||'Post')}</span><div class="ph">◆</div></div>`;
+  const href = p.youtubeId ? `https://youtube.com/watch?v=${esc(p.youtubeId)}` : `post.html?id=${esc(p.id)}`;
+  const target = p.youtubeId ? ' target="_blank" rel="noopener"' : '';
+  return `<a class="card${isFeat?' feat':''}" href="${href}"${target}>
+    ${thumb}
+    <div class="body">
+      <div class="cat">${esc(p.category||'Post')}</div>
+      <h3>${esc(p.title)}</h3>
+      <p class="exc">${esc(p.excerpt||'')}</p>
+      <div class="meta"><span>${fmtDate(p.date)}</span>${p.readMins?`<span>· ${p.readMins} min read</span>`:''}<span class="read">${p.youtubeId?'Watch →':'Read →'}</span></div>
+    </div>
+  </a>`;
+}
+
+function renderFeed(){
+  const feed = document.getElementById('feed');
+  let posts = activePosts.slice();
+  if(activeCat!=='All') posts = posts.filter(p=> (activeCat==='Video') ? p.youtubeId : (p.category===activeCat));
+  if(!posts.length){ feed.innerHTML = `<div class="state" style="grid-column:1/-1"><h2>Nothing here yet</h2><p>New posts are on the way.</p></div>`; return; }
+  posts.sort((a,b)=> new Date(b.date) - new Date(a.date));
+  feed.innerHTML = posts.map((p,i)=> cardHTML(p, i===0 && activeCat==='All')).join('');
+}
+
+// ── YouTube auto-feed (free, via RSS; no API key needed) ──
+async function loadYouTube(){
+  if(!YOUTUBE_CHANNEL_ID || YOUTUBE_CHANNEL_ID.startsWith('PASTE')) return [];
+  try{
+    const rss = `https://www.youtube.com/feeds/videos.xml?channel_id=${YOUTUBE_CHANNEL_ID}`;
+    // Public CORS-friendly reader for the RSS feed:
+    const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(rss)}`);
+    const xml = new DOMParser().parseFromString(await res.text(), 'text/xml');
+    return [...xml.querySelectorAll('entry')].slice(0,6).map(e=>({
+      id: 'yt_'+(e.querySelector('videoId')?.textContent||''),
+      youtubeId: e.querySelector('videoId')?.textContent||'',
+      type:'video', category:'Video',
+      title: e.querySelector('title')?.textContent||'',
+      excerpt: (e.querySelector('group > description')?.textContent||'').slice(0,140),
+      date: e.querySelector('published')?.textContent||'',
+      readMins: 0
+    }));
+  }catch(e){ console.log('YouTube feed unavailable:', e && e.message); return []; }
+}
+
+async function boot(){
+  renderFilters();
+  let posts = [];
+
+  const hasConfig = FIREBASE_CONFIG.apiKey && !FIREBASE_CONFIG.apiKey.startsWith('PASTE');
+  if(hasConfig){
+    try{
+      const { initializeApp } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js');
+      const { getFirestore, collection, getDocs, query, where, orderBy } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js');
+      const app = initializeApp(FIREBASE_CONFIG);
+      const db = getFirestore(app);
+      const snap = await getDocs(query(collection(db,'blog_posts'), where('published','==',true), orderBy('date','desc')));
+      snap.forEach(d=>{ const x=d.data(); posts.push({ id:d.id, ...x }); });
+    }catch(e){ console.log('Firestore load failed, showing demo:', e && e.message); }
+  }
+
+  if(!posts.length) posts = DEMO_POSTS;   // fall back to demo until real posts exist
+
+  // Merge in YouTube videos (auto)
+  const yt = await loadYouTube();
+  posts = posts.concat(yt);
+
+  activePosts = posts;
+  renderFeed();
+}
+boot();
+</script>
+</body>
+</html>
