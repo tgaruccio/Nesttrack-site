@@ -149,6 +149,12 @@ async function boot(){
       const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js');
       const app = initializeApp(FIREBASE_CONFIG);
       const db = getFirestore(app);
+      // Author bio from settings (managed in admin)
+      try{ const ss = await getDoc(doc(db,'settings','site')); if(ss.exists()){ const s=ss.data();
+        if(s.authorName) AUTHOR.name = s.authorName;
+        if(s.authorTagline) AUTHOR.tagline = s.authorTagline;
+        AUTHOR.initials = (AUTHOR.name||'').split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase() || AUTHOR.initials;
+      }}catch(e){}
       const snap = await getDoc(doc(db,'blog_posts',id));
       if(snap.exists()) post = { id, ...snap.data() };
     }catch(e){ console.log('load failed:', e && e.message); }
