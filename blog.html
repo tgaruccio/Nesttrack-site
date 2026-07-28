@@ -235,7 +235,8 @@ function renderFeed(){
   let posts = activePosts.slice();
   if(activeCat!=='All') posts = posts.filter(p=> (activeCat==='Video') ? p.youtubeId : (p.category===activeCat));
   if(!posts.length){ feed.innerHTML = `<div class="state" style="grid-column:1/-1"><h2>Nothing here yet</h2><p>New posts are on the way.</p></div>`; return; }
-  posts.sort((a,b)=> new Date(b.date) - new Date(a.date));
+  const when = p => { const t = new Date(p.date).getTime(); return isNaN(t) ? 0 : t; };
+  posts.sort((a,b)=> when(b) - when(a));
   feed.innerHTML = posts.map((p,i)=> cardHTML(p, i===0 && activeCat==='All')).join('');
 }
 
@@ -263,6 +264,7 @@ async function boot(){
   renderFilters();
   let posts = [];
   let settings = {};
+  let loadedFromFirestore = false;
 
   const hasConfig = FIREBASE_CONFIG.apiKey && !FIREBASE_CONFIG.apiKey.startsWith('PASTE');
   let db = null;
@@ -274,13 +276,27 @@ async function boot(){
       db = getFirestore(app);
       // Settings (social links + YouTube channel), managed from the admin
       try{ const ss = await getDoc(doc(db,'settings','site')); if(ss.exists()) settings = ss.data(); }catch(e){}
-      // Published posts
-      const snap = await getDocs(query(collection(db,'blog_posts'), where('published','==',true), orderBy('date','desc')));
-      snap.forEach(d=>{ const x=d.data(); posts.push({ id:d.id, ...x }); });
-    }catch(e){ console.log('Firestore load failed, showing demo:', e && e.message); }
+      // Fetch everything, then filter and sort in code.
+      // where('published') + orderBy('date') is a composite query: it needs an index
+      // Firestore will not build on its own, AND orderBy silently drops any document
+      // missing a 'date' field. Both failures look identical to 'no posts exist'.
+      const snap = await getDocs(collection(db,'blog_posts'));
+      const all = [];
+      snap.forEach(d=>{ all.push({ id:d.id, ...d.data() }); });
+      loadedFromFirestore = true;
+      // Hide only what is explicitly unpublished, so a post saved without the flag
+      // still appears rather than vanishing without explanation.
+      posts = all.filter(p => p.published !== false);
+      console.log('[journal] ' + all.length + ' document(s) in blog_posts, ' + posts.length + ' shown.');
+      const undated = posts.filter(p => !p.date).map(p => p.id);
+      if (undated.length) console.warn('[journal] no date field on: ' + undated.join(', ') + ' — these sort to the end.');
+    }catch(e){ console.error('[journal] Firestore load failed:', e && e.message); }
   }
 
-  if(!posts.length) posts = DEMO_POSTS;   // fall back to demo until real posts exist
+  // Demo posts only stand in when there is no Firebase config at all. If the project
+  // is connected and returns nothing, show nothing — a silent swap to demo content
+  // makes a broken query look like a working page.
+  if(!posts.length && !loadedFromFirestore) posts = DEMO_POSTS;
 
   // Wire footer social links from settings
   applySocial(settings);
