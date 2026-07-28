@@ -168,8 +168,11 @@
   /* ===== workflow showcase (faithful to the real app) ===== */
   .work{background:linear-gradient(180deg,#fff, var(--paper));}
   .video-frame{position:relative; margin:36px auto 0; max-width:880px; aspect-ratio:16/9; border-radius:20px; overflow:hidden; background:var(--ink); box-shadow:var(--shadow-lg); display:flex; align-items:center; justify-content:center; border:1px solid var(--line); text-decoration:none;}
-  .video-frame::before{content:""; position:absolute; inset:0; background:radial-gradient(120% 90% at 50% 28%, rgba(29,158,117,.28), transparent 60%);}
-  .video-frame .play{position:relative; display:flex; flex-direction:column; align-items:center; gap:13px; color:#fff;}
+  .video-frame::before{content:""; position:absolute; inset:0; z-index:1; background:radial-gradient(120% 90% at 50% 28%, rgba(29,158,117,.28), transparent 60%); pointer-events:none;}
+  .video-frame .vthumb{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0;}
+  .video-frame iframe{position:absolute; inset:0; width:100%; height:100%; border:0; z-index:3;}
+  .video-frame.playing::before{display:none;}
+  .video-frame .play{position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; gap:13px; color:#fff; text-shadow:0 1px 10px rgba(0,0,0,.5);}
   .video-frame .pbtn{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.13);border:1.5px solid rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);transition:transform .2s, background .2s, border-color .2s;}
   .video-frame:hover .pbtn{transform:scale(1.06);background:var(--emerald);border-color:var(--emerald);}
   .video-frame .vlabel{font-size:15.5px;font-weight:600;}
@@ -753,13 +756,14 @@
 <!-- VIDEO (below hero) -->
 <section style="padding:0 0 20px;">
   <div class="wrap">
-    <a class="video-frame reveal" id="tourVideo" href="https://youtu.be/fxYenaYYrZY" target="_blank" rel="noopener" aria-label="Watch the NestTrack tour">
+    <button type="button" class="video-frame reveal" id="tourVideo" data-video="https://youtu.be/fxYenaYYrZY" aria-label="Play the NestTrack tour" style="cursor:pointer;padding:0;width:100%;font:inherit;">
+      <img class="vthumb" id="tourThumb" alt="" aria-hidden="true"/>
       <span class="play">
         <span class="pbtn"><svg width="25" height="25" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
         <span class="vlabel" id="tourVlabel">Watch the 2-minute tour</span>
         <span class="vsub" id="tourVsub">See a lead go from first click to closing</span>
       </span>
-    </a>
+    </button>
   </div>
 </section>
 
@@ -1343,12 +1347,38 @@
       agent:{href:'https://youtu.be/fxYenaYYrZY', label:'Watch the 2-minute tour', sub:'See a lead go from first click to closing'},
       lender:{href:'https://youtu.be/fxYenaYYrZY', label:'Watch the 2-minute lender tour', sub:'See how you give agents a business — and stay on every loan'}
     };
+    // youtu.be/ID, watch?v=ID and /embed/ID all resolve to the same 11-char ID.
+    function vidId(u){ var m=String(u||'').match(/(?:youtu\.be\/|[?&]v=|\/embed\/)([A-Za-z0-9_-]{11})/); return m?m[1]:''; }
+    var thumb=document.getElementById('tourThumb');
+    function paintThumb(url){
+      var id=vidId(url);
+      if(!thumb || !id){ if(thumb) thumb.style.display='none'; return; }
+      thumb.style.display='';
+      // maxres does not exist for every upload; fall back to hq, which always does.
+      thumb.onerror=function(){ thumb.onerror=null; thumb.src='https://i.ytimg.com/vi/'+id+'/hqdefault.jpg'; };
+      thumb.src='https://i.ytimg.com/vi/'+id+'/maxresdefault.jpg';
+    }
+    // Play in place. The iframe is only created on click, so YouTube loads nothing
+    // until someone actually wants the video.
+    if(vid) vid.addEventListener('click', function(){
+      var id=vidId(vid.getAttribute('data-video'));
+      if(!id || vid.classList.contains('playing')) return;
+      vid.classList.add('playing');
+      var f=document.createElement('iframe');
+      f.src='https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0&modestbranding=1';
+      f.title='NestTrack tour';
+      f.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      f.setAttribute('allowfullscreen','');
+      vid.innerHTML='';
+      vid.appendChild(f);
+    });
+
     function setMode(m, user){
       var lender=(m==='lender');
       body.classList.toggle('lender', lender);
       btns.forEach(function(b){ var on=b.getAttribute('data-mode')===m; b.classList.toggle('is-active', on); b.setAttribute('aria-selected', on?'true':'false'); });
       var v=VID[lender?'lender':'agent'];
-      if(vid) vid.setAttribute('href', v.href);
+      if(vid && !vid.classList.contains('playing')){ vid.setAttribute('data-video', v.href); paintThumb(v.href); }
       if(vlab) vlab.textContent=v.label;
       if(vsub) vsub.textContent=v.sub;
       if(user){
