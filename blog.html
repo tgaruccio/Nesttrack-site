@@ -97,6 +97,10 @@
   @media(max-width:760px){ .card.feat{flex-direction:column;} .card.feat .thumb,.card.feat .body{width:100%;} .card.feat .thumb{aspect-ratio:16/9;} .card.feat h3{font-size:24px;} }
 
   /* States */
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:56px 0 22px;padding-top:34px;border-top:1px solid var(--line);}
+  .sec-head h2{font-family:'Fraunces',serif;font-weight:500;font-size:26px;letter-spacing:-0.01em;color:var(--ink);}
+  .sec-head a{font-size:14px;font-weight:500;color:var(--emerald-dk);text-decoration:none;white-space:nowrap;}
+  .sec-head a:hover{text-decoration:underline;}
   .state{text-align:center;padding:80px 20px;color:var(--ink-faint);}
   .state h2{font-family:'Fraunces',serif;font-weight:400;font-size:26px;color:var(--ink-soft);margin-bottom:8px;}
   .skeleton{background:var(--card);border:1px solid var(--line-soft);border-radius:var(--r);height:340px;animation:pulse 1.4s ease-in-out infinite;}
@@ -145,6 +149,15 @@
       <!-- Loading skeletons -->
       <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
     </div>
+  </div>
+
+  <!-- Channel: its own section so uploads never push the writing down the page -->
+  <div class="wrap" id="videoSection" style="display:none;">
+    <div class="sec-head">
+      <h2>From the channel</h2>
+      <a id="channelLink" href="#" target="_blank" rel="noopener" style="display:none;">All videos &rarr;</a>
+    </div>
+    <div class="grid" id="videoFeed"></div>
   </div>
 </main>
 
@@ -198,8 +211,9 @@ const DEMO_POSTS = [
   { id:'demo4', type:'article', category:'Lead gen', title:'What buying paid leads actually costs you (it is not the lead price)', excerpt:'Speed-to-lead, follow-up discipline, and the system that turns a $40 lead into a closing instead of a dead end.', thumb:'', date:'2026-06-10', readMins:5 }
 ];
 
-const CATEGORIES = ['All','Systems','Follow-up','Tools','Lead gen','Video'];
+const CATEGORIES = ['All','Systems','Follow-up','Tools','Lead gen'];
 let activePosts = [];
+let activeVideos = [];
 let activeCat = 'All';
 
 function fmtDate(d){ try{ return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }catch(e){ return d; } }
@@ -233,12 +247,25 @@ function cardHTML(p, isFeat){
 function renderFeed(){
   const feed = document.getElementById('feed');
   let posts = activePosts.slice();
-  if(activeCat!=='All') posts = posts.filter(p=> (activeCat==='Video') ? p.youtubeId : (p.category===activeCat));
+  if(activeCat!=='All') posts = posts.filter(p=> p.category===activeCat);
   if(!posts.length){ feed.innerHTML = `<div class="state" style="grid-column:1/-1"><h2>Nothing here yet</h2><p>New posts are on the way.</p></div>`; return; }
-  const when = p => { const t = new Date(p.date).getTime(); return isNaN(t) ? 0 : t; };
   posts.sort((a,b)=> when(b) - when(a));
   feed.innerHTML = posts.map((p,i)=> cardHTML(p, i===0 && activeCat==='All')).join('');
 }
+
+// Videos render on their own, below the writing, and are not touched by the
+// category chips — those filter posts only.
+function renderVideos(){
+  const sec = document.getElementById('videoSection');
+  const grid = document.getElementById('videoFeed');
+  if(!sec || !grid) return;
+  if(!activeVideos.length){ sec.style.display='none'; return; }
+  const vids = activeVideos.slice().sort((a,b)=> when(b) - when(a));
+  grid.innerHTML = vids.map(v=> cardHTML(v, false)).join('');
+  sec.style.display='';
+}
+
+const when = p => { const t = new Date(p.date).getTime(); return isNaN(t) ? 0 : t; };
 
 // ── YouTube auto-feed (free, via RSS; no API key needed) ──
 async function loadYouTube(channelId){
@@ -276,20 +303,18 @@ async function boot(){
       db = getFirestore(app);
       // Settings (social links + YouTube channel), managed from the admin
       try{ const ss = await getDoc(doc(db,'settings','site')); if(ss.exists()) settings = ss.data(); }catch(e){}
-      // Fetch everything, then filter and sort in code.
-      // where('published') + orderBy('date') is a composite query: it needs an index
-      // Firestore will not build on its own, AND orderBy silently drops any document
-      // missing a 'date' field. Both failures look identical to 'no posts exist'.
-      const snap = await getDocs(collection(db,'blog_posts'));
-      const all = [];
-      snap.forEach(d=>{ all.push({ id:d.id, ...d.data() }); });
+      // Firestore checks rules against the QUERY, not the documents it returns. The rule
+      // is `allow read: if resource.data.published == true`, so the query has to prove it
+      // matches by carrying where('published','==',true) — fetching the bare collection
+      // gets rejected outright. Sorting stays in JS: adding orderBy('date') alongside the
+      // where would demand a composite index, and it silently drops undated documents.
+      const snap = await getDocs(query(collection(db,'blog_posts'), where('published','==',true)));
+      snap.forEach(d=>{ posts.push({ id:d.id, ...d.data() }); });
       loadedFromFirestore = true;
-      // Hide only what is explicitly unpublished, so a post saved without the flag
-      // still appears rather than vanishing without explanation.
-      posts = all.filter(p => p.published !== false);
-      console.log('[journal] ' + all.length + ' document(s) in blog_posts, ' + posts.length + ' shown.');
+      console.log('[journal] ' + posts.length + ' published post(s) loaded.');
       const undated = posts.filter(p => !p.date).map(p => p.id);
-      if (undated.length) console.warn('[journal] no date field on: ' + undated.join(', ') + ' — these sort to the end.');
+      if (undated.length) console.warn('[journal] no date field on: ' + undated.join(', ') + ' \u2014 these sort to the end.');
+      if (!posts.length) console.warn('[journal] nothing returned. Check that your posts have published set to true (boolean, not the string "true").');
     }catch(e){ console.error('[journal] Firestore load failed:', e && e.message); }
   }
 
@@ -301,13 +326,17 @@ async function boot(){
   // Wire footer social links from settings
   applySocial(settings);
 
-  // Merge in YouTube videos (auto) — channel ID comes from settings, or the hardcoded fallback
-  const channelId = settings.youtubeChannelId || YOUTUBE_CHANNEL_ID;
-  const yt = await loadYouTube(channelId);
-  posts = posts.concat(yt);
-
+  // Posts render immediately; videos are a separate list in a separate section.
   activePosts = posts;
   renderFeed();
+
+  const channelId = settings.youtubeChannelId || YOUTUBE_CHANNEL_ID;
+  if(channelId && !channelId.startsWith('PASTE')){
+    const cl = document.getElementById('channelLink');
+    if(cl){ cl.href = 'https://www.youtube.com/channel/' + channelId; cl.style.display=''; }
+  }
+  activeVideos = await loadYouTube(channelId);
+  renderVideos();
 }
 
 function applySocial(s){
