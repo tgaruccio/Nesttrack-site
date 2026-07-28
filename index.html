@@ -753,7 +753,7 @@
 <!-- VIDEO (below hero) -->
 <section style="padding:0 0 20px;">
   <div class="wrap">
-    <a class="video-frame reveal" id="tourVideo" href="https://youtu.be/REPLACE_WITH_YOUR_AGENT_VIDEO" target="_blank" rel="noopener" aria-label="Watch the NestTrack tour">
+    <a class="video-frame reveal" id="tourVideo" href="https://youtu.be/fxYenaYYrZY" target="_blank" rel="noopener" aria-label="Watch the NestTrack tour">
       <span class="play">
         <span class="pbtn"><svg width="25" height="25" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
         <span class="vlabel" id="tourVlabel">Watch the 2-minute tour</span>
@@ -1315,6 +1315,7 @@
         <h4>Legal</h4>
         <a href="/privacy.html">Privacy Policy</a>
         <a href="/terms.html">Terms of Service</a>
+        <a href="/admin.html" style="opacity:.45;">Admin</a>
       </div>
     </div>
     <div class="foot-bottom">
@@ -1339,8 +1340,8 @@
     var body=document.body, btns=document.querySelectorAll('.mt-btn');
     var vid=document.getElementById('tourVideo'), vlab=document.getElementById('tourVlabel'), vsub=document.getElementById('tourVsub');
     var VID={
-      agent:{href:'https://youtu.be/REPLACE_WITH_YOUR_AGENT_VIDEO', label:'Watch the 2-minute tour', sub:'See a lead go from first click to closing'},
-      lender:{href:'https://youtu.be/REPLACE_WITH_YOUR_LENDER_VIDEO', label:'Watch the 2-minute lender tour', sub:'See how you give agents a business — and stay on every loan'}
+      agent:{href:'https://youtu.be/fxYenaYYrZY', label:'Watch the 2-minute tour', sub:'See a lead go from first click to closing'},
+      lender:{href:'https://youtu.be/fxYenaYYrZY', label:'Watch the 2-minute lender tour', sub:'See how you give agents a business — and stay on every loan'}
     };
     function setMode(m, user){
       var lender=(m==='lender');
@@ -1358,6 +1359,13 @@
     btns.forEach(function(b){ b.addEventListener('click', function(){ setMode(b.getAttribute('data-mode'), true); }); });
     var qs=(location.search.match(/[?&]mode=(lender|agent)/)||[])[1];
     setMode(qs==='lender'?'lender':'agent', false);
+    // Let the journal admin swap either video without a code change. The URLs above
+    // stay as the fallback, so the page is never broken if the fetch fails.
+    window.NT_setVideos = function(agentUrl, lenderUrl){
+      if(agentUrl)  VID.agent.href  = agentUrl;
+      if(lenderUrl) VID.lender.href = lenderUrl;
+      setMode(body.classList.contains('lender') ? 'lender' : 'agent', false);
+    };
   })();
   // ===== app-style agent trail =====
   var atRow = document.getElementById('atrailRow');
@@ -1436,6 +1444,24 @@
         if(!tier) return;
         var comp = !!(tier.comp && tier.comp.booleanValue);
         fill(num(tier.leadAmount)/100, num(tier.memberAmount)/100, comp);
+      })
+      .catch(function(){});
+  } catch(e){}
+})();
+</script>
+<script>
+/* Video URLs from the sales-site Firestore (settings/site → agentVideo, lenderVideo).
+   Set them in the journal admin; falls back silently to the hardcoded URLs. */
+(function(){
+  var FB_KEY='AIzaSyB9hCijkzRnafdehcYyYxc9kS3KuVwek4o', PROJ='nesttrack-sales-page';
+  try {
+    fetch('https://firestore.googleapis.com/v1/projects/'+PROJ+'/databases/(default)/documents/settings/site?key='+FB_KEY)
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if(!d || !d.fields || typeof window.NT_setVideos !== 'function') return;
+        var a = d.fields.agentVideo  && d.fields.agentVideo.stringValue;
+        var l = d.fields.lenderVideo && d.fields.lenderVideo.stringValue;
+        if(a || l) window.NT_setVideos(a, l);
       })
       .catch(function(){});
   } catch(e){}
