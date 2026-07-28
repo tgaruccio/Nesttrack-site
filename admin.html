@@ -207,6 +207,13 @@
         <label>Name</label><input id="s-name" type="text" placeholder="Tom Garuccio"/>
         <label>Tagline <span class="hint" style="display:inline;">— shows under your name on posts</span></label>
         <input id="s-tagline" type="text" placeholder="Broker · Founder of NestTrack"/>
+        <b style="font-family:'Fraunces',serif;font-size:18px;display:block;margin-top:28px;">Sales page videos</b>
+        <p class="hint" style="margin-top:4px;">The tour video on the home page. Paste any YouTube link — short, watch, or share URL all work. Leave blank to use the built-in default.</p>
+        <label>Agent video <span class="hint" style="display:inline;">— shown by default</span></label>
+        <input id="s-agentvid" type="url" placeholder="https://youtu.be/xxxxxxxxxxx"/>
+        <label>Lender video <span class="hint" style="display:inline;">— shown when a visitor switches to lender mode</span></label>
+        <input id="s-lendervid" type="url" placeholder="https://youtu.be/xxxxxxxxxxx"/>
+
         <b style="font-family:'Fraunces',serif;font-size:18px;display:block;margin-top:28px;">Social links</b>
         <p class="hint" style="margin-top:4px;">These power the footer icons and the auto video feed.</p>
         <label>YouTube channel ID <span class="hint" style="display:inline;">— starts with UC… (from youtube.com/account_advanced). Drives the auto video feed.</span></label>
@@ -382,12 +389,14 @@ async function loadSettings(){
   try{ const snap=await getDoc(doc(db,'settings','site')); if(snap.exists()){ const s=snap.data();
     $('s-name').value=s.authorName||''; $('s-tagline').value=s.authorTagline||'';
     $('s-ytid').value=s.youtubeChannelId||''; $('s-youtube').value=s.youtube||'';
+    $('s-agentvid').value=s.agentVideo||''; $('s-lendervid').value=s.lenderVideo||'';
     $('s-instagram').value=s.instagram||''; $('s-tiktok').value=s.tiktok||''; $('s-facebook').value=s.facebook||'';
   }}catch(e){ console.log('settings load:',e); }
 }
 $('save-settings').onclick=async()=>{
   const data={ authorName:$('s-name').value.trim(), authorTagline:$('s-tagline').value.trim(),
     youtubeChannelId:$('s-ytid').value.trim(), youtube:$('s-youtube').value.trim(),
+    agentVideo:$('s-agentvid').value.trim(), lenderVideo:$('s-lendervid').value.trim(),
     instagram:$('s-instagram').value.trim(), tiktok:$('s-tiktok').value.trim(), facebook:$('s-facebook').value.trim() };
   try{ await setDoc(doc(db,'settings','site'),data,{merge:true}); toast('Settings saved'); }
   catch(e){ toast('Save failed'); console.log(e); }
