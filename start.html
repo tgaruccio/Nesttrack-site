@@ -73,6 +73,7 @@
   .how-i{display:flex;gap:12px;font-size:14.5px;color:var(--muted);padding:6px 0}
   .how-i strong{color:var(--ink)}
   .how-i b{flex:0 0 24px;height:24px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-size:13px}
+  #cal{min-height:680px}
   .panel{display:none} .panel.show{display:block}
   .steps3{display:flex;gap:6px;margin-bottom:18px}
   .steps3 span{flex:1;font-size:11.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;text-align:center;color:var(--muted);padding:8px 4px;border-radius:8px;background:#F1EEE7}
@@ -191,10 +192,11 @@
 
         <!-- STEP 3b: shown when they come back from activating -->
         <div class="panel" id="p4">
-          <h2>You're activated ✓</h2>
-          <p class="sub">Your card is on file and you won't be charged until your 30-day trial ends. Log in and I'll be in touch about your setup call.</p>
-          <a class="btn" href="https://app.nesttrack.io" id="loginBtn">Log in to NestTrack &rarr;</a>
-          <p class="fine">Use the email and password you just created.</p>
+          <h2>You're activated ✓ Pick a time for your call</h2>
+          <p class="sub">Your card is on file — you won't be charged until your 30-day trial ends. Grab any open spot and I'll see you there.</p>
+          <div id="cal"></div>
+          <a class="btn" href="https://app.nesttrack.io" id="loginBtn" style="margin-top:16px">Take me to the app &rarr;</a>
+          <p class="fine">Log in with the email and password you just created.</p>
         </div>
 
         <!-- Hidden NestTrack widget: saves the lead (source "NestTrack Ad Lead") which starts the AI-editor email campaign -->
@@ -269,6 +271,7 @@
   var WORKER_URL    = "https://app.tom-b52.workers.dev";           // the EXISTING NestTrack checkout
   var APP_URL       = "https://app.nesttrack.io";                  // where every path ends: log in
   var PLAN          = "founding";                                  // founding $39.99 / list $59.99
+  var CALENDLY_URL  = "https://calendly.com/tomgaruccio_realtor/tom-garuccio-appointment-call";
 
   document.getElementById('yr').textContent = new Date().getFullYear();
   var who = {first:'',last:'',email:'',phone:''};
@@ -318,6 +321,18 @@
         console.log("checkout failed:", reason);
       });
   }
+  // Shown only after Stripe sends them back. Name and email come from sessionStorage, which
+  // survives the round trip to Stripe and back; if it is ever empty the calendar still loads,
+  // just without the fields filled in.
+  function loadCalendly(){
+    var c = document.getElementById("cal"); if (!c) return;
+    var nm = ((who.first||"") + " " + (who.last||"")).trim();
+    var u = CALENDLY_URL + "?hide_gdpr_banner=1"
+          + (nm ? "&name=" + encodeURIComponent(nm) : "")
+          + (who.email ? "&email=" + encodeURIComponent(who.email) : "");
+    c.innerHTML = '<iframe src="' + u + '" style="width:100%;height:680px;border:0" title="Book your setup call" loading="lazy"></iframe>';
+  }
+
   // STEP 1 -> 2: the signup form on THIS page calls this the moment the account exists. No
   // cross-page messaging any more — one page means the details are already in hand.
   window.ntTrialCreated = function(w){
@@ -357,7 +372,7 @@
   document.getElementById("skipCard").onclick = function(e){ e.preventDefault(); location.href = APP_URL; };
 
   // Back from activation -> booking calendar.
-  if (/[?&]activated=1/.test(location.search)) { /* if (window.fbq) fbq('track','StartTrial'); */ show(4); }
+  if (/[?&]activated=1/.test(location.search)) { /* if (window.fbq) fbq('track','StartTrial'); */ loadCalendly(); show(4); }
   else if (/[?&]canceled=1/.test(location.search)) { show(3); }   // backed out of Stripe — land on step 3, not step 1
   else { show(1); }
 </script>
