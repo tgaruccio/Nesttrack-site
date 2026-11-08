@@ -723,7 +723,7 @@
       <a class="link" href="#pricing">Pricing</a>
       <a class="link" href="/blog.html">Journal</a>
       <a class="link" href="https://app.nesttrack.io" style="font-weight:600;color:var(--emerald-deep);">Log in</a>
-      <a class="btn btn-primary" href="https://app.nesttrack.io/signup.html">Start Free Trial</a>
+      <a class="btn btn-primary" href="https://app.nesttrack.io/trial.html">Start Free Trial</a>
     </nav>
   </div>
 </header>
@@ -746,7 +746,7 @@
     <p class="lead agent-only" style="margin-top:12px;font-size:16px;color:var(--ink-faint);">A mountain of contacts you'll never call isn't a business. NestTrack keeps you close to the people you actually talk to.</p>
     <p class="lead lender-only" style="margin-top:12px;font-size:16px;color:var(--ink-faint);">Give them something worth saying yes to. The agent looks great, the client stays informed, and you're the partner they can't get anywhere else.</p>
     <div class="cta-row">
-      <a class="btn btn-primary btn-lg" href="https://app.nesttrack.io/signup.html">Start your free trial</a>
+      <a class="btn btn-primary btn-lg" href="https://app.nesttrack.io/trial.html">Start your free trial</a>
       <a class="btn btn-ghost btn-lg" href="#loop">See it in action</a>
     </div>
     <p class="micro"><span>✓</span> <b>30-day free trial</b> &nbsp;·&nbsp; No card required &nbsp;·&nbsp; <span class="agent-only">Built by a producing agent</span><span class="lender-only">Built by a producing agent — the kind you want to partner with</span></p>
@@ -1262,7 +1262,7 @@
           <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Add team members anytime — one simple bill</li>
           <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> 30-day free trial, no card required</li>
         </ul>
-        <a class="btn btn-primary" href="https://app.nesttrack.io/signup.html" style="width:100%;justify-content:center;margin-top:22px;">Start free trial</a>
+        <a class="btn btn-primary" href="https://app.nesttrack.io/trial.html" style="width:100%;justify-content:center;margin-top:22px;">Start free trial</a>
       </div>
     </div>
     <p class="price-foot reveal"><b>Friends &amp; Family and brokerage rates</b> available by arrangement. Questions on pricing? <a href="#get" style="color:var(--emerald-deep);font-weight:600;text-decoration:underline;">Get in touch</a>.</p>
@@ -1280,7 +1280,7 @@
       <p class="agent-only">Software was supposed to free you up for the people. Somewhere along the way it did the opposite. NestTrack gives it back.</p>
       <p class="lender-only">Give your agents a platform worth saying yes to — and stay on every loan, every client, every year. That's how referral relationships are really built.</p>
       <div class="cta-row">
-        <a class="btn btn-primary btn-lg" href="https://app.nesttrack.io/signup.html">Start your free trial</a>
+        <a class="btn btn-primary btn-lg" href="https://app.nesttrack.io/trial.html">Start your free trial</a>
         <a class="btn btn-ghost btn-lg on-dark" href="https://calendly.com/tomgaruccio_realtor/tom-garuccio-appointment-call" target="_blank" rel="noopener">Book a demo call →</a>
       </div>
       <p class="agent-only" style="margin-top:22px;font-size:14px;color:rgba(255,255,255,.7);font-style:italic;">A CRM about building relationships — built by an agent who lost his way chasing volume, and found it again.</p>
@@ -1310,7 +1310,7 @@
       </div>
       <div class="fcol">
         <h4>Get started</h4>
-        <a href="https://app.nesttrack.io/signup.html">Start free trial</a>
+        <a href="https://app.nesttrack.io/trial.html">Start free trial</a>
         <a href="https://app.nesttrack.io">Log in</a>
         <a href="mailto:hi@nesttrack.io">hi@nesttrack.io</a>
         <p>Cleveland, Ohio</p>
@@ -1376,6 +1376,12 @@
     function setMode(m, user){
       var lender=(m==='lender');
       body.classList.toggle('lender', lender);
+      // Trial links follow the audience. A lender reading the lender pitch should land on the
+      // lender signup, not the agent one. setMode also runs on load (it is called with the
+      // ?mode= param), so the links can never disagree with the pitch that is on screen.
+      document.querySelectorAll('a[href^="https://app.nesttrack.io/trial.html"]').forEach(function(a){
+        a.href = 'https://app.nesttrack.io/trial.html' + (lender ? '?type=lender' : '');
+      });
       btns.forEach(function(b){ var on=b.getAttribute('data-mode')===m; b.classList.toggle('is-active', on); b.setAttribute('aria-selected', on?'true':'false'); });
       var v=VID[lender?'lender':'agent'];
       if(vid && !vid.classList.contains('playing')){ vid.setAttribute('data-video', v.href); paintThumb(v.href); }
