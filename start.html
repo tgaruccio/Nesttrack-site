@@ -300,16 +300,24 @@
         successUrl: base + "?activated=1",
         cancelUrl:  base + "?canceled=1"
       })
-    }).then(function(r){ return r.json(); }).then(function(d){
-      if (d && d.url) { location.href = d.url; return; }
-      throw new Error((d && d.error) || "no checkout url");
-    }).catch(function(e){
-      cardBusy = false; btn.disabled = false; btn.textContent = "Add my card \u2192";
-      msg.textContent = "That didn\u2019t open. Try again, or skip \u2014 you can add a card inside the app.";
-      console.log("checkout:", e && e.message);
-    });
+    }).then(function(r){
+      // Read as text first: a worker or Stripe failure may not be JSON at all, and a generic
+      // "didn\u2019t work" hides the one piece of information needed to fix it. Whatever comes
+      // back gets shown on screen.
+      return r.text().then(function(t){
+        var d = {}; try { d = JSON.parse(t); } catch(_e){}
+        if (r.ok && d && d.url) return d.url;
+        throw new Error((d && d.error) || ("HTTP " + r.status + " " + String(t).slice(0,200)));
+      });
+    }).then(function(url){ location.href = url; })
+      .catch(function(e){
+        cardBusy = false; btn.disabled = false; btn.textContent = "Add my card \u2192";
+        var reason = (e && e.message) ? e.message : "unknown error";
+        msg.textContent = reason + " \u2014 or skip, you can add a card inside the app.";
+        msg.style.color = "#B3261E"; msg.style.textAlign = "left";
+        console.log("checkout failed:", reason);
+      });
   }
-  // STEP 1 -> 2: trial.html tells this page the account was created (see snippet for trial.html).
   // STEP 1 -> 2: the signup form on THIS page calls this the moment the account exists. No
   // cross-page messaging any more — one page means the details are already in hand.
   window.ntTrialCreated = function(w){
