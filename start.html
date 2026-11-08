@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NestTrack — The 3 systems that run my real estate business</title>
+<meta name="description" content="Leads, client experience, and follow-up in one platform. Start NestTrack free and Tom Garuccio will personally help you set it up.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- ============ META PIXEL (optional) ============
+     Paste your NestTrack Meta Pixel code here so ad opt-ins are tracked.
+     Then uncomment the fbq('track','Lead') line in the script at the bottom.
+================================================== -->
+
+<style>
+  :root{
+    --green:#1D9E75; --pine:#0F6E56; --ivory:#F4EFE6; --ink:#14201B; --muted:#5B6B64; --line:#E3DED3; --white:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:var(--ivory);line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+
+  /* top bar */
+  header{padding:22px 0}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-.3px;color:var(--pine)}
+  .brand .mark{width:30px;height:30px;border-radius:8px;background:var(--pine);display:grid;place-items:center;color:var(--ivory);font-size:15px}
+
+  /* hero */
+  .hero{padding:20px 0 56px}
+  .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:start}
+  .eyebrow{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:14px}
+  h1{font-size:clamp(32px,4.6vw,50px);line-height:1.06;letter-spacing:-1.4px;font-weight:800;margin-bottom:18px}
+  h1 em{font-style:normal;color:var(--green)}
+  .lede{font-size:18px;color:var(--muted);max-width:520px;margin-bottom:26px}
+  .vlabel{font-size:15px;color:var(--ink);margin:0 0 12px}
+  .vlabel b{color:var(--pine)}
+  .steps{display:flex;gap:8px;margin-bottom:16px}
+  .steps span{flex:1;height:6px;border-radius:3px;background:var(--line)}
+  .steps span.on{background:var(--green)}
+  .stepl{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:6px}
+  .btn.alt{background:var(--pine)} .btn.alt:hover{background:#0b5442}
+  .sys .lead{font-size:14.5px;font-weight:600;color:var(--pine);margin:-4px 0 12px}
+  .video{position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:var(--pine);box-shadow:0 18px 40px -18px rgba(15,110,86,.45)}
+  .video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .video .ph{position:absolute;inset:0;display:grid;place-items:center;color:var(--ivory);text-align:center;font-weight:600;padding:20px}
+  .video .ph .play{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center;margin:0 auto 12px}
+  .video .ph .play:after{content:"";border-left:20px solid var(--ivory);border-top:12px solid transparent;border-bottom:12px solid transparent;margin-left:5px}
+
+  /* opt-in card */
+  .card{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:28px;box-shadow:0 20px 50px -30px rgba(20,32,27,.35)}
+  .card h2{font-size:22px;letter-spacing:-.4px;line-height:1.2;margin-bottom:6px}
+  .card p.sub{color:var(--muted);font-size:15px;margin-bottom:18px}
+  .perks{list-style:none;margin:0 0 20px;display:grid;gap:9px}
+  .perks li{display:flex;gap:10px;font-size:15px;font-weight:500}
+  .perks li:before{content:"";flex:0 0 20px;height:20px;border-radius:50%;background:var(--green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/20px no-repeat}
+  .card label{display:block;font-size:13px;font-weight:600;margin:0 0 6px}
+  .card input{width:100%;font:inherit;font-size:16px;padding:13px 14px;border:1px solid var(--line);border-radius:10px;background:#FBFAF7;margin-bottom:14px;outline:none;transition:border .15s}
+  .card input:focus{border-color:var(--green);background:#fff}
+  .row2{display:flex;gap:10px}.row2>div{flex:1;min-width:0}
+  form label{display:block;font-size:13px;font-weight:600;margin:0 0 6px}
+  form input{width:100%;font:inherit;font-size:16px;padding:13px 14px;border:1px solid var(--line);border-radius:10px;background:#FBFAF7;margin-bottom:14px;outline:none;transition:border .15s}
+  form input:focus{border-color:var(--green);background:#fff}
+  .btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;width:100%;font:inherit;font-weight:700;font-size:17px;color:#fff;background:var(--green);border:0;border-radius:12px;padding:15px 20px;cursor:pointer;text-decoration:none;transition:background .15s,transform .05s}
+  .btn:hover{background:var(--pine)} .btn:active{transform:translateY(1px)}
+  .fine{font-size:12.5px;color:var(--muted);text-align:center;margin-top:10px}
+  .rightcol{display:grid;gap:16px}
+  .how{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+  .how-h{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--green);margin-bottom:10px}
+  .how-i{display:flex;gap:12px;font-size:14.5px;color:var(--muted);padding:6px 0}
+  .how-i strong{color:var(--ink)}
+  .how-i b{flex:0 0 24px;height:24px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-size:13px}
+  .panel{display:none} .panel.show{display:block}
+  .steps3{display:flex;gap:6px;margin-bottom:18px}
+  .steps3 span{flex:1;font-size:11.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;text-align:center;color:var(--muted);padding:8px 4px;border-radius:8px;background:#F1EEE7}
+  .steps3 span.on{background:var(--green);color:#fff} .steps3 span.ok{background:var(--pine);color:#fff}
+  .about h2.ah{font-size:clamp(24px,3vw,32px);letter-spacing:-.6px;line-height:1.2;max-width:720px;margin:14px auto 12px}
+  .done{display:none}
+  #nesttrack-form .ntw-title,#nesttrack-form .ntw-sub,#nesttrack-form .ntw-fine,#nesttrack-form .ntw-thanks{display:none!important}
+  #nesttrack-form .ntw-card{box-shadow:none!important;border:0!important;padding:0!important;background:transparent!important}
+  #nesttrack-form .ntw{max-width:none!important;margin:0!important}
+  #nesttrack-form input{font-size:16px!important}
+  .flow{list-style:none;display:grid;gap:12px;margin:14px 0 20px}
+  .flow li{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--muted);padding:12px;border-radius:12px;border:1px solid var(--line)}
+  .flow li strong{color:var(--ink)}
+  .flow li b{flex:0 0 28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:14px;background:var(--line);color:var(--muted)}
+  .flow li.cur{border-color:var(--green);background:#F3FAF6}
+  .flow li.cur b{background:var(--green);color:#fff}
+  .flow li.ok b{background:var(--pine);color:#fff}
+  .done h3{font-size:22px;margin-bottom:6px}
+  .done p{color:var(--muted)}
+
+  /* systems */
+  section.systems{background:var(--white);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:64px 0}
+  .sec-h{text-align:center;max-width:640px;margin:0 auto 38px}
+  .sec-h h2{font-size:clamp(26px,3.4vw,36px);letter-spacing:-.9px;line-height:1.12;margin-bottom:10px}
+  .sec-h p{color:var(--muted);font-size:17px}
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .sys{border:1px solid var(--line);border-radius:16px;padding:24px;background:var(--ivory)}
+  .sys .num{font-size:13px;font-weight:800;color:var(--green);letter-spacing:.06em;margin-bottom:8px}
+  .sys h3{font-size:20px;letter-spacing:-.3px;margin-bottom:12px}
+  .sys ul{list-style:none;display:grid;gap:8px}
+  .sys li{font-size:15px;color:#33433C;padding-left:16px;position:relative}
+  .sys li:before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--green)}
+
+  /* about + final cta */
+  .about{padding:60px 0;text-align:center}
+  .about .eyebrow{display:block}
+  .about .stat{display:inline-flex;gap:28px;flex-wrap:wrap;justify-content:center;margin:20px 0 26px}
+  .about .stat div{min-width:130px}
+  .about .stat b{display:block;font-size:34px;letter-spacing:-1px;color:var(--pine)}
+  .about .stat span{font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+  .about p.q{font-size:19px;max-width:640px;margin:0 auto 26px}
+  .about .btn{width:auto;padding:15px 34px}
+  footer{padding:26px 0 40px;text-align:center;color:var(--muted);font-size:13px}
+
+  @media (max-width:860px){
+    .grid{grid-template-columns:1fr;gap:28px}
+    .three{grid-template-columns:1fr}
+    .hero{padding-bottom:40px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap"><div class="brand"><div class="mark">N</div>NestTrack</div></div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap grid">
+      <div>
+        <span class="eyebrow">For real estate agents</span>
+        <h1>Leads. Client experience. Follow-up. <em>One platform.</em></h1>
+        <p class="lede">If this market is eating you alive, you're probably missing one of these three systems. I sold 78 homes in one year as a solo agent with no transaction coordinator. Here's exactly how I run it.</p>
+
+        <p class="vlabel"><b>Free 20-minute training:</b> exactly what to set up for each of the 3 systems, step by step.</p>
+        <div class="video" id="video">
+          <iframe src="https://www.youtube.com/embed/gAsR7vTQVC8?rel=0&amp;modestbranding=1" title="Free training: how to build all 3 systems" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <div class="rightcol">
+      <div class="how">
+        <div class="how-h">How it works: 3 free steps</div>
+        <div class="how-i"><b>1</b><div><strong>Free 30-day trial.</strong> Create your NestTrack account. No credit card.</div></div>
+        <div class="how-i"><b>2</b><div><strong>Free gift (optional).</strong> My AI video editor, the same one I use to edit my reels and ads. Skip it if you don't want it.</div></div>
+        <div class="how-i"><b>3</b><div><strong>Free 1-on-1 setup call.</strong> Add a card to activate (you're not charged until your 30-day trial ends), then pick a time and I'll hop on to get you set up.</div></div>
+      </div>
+      <div class="card" id="get-started">
+        <div class="steps3"><span id="st1" class="on">1 · Free trial</span><span id="st2">2 · Gift (optional)</span><span id="st3">3 · Free setup call</span></div>
+
+        <!-- STEP 1: NestTrack 30-day free trial signup, embedded so they never leave this page -->
+        <div class="panel" id="p1">
+          <h2>Start your free 30-day trial</h2>
+          <p class="sub">No credit card. Takes about a minute.</p>
+          <div class="row2">
+            <div><label for="s-first">First name</label><input id="s-first" type="text" autocomplete="given-name"></div>
+            <div><label for="s-last">Last name</label><input id="s-last" type="text" autocomplete="family-name"></div>
+          </div>
+          <label for="s-email">Email</label><input id="s-email" type="email" autocomplete="email" placeholder="you@email.com">
+          <label for="s-phone">Phone</label><input id="s-phone" type="tel" autocomplete="tel" placeholder="(440) 555-0123">
+          <label for="s-pass">Create a password</label><input id="s-pass" type="password" autocomplete="new-password" placeholder="At least 6 characters">
+          <button class="btn" id="signupBtn" type="button">Create my free account &rarr;</button>
+          <p class="fine" id="signupErr" style="color:#B3261E;display:none;text-align:left"></p>
+          <p class="fine">You'll log in at app.nesttrack.io with this email and password.</p>
+        </div>
+
+        <!-- STEP 2: free gift (AI video editor). Their info carries over from step 1. -->
+        <div class="panel" id="p2">
+          <h2>You're in ✓ Want my free AI video editor?</h2>
+          <p class="sub">It's the same AI editor I use for my reels and ads. I'll email it to <b id="giftEmail">you</b>.</p>
+          <button class="btn" id="giftBtn" type="button">Yes, send me the AI editor →</button>
+          <p class="fine" id="giftMsg"></p>
+          <p class="fine"><a href="#" id="skipGift">No thanks, skip to step 3</a></p>
+        </div>
+
+        <!-- STEP 3: activate right here (Stripe Embedded Checkout, $0 today, charged after the 30-day trial) -->
+        <div class="panel" id="p3">
+          <h2>Activate &amp; book your free setup call</h2>
+          <p class="sub">Add a card to activate your account. You won't be charged until your 30-day trial is up. Then pick a time and I'll hop on a free 1&#8209;on&#8209;1 call to get you set up.</p>
+          <p class="fine" style="text-align:left;margin:-6px 0 14px">I ask for a card so my call spots go to agents who are serious.</p>
+          <button class="btn" id="cardBtn" type="button">Add my card &rarr;</button>
+          <p class="fine" id="cardMsg"></p>
+          <p class="fine"><a href="#" id="skipCard">No thanks, take me to the app</a></p>
+        </div>
+
+        <!-- STEP 3b: shown when they come back from activating -->
+        <div class="panel" id="p4">
+          <h2>You're activated ✓</h2>
+          <p class="sub">Your card is on file and you won't be charged until your 30-day trial ends. Log in and I'll be in touch about your setup call.</p>
+          <a class="btn" href="https://app.nesttrack.io" id="loginBtn">Log in to NestTrack &rarr;</a>
+          <p class="fine">Use the email and password you just created.</p>
+        </div>
+
+        <!-- Hidden NestTrack widget: saves the lead (source "NestTrack Ad Lead") which starts the AI-editor email campaign -->
+        <div id="nesttrack-form" style="display:none"></div>
+        <script src="https://app.nesttrack.io/widget.js" data-agent="tom" data-source="NestTrack Ad Lead" data-fields="name,email,phone"></script>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="systems">
+    <div class="wrap">
+      <div class="sec-h">
+        <h2>The 3 systems, in one place</h2>
+        <p>No more juggling a CRM, a to-do app, a transaction coordinator and a past-client newsletter.</p>
+      </div>
+      <div class="three">
+        <div class="sys">
+          <div class="num">01</div>
+          <h3>Lead generation</h3>
+          <p class="lead">Build your entire lead generation system inside the CRM.</p>
+          <ul>
+            <li>Landing pages</li>
+            <li>Your virtual business card</li>
+            <li>Voicemail drops</li>
+            <li>Texting</li>
+            <li>Letters</li>
+            <li>Tracks exactly who you need to follow up with</li>
+            <li>AI keeps track of your calls and emails</li>
+          </ul>
+        </div>
+        <div class="sys">
+          <div class="num">02</div>
+          <h3>Client experience</h3>
+          <p class="lead">Your client's experience is directly proportional to how organized you are as an agent.</p>
+          <ul>
+            <li>Every step tracked, contract to close</li>
+            <li>Automatic updates with your personal video</li>
+            <li>Clients get their own live dashboard</li>
+            <li>AI transaction coordinator drafts the work</li>
+            <li>Offer manager with one-click net sheets</li>
+          </ul>
+        </div>
+        <div class="sys">
+          <div class="num">03</div>
+          <h3>Follow-up forever</h3>
+          <ul>
+            <li>NestTracker home-value emails for every past client</li>
+            <li>Value, equity and neighborhood sales</li>
+            <li>Keeps you top of mind without thinking about it</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <div class="wrap">
+      <span class="eyebrow">Built by an agent, for agents</span>
+      <h2 class="ah">Free: activate your account and I'll hop on a 1&#8209;on&#8209;1 coaching call to get you set up.</h2>
+      <p class="q"><strong>— Tom Garuccio</strong></p>
+      <a class="btn" href="#get-started">Start my free trial →</a>
+    </div>
+  </section>
+</main>
+
+<footer>© <span id="yr"></span> NestTrack · <a href="https://nesttrack.io">nesttrack.io</a></footer>
+
+<script>
+  // ===== Settings =====
+  var TRIAL_ORIGIN  = "https://app.nesttrack.io";                // trial.html posts a message from here when signup succeeds
+  var WORKER_URL    = "https://app.tom-b52.workers.dev";           // the EXISTING NestTrack checkout
+  var APP_URL       = "https://app.nesttrack.io";                  // where every path ends: log in
+  var PLAN          = "founding";                                  // founding $39.99 / list $59.99
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  var who = {first:'',last:'',email:'',phone:''};
+  try { var saved = JSON.parse(sessionStorage.getItem('nt_who')||'null'); if (saved) who = saved; } catch(e){}
+
+  function show(n){
+    ['p1','p2','p3','p4'].forEach(function(id,i){ document.getElementById(id).classList.toggle('show', i+1===n); });
+    var stage = n===4 ? 3 : n;
+    ['st1','st2','st3'].forEach(function(id,i){ var el=document.getElementById(id); el.className = (i+1<stage)?'ok':(i+1===stage?'on':''); });
+  }
+  // STEP 3: uses the EXISTING NestTrack checkout (X-Action: stripe-checkout). The subscription
+  // is stamped with this account id, so the webhook flips THIS account to paid — same billing as
+  // any other signup, not a second path. $0 today: trialEnd is 30 days out and the worker turns
+  // that into Stripe’s trial_end, so the first charge lands when the in-app trial runs out.
+  function activateLink(){}   // nothing to pre-load now that the card form is Stripe’s own page
+  var cardBusy = false;
+  function goToCard(){
+    if (cardBusy) return; cardBusy = true;
+    var btn = document.getElementById("cardBtn"), msg = document.getElementById("cardMsg");
+    btn.disabled = true; btn.textContent = "Opening secure card form\u2026"; msg.textContent = "";
+    var base = location.origin + location.pathname;
+    fetch(WORKER_URL, { method:"POST", headers:{"Content-Type":"application/json","X-Action":"stripe-checkout"},
+      body: JSON.stringify({
+        ownerUid:   who.uid || "",
+        email:      who.email || "",
+        plan:       PLAN,
+        memberQty:  0,
+        trialEnd:   Math.floor((Date.now() + 30*86400000)/1000),
+        successUrl: base + "?activated=1",
+        cancelUrl:  base + "?canceled=1"
+      })
+    }).then(function(r){ return r.json(); }).then(function(d){
+      if (d && d.url) { location.href = d.url; return; }
+      throw new Error((d && d.error) || "no checkout url");
+    }).catch(function(e){
+      cardBusy = false; btn.disabled = false; btn.textContent = "Add my card \u2192";
+      msg.textContent = "That didn\u2019t open. Try again, or skip \u2014 you can add a card inside the app.";
+      console.log("checkout:", e && e.message);
+    });
+  }
+  // STEP 1 -> 2: trial.html tells this page the account was created (see snippet for trial.html).
+  // STEP 1 -> 2: the signup form on THIS page calls this the moment the account exists. No
+  // cross-page messaging any more — one page means the details are already in hand.
+  window.ntTrialCreated = function(w){
+    who = { first:w.first||"", last:w.last||"", email:w.email||"", phone:w.phone||"", uid:w.uid||"" };
+    try { sessionStorage.setItem("nt_who", JSON.stringify(who)); } catch(err){}
+    document.getElementById("giftEmail").textContent = who.email || "you";
+    // if (window.fbq) fbq('track', 'CompleteRegistration');   // uncomment once the Meta Pixel is added
+    show(2);
+    document.getElementById("get-started").scrollIntoView({behavior:"smooth", block:"start"});
+  };
+
+  // STEP 2: one click sends their info through the NestTrack widget (starts the AI-editor email campaign).
+  function fill(id, v){ var el=document.getElementById(id); if(el){ el.value=v; el.dispatchEvent(new Event('input',{bubbles:true})); } }
+  document.getElementById('giftBtn').onclick = function(){
+    var btn = document.getElementById('ntw-btn');
+    if (!btn) { document.getElementById('giftMsg').textContent = 'One sec, still loading. Tap again.'; return; }
+    fill('ntw-first', who.first); fill('ntw-last', who.last); fill('ntw-email', who.email); fill('ntw-phone', who.phone);
+    this.disabled = true; this.textContent = 'Sending…';
+    btn.click();
+  };
+  // The widget hides its form and shows its thank-you panel when the lead is saved.
+  new MutationObserver(function(){
+    var body = document.getElementById('ntw-body'), err = document.getElementById('ntw-err');
+    if (body && body.style.display === 'none' && document.getElementById('p2').classList.contains('show')) {
+      // if (window.fbq) fbq('track', 'Lead');
+      document.getElementById('giftMsg').textContent = 'Sent ✓ Check your inbox.';
+      setTimeout(function(){ activateLink(); show(3); }, 900);
+    } else if (err && err.textContent && document.getElementById('giftBtn').disabled) {
+      var g = document.getElementById('giftBtn'); g.disabled = false; g.textContent = 'Yes, send me the AI editor →';
+      document.getElementById('giftMsg').textContent = err.textContent;
+    }
+  }).observe(document.getElementById('nesttrack-form'), {childList:true, subtree:true, attributes:true, characterData:true});
+  document.getElementById('skipGift').onclick = function(e){ e.preventDefault(); activateLink(); show(3); };
+  document.getElementById("cardBtn").onclick = goToCard;
+  // Skipping the card is fine: the trial is already running and the app asks for payment itself,
+  // then locks the account when the 30 days are up. Either way this ends at the login screen.
+  document.getElementById("skipCard").onclick = function(e){ e.preventDefault(); location.href = APP_URL; };
+
+  // Back from activation -> booking calendar.
+  if (/[?&]activated=1/.test(location.search)) { /* if (window.fbq) fbq('track','StartTrial'); */ show(4); }
+  else if (/[?&]canceled=1/.test(location.search)) { show(3); }   // backed out of Stripe — land on step 3, not step 1
+  else { show(1); }
+</script>
+<!-- Account creation. Runs on THIS page, so the moment it succeeds the page already holds the
+     name, email, phone and account id that steps 2 and 3 need. Same two calls the standalone
+     signup page makes: create the Firebase user, then hand the token to the worker, which
+     provisions the NestTrack account and starts the 30-day trial. -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification }
+    from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+  const auth = getAuth(initializeApp({
+    apiKey: "AIzaSyCy5ZkbPcGtk7I_88dVbNsX40LY-M4R_sY",
+    authDomain: "buyers-880bc.firebaseapp.com",
+    projectId: "buyers-880bc",
+    databaseURL: "https://buyers-880bc-default-rtdb.firebaseio.com",
+    storageBucket: "buyers-880bc.firebasestorage.app",
+    messagingSenderId: "681324344980",
+    appId: "1:681324344980:web:1a7ae6a9d592b96ec26681"
+  }));
+  const WORKER = "https://app.tom-b52.workers.dev";
+
+  const v = id => { const e = document.getElementById(id); return e ? e.value.trim() : ''; };
+  const err = m => { const e = document.getElementById('signupErr'); e.textContent = m; e.style.display = m ? 'block' : 'none'; };
+
+  let busy = false;
+  const btn = document.getElementById('signupBtn');
+  btn.addEventListener('click', async function(){
+    if (busy) return;
+    err('');
+    const first = v('s-first'), last = v('s-last'), email = v('s-email'), phone = v('s-phone');
+    const pass = (document.getElementById('s-pass') || {}).value || '';
+    if (!first || !last) { err('Please enter your first and last name.'); return; }
+    if (!email)          { err('Please enter your email.'); return; }
+    if (pass.length < 6) { err('Password must be at least 6 characters.'); return; }
+
+    busy = true; btn.disabled = true; btn.textContent = 'Creating your account\u2026';
+    try {
+      let cred;
+      try {
+        cred = await createUserWithEmailAndPassword(auth, email, pass);
+        try { await sendEmailVerification(cred.user); } catch(_e){}
+      } catch(e) {
+        const c = e && e.code;
+        // Already registered: if the password matches it is them returning, so let them through.
+        if (c === 'auth/email-already-in-use') {
+          try { cred = await signInWithEmailAndPassword(auth, email, pass); }
+          catch(_e){ throw new Error('An account with this email already exists. Log in at app.nesttrack.io instead.'); }
+        }
+        else if (c === 'auth/invalid-email')  { throw new Error('That email address doesn\u2019t look right.'); }
+        else if (c === 'auth/weak-password')  { throw new Error('Please choose a stronger password.'); }
+        else throw e;
+      }
+
+      const idToken = await cred.user.getIdToken();
+      const r = await fetch(WORKER, {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json', 'X-Action':'self-serve-signup' },
+        body: JSON.stringify({ idToken, firstName:first, lastName:last, phone:phone, company:'', accountType:'agent' })
+      });
+      // fetch resolves on 4xx, so the status is checked explicitly rather than trusted.
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok || !d.ok) throw new Error(d.error || 'Could not finish setting up your account.');
+
+      window.ntTrialCreated({ first, last, email, phone, uid: cred.user.uid });
+    } catch(e) {
+      busy = false; btn.disabled = false; btn.textContent = 'Create my free account \u2192';
+      err((e && e.message) ? e.message : 'Something went wrong. Please try again.');
+    }
+  });
+</script>
+</body>
+</html>
