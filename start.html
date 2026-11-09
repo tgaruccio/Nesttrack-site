@@ -9,10 +9,23 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<!-- ============ META PIXEL (optional) ============
-     Paste your NestTrack Meta Pixel code here so ad opt-ins are tracked.
-     Then uncomment the fbq('track','Lead') line in the script at the bottom.
-================================================== -->
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1940157110674752');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1940157110674752&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 
 <style>
   :root{
@@ -340,7 +353,7 @@
     who = { first:w.first||"", last:w.last||"", email:w.email||"", phone:w.phone||"", uid:w.uid||"" };
     try { sessionStorage.setItem("nt_who", JSON.stringify(who)); } catch(err){}
     document.getElementById("giftEmail").textContent = who.email || "you";
-    // if (window.fbq) fbq('track', 'CompleteRegistration');   // uncomment once the Meta Pixel is added
+    if (window.fbq) fbq('track', 'CompleteRegistration');   // free trial account created
     show(2);
     document.getElementById("get-started").scrollIntoView({behavior:"smooth", block:"start"});
   };
@@ -358,7 +371,7 @@
   new MutationObserver(function(){
     var body = document.getElementById('ntw-body'), err = document.getElementById('ntw-err');
     if (body && body.style.display === 'none' && document.getElementById('p2').classList.contains('show')) {
-      // if (window.fbq) fbq('track', 'Lead');
+      if (window.fbq) fbq('track', 'Lead');   // took the free gift
       document.getElementById('giftMsg').textContent = 'Sent ✓ Check your inbox.';
       setTimeout(function(){ activateLink(); show(3); }, 900);
     } else if (err && err.textContent && document.getElementById('giftBtn').disabled) {
@@ -373,7 +386,7 @@
   document.getElementById("skipCard").onclick = function(e){ e.preventDefault(); location.href = APP_URL; };
 
   // Back from activation -> booking calendar.
-  if (/[?&]activated=1/.test(location.search)) { /* if (window.fbq) fbq('track','StartTrial'); */ loadCalendly(); show(4); }
+  if (/[?&]activated=1/.test(location.search)) { if (window.fbq) fbq('track','StartTrial'); loadCalendly(); show(4); }
   else if (/[?&]canceled=1/.test(location.search)) { show(3); }   // backed out of Stripe — land on step 3, not step 1
   else { show(1); }
 </script>
