@@ -7,7 +7,7 @@
 <meta name="description" content="Leads, client experience, and follow-up in one platform. Start NestTrack free and Tom Garuccio will personally help you set it up.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,300;9..144,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 
 <!-- Meta Pixel Code -->
 <script>
@@ -129,6 +129,192 @@ src="https://www.facebook.com/tr?id=1940157110674752&ev=PageView&noscript=1"
   .sys li{font-size:15px;color:#33433C;padding-left:16px;position:relative}
   .sys li:before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--green)}
 
+  /* three systems, as flows. Named sysflow, not flow: .flow is already taken above by the
+     opt-in card's step list, whose `.flow li b` turns every <b> into a numbered circle. */
+  .sysflow{display:grid;gap:0}
+  .stg{position:relative;padding:0 0 18px 26px}
+  .stg:last-child{padding-bottom:0}
+  .stg:before{content:"";position:absolute;left:7px;top:17px;bottom:0;width:2px;background:var(--line)}
+  .stg:last-child:before{display:none}
+  .stg .dot{position:absolute;left:0;top:4px;width:16px;height:16px;border-radius:50%;background:var(--white);border:2px solid var(--green);display:grid;place-items:center}
+  .stg .dot:after{content:"";width:6px;height:6px;border-radius:50%;background:var(--green)}
+  .stg .st{font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--green);margin-bottom:5px}
+  .stg ul{list-style:none;display:grid;gap:6px}
+  .stg li{font-size:14.5px;color:#33433C;line-height:1.45;padding-left:0}
+  .stg li:before{display:none}
+  .stg li b{color:var(--ink);font-weight:600}
+
+  /* ── interactive deal demo ──
+     The panes below are a faithful rebuild of the real NestTrack deal card and client
+     dashboard, down to the app's own tokens, so what a visitor clicks here is what they
+     get when they log in. App tokens are scoped to .nt so they cannot leak into the
+     landing page's own ivory/Inter styling. */
+  section.demo{padding:64px 0;background:var(--ivory)}
+  .nt{--g:#1D9E75;--g-lt:#E1F5EE;--g-dk:#0F6E56;--sf:#fff;--sf2:#F1EFE8;
+      --bd:rgba(0,0,0,.10);--bd2:rgba(0,0,0,.18);--t1:#1a1a18;--t2:#5a5a54;--t3:#9a9a90;--r:10px;--rs:7px;
+      font-family:'DM Sans',system-ui,sans-serif;font-size:14px;line-height:1.55;color:var(--t1)}
+  .demo-note{text-align:center;font-size:13.5px;color:var(--muted);margin-bottom:18px}
+  .panes{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+  .ntcard{border-radius:var(--r);overflow:hidden;box-shadow:0 18px 44px -30px rgba(20,32,27,.5)}
+
+  /* agent deal card */
+  .dealc{background:#FEF3C7;border:1.5px solid #F59E0B}
+  .dealh{background:#D97706;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .dealh .addr{font-size:14px;font-weight:600;color:#fff}
+  .dealh .sub{font-size:11px;color:rgba(255,255,255,.8);margin-top:1px}
+  .dealh .badge{font-size:11px;font-weight:600;color:#fff;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:3px 8px;white-space:nowrap}
+  .dealh .sale{display:flex;align-items:center;gap:3px;justify-content:flex-end;margin-bottom:3px}
+  .dealh .sale span{font-size:9px;color:rgba(255,255,255,.7);font-weight:600;text-transform:uppercase}
+  .dealh .sale b{font-size:11px;color:#fff;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:4px;padding:2px 6px;font-weight:500}
+  .omgr{padding:7px 14px;background:var(--sf2);border-bottom:1px solid var(--bd);font-size:11.5px;color:var(--t3)}
+  .omgr u{color:var(--g-dk);cursor:pointer}
+  .stagerow{display:flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(255,255,255,.55);border-bottom:1px solid #F59E0B}
+  .stagerow>span{font-size:10px;color:var(--t3);font-weight:700;text-transform:uppercase;flex-shrink:0}
+  .stagerow select{flex:1;min-width:0;font:inherit;font-size:12px;padding:5px 6px;border:1px solid #F59E0B;border-radius:var(--rs);background:var(--sf);color:var(--t1);cursor:pointer}
+  .daterow{display:flex;overflow-x:auto;border-bottom:1px solid var(--bd);background:var(--sf2)}
+  /* the app lets this row scroll sideways; on a sales page all seven need to be visible at
+     once, so they share the width equally instead. */
+  .daterow div{flex:1 1 0;min-width:0;padding:7px 8px}
+  .daterow div+div{border-left:1px solid var(--bd)}
+  .daterow .k{font-size:8px;color:var(--t3);text-transform:uppercase;font-weight:700;letter-spacing:0;margin-bottom:2px;white-space:nowrap}
+  .daterow .v{font-size:11px;color:var(--t1);white-space:nowrap}
+  .dealb{padding:12px 16px 16px;background:#FEF3C7}
+  .dsum{display:flex;align-items:center;justify-content:space-between;padding:6px 0 4px;font-size:12px;font-weight:600;color:var(--t2)}
+  .dsum .cnt{font-size:11px;background:var(--sf2);color:var(--t3);padding:2px 7px;border-radius:10px}
+  .dsum .on{font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;background:#ECFDF5;color:#065F46}
+  .chk{display:grid;gap:0;margin-bottom:10px}
+  .chk li{list-style:none;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t1);padding:5px 0;border-bottom:.5px solid var(--bd)}
+  .chk li .box{flex:0 0 14px;height:14px;border:1.5px solid var(--bd2);border-radius:3px;background:var(--sf)}
+  .chk li.on .box{background:var(--g);border-color:var(--g);color:#fff;font-size:10px;display:grid;place-items:center}
+  .chk li.on{color:var(--t3);text-decoration:line-through}
+  .tcrow{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:.5px solid var(--bd)}
+  .tcrow .p{font-size:9px;font-weight:700;padding:2px 6px;border-radius:8px;flex-shrink:0;white-space:nowrap}
+  .tcrow .p.now{background:#ECFDF5;color:#065F46}
+  .tcrow .p.up{background:#F3F4F6;color:#6B7280}
+  .tcrow .p.ov{background:#FEF2F2;color:#B91C1C}
+  .tcrow .lb{flex:1;min-width:0;font-size:12px;color:var(--t1)}
+  .tcrow .lb i{font-size:10px;color:var(--t3);font-style:normal}
+  .tcrow .dft{font:inherit;font-size:10px;padding:3px 8px;border-radius:var(--rs);border:0;background:var(--g);color:#fff;cursor:pointer;flex-shrink:0}
+  .tcrow .dft:hover{background:#17855f}
+  .tcrow .tick{color:#1D9E75;font-size:14px;flex-shrink:0}
+  .tcrow .ex{color:var(--t3);font-size:13px;flex-shrink:0}
+  .tcempty{font-size:11px;color:var(--t3);padding:6px 0}
+
+  /* client dashboard */
+  .clic{background:var(--sf);border:1px solid var(--bd)}
+  .clih{background:linear-gradient(135deg,#0F6E56,#1D9E75);padding:14px 16px;color:#fff}
+  .clih .jt{font-family:'Fraunces',serif;font-size:20px;font-weight:300;letter-spacing:-.4px}
+  .clih .eb{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.75);margin-bottom:6px}
+  .clih .dc{font-size:22px;font-weight:700;letter-spacing:-.5px;margin-top:8px}
+  .clih .ca{font-size:12px;color:rgba(255,255,255,.8);margin-top:2px}
+  /* second header band + trail + progress bar, matching home-sell-section in the app */
+  .clih2{background:linear-gradient(135deg,#92400E,#D97706);color:#fff;padding:14px 16px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;border-bottom:1.5px solid #F59E0B}
+  .clih2 .eb2{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;opacity:.8;margin-bottom:3px}
+  .calbtn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);border-radius:20px;padding:6px 12px;font-size:11.5px;white-space:nowrap;flex-shrink:0}
+  .trailwrap{padding:16px 0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+  .trailwrap svg{display:block}
+  .progwrap{padding:8px 16px 14px;border-top:.5px solid var(--bd);background:var(--sf2)}
+  .progtop{display:flex;justify-content:space-between;margin-bottom:5px}
+  .progtop span:first-child{font-size:11.5px;color:var(--t2)}
+  .progtop span:last-child{font-size:11px;color:#D97706;font-weight:500}
+  .progbar{background:var(--bd);border-radius:20px;height:5px;overflow:hidden}
+  .progbar i{display:block;background:#D97706;height:100%;border-radius:20px;transition:width .4s}
+  .drow{padding:10px 14px;border-bottom:.5px solid var(--bd)}
+  .drow .l1{display:flex;align-items:center;gap:10px}
+  .drow .ic{font-size:16px;flex-shrink:0}
+  .drow .lb{flex:1;font-size:12.5px;color:var(--t1);font-weight:500}
+  .drow .l2{font-size:11px;color:var(--t3);margin-top:2px;padding-left:26px}
+  .drow .tg{font-size:10px;border-radius:10px;padding:2px 7px;white-space:nowrap}
+  .drow.past{background:var(--sf2);border-left:1px solid var(--bd)}
+  .drow.past .tg{background:#F1F5F9;color:var(--t3)}
+  .drow.today{background:#FEF3C7;border-left:2px solid #F59E0B}
+  .drow.today .tg{background:#FEF3C7;color:#92400E;font-weight:600}
+  .drow.fut{background:var(--sf);border-left:1px solid var(--bd)}
+  .drow.fut .tg{color:var(--t3)}
+  /* draft email modal */
+  .mback{position:fixed;inset:0;background:rgba(20,32,27,.55);display:none;place-items:center;padding:20px;z-index:60}
+  .mback.open{display:grid}
+  .mbox{background:#fff;border-radius:14px;max-width:640px;width:100%;max-height:86vh;overflow:auto;box-shadow:0 30px 70px -20px rgba(0,0,0,.5)}
+  .mbox .mh{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .mbox .mh b{font-size:15px}
+  .mbox .mx{background:none;border:0;font-size:22px;line-height:1;color:#9a9a90;cursor:pointer;font-family:inherit}
+  .mbox .mb{padding:18px;background:#F6F8F7}
+  .mfield{font-size:13px;color:#5a5a54;padding:6px 0;border-bottom:1px solid var(--line)}
+  .mfield b{color:#1a1a18}
+  .mbody{padding-top:16px}
+  .mbody img{max-width:100%}
+  .mfoot{padding:0 18px 18px;display:flex;gap:8px;flex-wrap:wrap}
+  .mfoot .fake{font-size:13px;font-weight:600;padding:9px 16px;border-radius:9px;background:var(--green);color:#fff}
+  .mfoot .fake.alt{background:#F1EFE8;color:#5a5a54}
+  .mnote{font-size:12px;color:#9a9a90;padding:0 18px 16px}
+  .demo-foot{text-align:center;margin-top:20px;font-size:14.5px;color:var(--muted)}
+
+  /* ── product shots inside the three systems cards ──
+     Rebuilt from the app rather than pasted in as PNGs: no real client names or addresses,
+     readable at phone width, and they stay right when the app's styling moves. */
+  .shot{margin:14px 0 2px;border:1px solid var(--bd);border-radius:10px;overflow:hidden;background:#fff;
+        box-shadow:0 10px 26px -20px rgba(20,32,27,.6)}
+  .shot-cap{font-size:11px;color:var(--muted);text-align:center;margin-top:7px;font-style:italic}
+  .shot-h{padding:9px 12px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff}
+  /* virtual business card — card.html's own blue, not the app green */
+  .bcwrap{background:#F6F8F7;padding-bottom:12px}
+  .bcard{background:linear-gradient(168deg,#1505F0 0%,#0F04AD 130%);padding:18px 16px 30px;color:#fff;text-align:center;border-radius:0 0 18px 18px}
+  .bcard .avw{position:relative;width:58px;margin:0 auto 9px}
+  .bcard .av{width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.55);display:grid;place-items:center;font-size:19px;font-weight:700}
+  .bcard .vb{position:absolute;right:-2px;bottom:-2px;width:18px;height:18px;border-radius:50%;background:#fff;color:#1505F0;font-size:10px;display:grid;place-items:center;font-weight:700}
+  .bcard .nm{font-size:19px;font-weight:700;letter-spacing:-.3px}
+  .bcard .rl{font-size:8px;color:rgba(255,255,255,.78);letter-spacing:.04em;margin-top:4px;line-height:1.5}
+  .bcard .bk{display:inline-block;font-size:9.5px;background:rgba(255,255,255,.18);border-radius:20px;padding:3px 11px;margin-top:9px}
+  .bcard .tg{font-size:9px;color:rgba(255,255,255,.7);margin-top:9px;letter-spacing:.06em}
+  .bcsave{background:#fff;border-radius:14px;margin:-20px 14px 0;padding:12px;box-shadow:0 8px 24px -12px rgba(21,5,240,.45);position:relative}
+  .bcsave .pri{display:block;background:#1505F0;color:#fff;border-radius:9px;padding:11px;font-size:13px;font-weight:700;text-align:center}
+  .bcsave .qr{display:block;text-align:center;font-size:11px;color:var(--t2);margin-top:9px}
+  .bctiles{display:flex;gap:8px;padding:12px 14px 0}
+  .bctiles div{flex:1;background:#fff;border:1px solid var(--bd);border-radius:11px;padding:9px 4px;text-align:center}
+  .bctiles .ic{width:26px;height:26px;border-radius:50%;background:#EEF0FF;color:#1505F0;margin:0 auto 4px;display:grid;place-items:center;font-size:12px}
+  .bctiles .lb{font-size:10px;color:var(--t2)}
+  .bconn{font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--t3);padding:14px 14px 6px}
+  .bsoc{display:flex;gap:7px;padding:0 14px 4px}
+  .bsoc span{flex:1;height:26px;border-radius:50%;display:grid;place-items:center;font-size:11px;color:#fff}
+  /* offer comparison */
+  .otab{width:100%;border-collapse:collapse;font-size:11.5px}
+  .otab th,.otab td{padding:6px 8px;text-align:left;border-bottom:1px solid var(--bd);white-space:nowrap}
+  .otab th{font-size:9px;text-transform:uppercase;letter-spacing:.04em;color:var(--t3);background:var(--sf2)}
+  .otab td:first-child{color:var(--t3)}
+  .otab .win{background:#F2F8F5;font-weight:700;color:var(--g-dk)}
+  /* Send Referrals — the real modal: category chips, Select/Clear/Show All, then checked rows */
+  .refl{padding:10px 11px}
+  .refstep{font-size:9px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+  .refchips{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px}
+  .refchips span{padding:3px 8px;border-radius:20px;border:.5px solid var(--bd);background:var(--sf);font-size:9.5px;color:var(--t2);white-space:nowrap}
+  .refchips span.active{background:var(--g-lt);color:var(--g-dk);border-color:#9FE1CB;font-weight:500}
+  .refbtns{display:flex;gap:5px;margin-bottom:9px}
+  .refbtns span{font-size:9.5px;padding:3px 8px;border-radius:var(--rs);border:1px solid var(--bd);background:var(--sf);color:var(--t2)}
+  .refbtns span.g{background:var(--g);border-color:var(--g);color:#fff}
+  .refhd{display:flex;justify-content:space-between;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin-bottom:5px}
+  .refhd em{font-style:normal;color:var(--g-dk);text-transform:none;letter-spacing:0;font-weight:400}
+  .refl .r{display:flex;gap:7px;align-items:flex-start;padding:7px 9px;border:1px solid var(--bd);border-radius:var(--rs);margin-bottom:5px;font-size:11px;background:var(--sf)}
+  .refl .cb{flex:0 0 13px;height:13px;border-radius:3px;background:#2563EB;color:#fff;font-size:9px;display:grid;place-items:center;margin-top:1px}
+  .refl .r b{display:block;color:var(--t1);font-size:11.5px}
+  .refl .r span{color:var(--t3);font-size:10px}
+  .refl .r i{display:block;color:var(--t3);font-size:10px;font-style:italic;margin-top:1px}
+  .refnext{display:block;text-align:center;background:var(--g);color:#fff;border-radius:var(--rs);font-size:10.5px;font-weight:600;padding:7px;margin-top:7px}
+  /* nesttracker digest */
+  .ntk{background:linear-gradient(150deg,#14201B,#0F6E56);padding:16px;color:#fff;text-align:center}
+  .ntk .lbl{font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.65)}
+  .ntk .val{font-family:'Fraunces',serif;font-size:30px;font-weight:400;letter-spacing:-1px;margin:2px 0 4px}
+  .ntk .chg{display:inline-block;font-size:10.5px;background:rgba(255,255,255,.16);border-radius:20px;padding:3px 10px}
+  .eqw{padding:12px}
+  .eqw .t{font-size:12px;font-weight:700;color:var(--t1);margin-bottom:8px}
+  .eqbar{height:16px;border-radius:8px;overflow:hidden;display:flex;border:1px solid var(--bd)}
+  .eqbar i{display:block;height:100%}
+  .eqbar .a{background:#4FA98B}
+  .eqbar .b{background:#E8E2D4}
+  .eqk{display:flex;justify-content:space-between;font-size:10.5px;margin-top:7px}
+  .eqk b{display:block;font-size:13px}
+  .eqk .l b{color:var(--g-dk)}
+  .eqk .r{text-align:right;color:var(--t3)}
+
   /* about + final cta */
   .about{padding:60px 0;text-align:center}
   .about .eyebrow{display:block}
@@ -144,6 +330,11 @@ src="https://www.facebook.com/tr?id=1940157110674752&ev=PageView&noscript=1"
     .grid{grid-template-columns:1fr;gap:28px}
     .three{grid-template-columns:1fr}
     .hero{padding-bottom:40px}
+    .panes{grid-template-columns:1fr}
+    .demo-bar{flex-direction:column;align-items:stretch}
+    .dbtns{justify-content:stretch}
+    .dbtn{flex:1}
+    .offers th:nth-child(2),.offers td:nth-child(2){display:none}
   }
 </style>
 </head>
@@ -183,10 +374,10 @@ src="https://www.facebook.com/tr?id=1940157110674752&ev=PageView&noscript=1"
         <div class="how-h">How it works: 3 free steps</div>
         <div class="how-i"><b>1</b><div><strong>Free 30-day trial.</strong> Create your NestTrack account. No credit card.</div></div>
         <div class="how-i"><b>2</b><div><strong>Free gift (optional).</strong> Posting consistently is the cheapest lead source you have &mdash; and editing is why most agents stop. My AI video editor is the same one I use for my reels and ads. Skip it if you don't want it.</div></div>
-        <div class="how-i"><b>3</b><div><strong>Free 1-on-1 setup call.</strong> Add a card to activate (you're not charged until your 30-day trial ends), then pick a time and I'll hop on to get you set up.</div></div>
+        <div class="how-i"><b>3</b><div><strong>Free 1-on-1 setup call (optional).</strong> Add a card to activate (you're not charged until your 30-day trial ends), then pick a time and I'll hop on to get you set up.</div></div>
       </div>
       <div class="card" id="get-started">
-        <div class="steps3"><span id="st1" class="on">1 · Free trial</span><span id="st2">2 · Gift (optional)</span><span id="st3">3 · Free setup call</span></div>
+        <div class="steps3"><span id="st1" class="on">1 · Free trial</span><span id="st2">2 · Gift (optional)</span><span id="st3">3 · Setup call (optional)</span></div>
 
         <!-- STEP 1: NestTrack 30-day free trial signup, embedded so they never leave this page -->
         <div class="panel" id="p1">
@@ -243,49 +434,250 @@ src="https://www.facebook.com/tr?id=1940157110674752&ev=PageView&noscript=1"
   <section class="systems">
     <div class="wrap">
       <div class="sec-h">
-        <h2>The 3 systems, in one place</h2>
-        <p>No more juggling a CRM, a to-do app, a transaction coordinator and a past-client newsletter.</p>
+        <h2>Three systems, one flow</h2>
+        <p>A lead comes in, becomes a client, and stays one. No juggling a CRM, a to-do app, a transaction coordinator and a past-client newsletter.</p>
       </div>
       <div class="three">
         <div class="sys">
           <div class="num">01</div>
           <h3>Lead generation</h3>
-          <p class="lead">Build your entire lead generation system inside the CRM.</p>
-          <ul>
-            <li>Landing pages</li>
-            <li>Your virtual business card</li>
-            <li>Voicemail drops</li>
-            <li>Texting</li>
-            <li>Letters</li>
-            <li>Tracks exactly who you need to follow up with</li>
-            <li>AI keeps track of your calls and emails <span style="color:var(--muted);font-size:13.5px;">(via a Claude connector)</span></li>
-          </ul>
+          <p class="lead">Every lead lands in the same place, already tagged.</p>
+          <div class="sysflow">
+            <div class="stg"><span class="dot"></span>
+              <div class="st">Put something out</div>
+              <ul>
+                <li><b>Landing pages</b> wired straight into the CRM &mdash; no Zapier, no spreadsheet</li>
+                <li><b>Single-page property listings</b> for every home you take</li>
+                <li>Your <b>virtual business card</b>, shareable anywhere</li>
+              </ul>
+              <div style="font-size:13px;color:var(--muted);line-height:1.45;margin-top:9px;padding-top:9px;border-top:1px solid var(--line);">
+                <b style="color:var(--pine);">Plus your free gift:</b> my AI video editor, so you can actually make the content. It runs through Claude, not NestTrack &mdash; yours to keep either way.
+              </div>
+            </div>
+            <div class="shot nt">
+              <div class="bcwrap">
+                <div class="bcard">
+                  <div class="avw"><div class="av">JA</div><div class="vb">&#10003;</div></div>
+                  <div class="nm">Jordan Avery</div>
+                  <div class="rl">REALTOR | TEAM LEADER | LISTING SPECIALIST</div>
+                  <div class="bk">Northside Realty</div>
+                  <div class="tg">#YourMoveMatters</div>
+                </div>
+                <div class="bcsave">
+                  <span class="pri">&#11015; Save My Contact</span>
+                  <span class="qr">&#9638; Show QR code</span>
+                </div>
+                <div class="bctiles">
+                  <div><div class="ic">&#128222;</div><div class="lb">Call</div></div>
+                  <div><div class="ic">&#128172;</div><div class="lb">Text</div></div>
+                  <div><div class="ic">&#9993;</div><div class="lb">Email</div></div>
+                </div>
+                <div class="bconn">CONNECT</div>
+                <div class="bsoc">
+                  <span style="background:#E1306C;">&#9679;</span><span style="background:#1877F2;">f</span>
+                  <span style="background:#111;">&#9834;</span><span style="background:#FF0000;">&#9654;</span>
+                  <span style="background:#0A66C2;">in</span>
+                </div>
+              </div>
+            </div>
+            <div class="shot-cap">Your virtual business card</div>
+            <div class="stg"><span class="dot"></span>
+              <div class="st">Reach people without cold calling</div>
+              <ul>
+                <li><b>Voicemail drops</b> &mdash; work expireds and farm whole neighborhoods without dialing</li>
+                <li><b>Letters</b> that go out on their own</li>
+                <li><b>Text from your own business number</b>, right inside NestTrack</li>
+              </ul>
+            </div>
+            <div class="stg"><span class="dot"></span>
+              <div class="st">Nothing falls through</div>
+              <ul>
+                <li>It tracks exactly who you owe a follow-up</li>
+                <li>AI logs your calls and emails <span style="color:var(--muted)">(via a Claude connector)</span></li>
+              </ul>
+            </div>
+          </div>
         </div>
         <div class="sys">
           <div class="num">02</div>
           <h3>Client experience</h3>
-          <p class="lead">Your client's experience is directly proportional to how organized you are as an agent.</p>
-          <ul>
-            <li>Every step tracked, contract to close</li>
-            <li>Automatic updates with your personal video</li>
-            <li>Clients get their own live dashboard</li>
-            <li>AI transaction coordinator &mdash; drafts your emails and documents, tracks every timeline and deadline, and puts the next step on your to-do list</li>
-            <li>Offer manager with one-click net sheets</li>
-          </ul>
+          <p class="lead">Your client's experience is directly proportional to how organized you are.</p>
+          <div class="sysflow">
+            <div class="stg"><span class="dot"></span>
+              <div class="st">You stay organized</div>
+              <ul>
+                <li>Every step tracked, <b>contract to close</b></li>
+                <li><b>AI transaction coordinator</b> &mdash; drafts the emails and documents, watches every deadline, puts the next step on your list</li>
+                <li><b>Offer manager</b> with one-click net sheets</li>
+              </ul>
+            </div>
+            <div class="stg"><span class="dot"></span>
+              <div class="st">They see it</div>
+              <ul>
+                <li>Clients get their <b>own live dashboard</b></li>
+                <li><b>Your personal video</b> at every step, sent automatically</li>
+              </ul>
+            </div>
+            <div class="stg"><span class="dot"></span>
+              <div class="st">You look like the pro you are</div>
+              <ul>
+                <li><b>Send Referrals</b> &mdash; inspectors, contractors, lenders, movers, in one click</li>
+              </ul>
+            </div>
+            <div class="shot nt">
+              <div class="shot-h" style="background:#1D9E75;">Offer Manager &middot; 1 Sample St</div>
+              <table class="otab">
+                <tr><th>Field</th><th>Offer A</th><th>Offer B</th></tr>
+                <tr><td>Price</td><td>$437,000</td><td class="win">$429,000</td></tr>
+                <tr><td>Financing</td><td>Conventional</td><td class="win">Cash</td></tr>
+                <tr><td>Inspection</td><td>Yes</td><td class="win">Waived</td></tr>
+                <tr><td>Close</td><td>45 days</td><td class="win">14 days</td></tr>
+                <tr><td>You net</td><td>$402,180</td><td class="win">$404,650</td></tr>
+              </table>
+            </div>
+            <div class="shot-cap">The higher price nets less &mdash; NestTrack does that math for you</div>
+            <div class="shot nt">
+              <div class="shot-h" style="background:#0F6E56;">Send Referral Recommendations</div>
+              <div class="refl">
+                <div class="refstep">Step 1 &mdash; Select Partners to Send</div>
+                <div class="refchips">
+                  <span class="active">General Inspector</span><span>Mold / Remediation</span><span>Well / Drilling</span>
+                  <span>Structural Engineer</span><span>HVAC</span><span>Plumber</span><span>Electrician</span>
+                  <span>Handyman</span><span>Contractor</span><span>Painter</span><span>Roofing</span>
+                  <span>Landscaping</span><span>Cleaning</span><span>Insurance</span><span>Title</span><span>Movers</span>
+                </div>
+                <div class="refbtns"><span class="g">&#10003; Select All</span><span>&#10005; Clear All</span><span>Show All</span></div>
+                <div class="refhd"><span>General Inspector <em>(3 selected)</em></span><em>Clear</em></div>
+                <div class="r"><span class="cb">&#10003;</span><span><b>Sample Inspections &#9733;</b><span>Anytown Inspections &middot; (440) 555-0142</span><i>Detailed, honest &mdash; preferred pricing for clients.</i></span></div>
+                <div class="r"><span class="cb">&#10003;</span><span><b>Example Home Services</b><span>Example Inspections &middot; (440) 555-0168</span><i>Home inspection + radon, sewer scopes, mold.</i></span></div>
+                <div class="r"><span class="cb">&#10003;</span><span><b>Sample Structural</b><span>Frontline Sample &middot; (440) 555-0193</span><i>Also does septic inspections</i></span></div>
+                <span class="refnext">Next: Select Client &#8594;</span>
+              </div>
+            </div>
+            <div class="shot-cap">Pick, send, done &mdash; one email, your whole trusted list</div>
+          </div>
         </div>
         <div class="sys">
           <div class="num">03</div>
           <h3>Follow-up forever</h3>
           <p class="lead">Most agents lose past clients because they go quiet. This makes sure you never do.</p>
-          <ul>
-            <li>NestTracker home-value emails for every past client</li>
-            <li>Value, equity and neighborhood sales</li>
-            <li>Keeps you top of mind without thinking about it</li>
-          </ul>
+          <div class="sysflow">
+            <div class="stg"><span class="dot"></span>
+              <div class="st">The day they close</div>
+              <ul>
+                <li>They roll into <b>NestTracker</b> automatically &mdash; nothing for you to set up</li>
+              </ul>
+            </div>
+            <div class="stg"><span class="dot"></span>
+              <div class="st">Every quarter after</div>
+              <ul>
+                <li>What their home is <b>worth now</b>, and the <b>equity</b> they've built</li>
+                <li>What sold on their street</li>
+              </ul>
+            </div>
+            <div class="stg"><span class="dot"></span>
+              <div class="st">Years later</div>
+              <ul>
+                <li>They still know your name &mdash; <b>without you thinking about it once</b></li>
+              </ul>
+            </div>
+            <div class="shot nt">
+              <div class="ntk">
+                <div class="lbl">Your home &middot; 1 Sample St</div>
+                <div class="val">$452,000</div>
+                <div class="chg">&#9650; +2.4% this quarter</div>
+              </div>
+              <div class="eqw">
+                <div class="t">You own more than you owe</div>
+                <div class="eqbar"><i class="a" style="width:56%"></i><i class="b" style="width:44%"></i></div>
+                <div class="eqk">
+                  <span class="l">Your equity<b>$254,000</b></span>
+                  <span class="r">Est. remaining loan<b>$198,000</b></span>
+                </div>
+              </div>
+            </div>
+            <div class="shot-cap">NestTracker &mdash; lands in their inbox every quarter, with your name on it</div>
+          </div>
         </div>
       </div>
     </div>
   </section>
+
+  <section class="demo">
+    <div class="wrap">
+      <div class="sec-h">
+        <h2>Move a real deal through it</h2>
+        <p>This is the actual NestTrack deal card and the actual client dashboard. Change the stage, exactly like you would in the app, and watch both sides move.</p>
+      </div>
+      <div class="demo-note">Everything below is live &mdash; the dropdown, the dates, the AI TC, the Draft button. Try it.</div>
+
+      <div class="panes nt">
+        <!-- AGENT: the real deal card -->
+        <div class="ntcard dealc">
+          <div class="dealh">
+            <div style="flex:1;min-width:0;">
+              <div class="addr">1 Sample St, Anytown, OH 44000</div>
+              <div class="sub" id="nt-sub">Practice Client &middot; Seller &middot; Step 9</div>
+            </div>
+            <div style="flex-shrink:0;">
+              <div class="sale"><span>Sale $</span><b>425,000</b></div>
+              <div class="badge" id="nt-badge">Under Contract</div>
+            </div>
+          </div>
+          <div class="omgr">&#128203; <u>Open in Offer Manager</u></div>
+          <div class="stagerow">
+            <span>Stage</span>
+            <select id="nt-stage" onchange="ntSetStage(parseInt(this.value,10))"></select>
+          </div>
+          <div class="daterow" id="nt-dates"></div>
+          <div class="dealb">
+            <div class="dsum"><span>&#9989; What's Needed</span><span class="cnt" id="nt-cnt">0/10</span></div>
+            <ul class="chk" id="nt-chk"></ul>
+            <div class="dsum"><span>&#129302; AI Transaction Coordinator</span><span class="on">On</span></div>
+            <div id="nt-tc"></div>
+          </div>
+        </div>
+
+        <!-- CLIENT: the real client dashboard -->
+        <div class="ntcard clic">
+          <div class="clih">
+            <div class="eb">What your client sees</div>
+            <div class="jt">Home Sellers Journey</div>
+          </div>
+          <div class="clih2">
+            <div>
+              <div class="eb2">&#127969; Selling &mdash; Under Contract</div>
+              <div class="dc" id="nt-dc">&mdash;</div>
+              <div class="ca">1 Sample St, Anytown, OH 44000</div>
+            </div>
+            <span class="calbtn">&#128197; Calendar</span>
+          </div>
+          <div id="nt-tl"></div>
+          <div class="trailwrap"><div id="nt-trail"></div></div>
+          <div class="progwrap">
+            <div class="progtop"><span id="nt-pname">Step 9</span><span id="nt-plabel">Step 9 of 13</span></div>
+            <div class="progbar"><i id="nt-pfill"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-foot">You changed one dropdown. Your client got all of that &mdash; automatically.</div>
+    </div>
+  </section>
+
+  <div class="mback" id="nt-modal" onclick="if(event.target===this)ntCloseMail()">
+    <div class="mbox" role="dialog" aria-modal="true" aria-label="Drafted email">
+      <div class="mh"><b id="nt-mt">Drafted for you</b><button class="mx" type="button" onclick="ntCloseMail()" aria-label="Close">&times;</button></div>
+      <div class="mb">
+        <div class="mfield">To: <b id="nt-mto"></b></div>
+        <div class="mfield">Subject: <b id="nt-msub"></b></div>
+        <div class="mbody" id="nt-mbody"></div>
+      </div>
+      <div class="mfoot"><span class="fake">Send</span><span class="fake alt">Edit first</span></div>
+      <div class="mnote">In the app this opens ready to send, already addressed, with the deal's real dates filled in.</div>
+    </div>
+  </div>
+
 
   <section class="about">
     <div class="wrap">
@@ -409,6 +801,427 @@ src="https://www.facebook.com/tr?id=1940157110674752&ev=PageView&noscript=1"
   if (/[?&]activated=1/.test(location.search)) { if (window.fbq) fbq('track','StartTrial'); loadCalendly(); show(4); }
   else if (/[?&]canceled=1/.test(location.search)) { show(3); }   // backed out of Stripe — land on step 3, not step 1
   else { show(1); }
+
+  // ===== interactive deal walkthrough =====
+  // A faithful rebuild of the real deal card and client dashboard, driven by the same STAGE
+  // dropdown the app uses. Step names, checklist, AI TC labels, pill colours, date-row labels
+  // and the client timeline rows are all taken from NestTrack itself, so a visitor clicking
+  // here is looking at the product. Client and address are invented: a real past client's
+  // name and street has no business on a public ad page.
+  var NT_STEPS = ['Initial Consultation','Home Prep & Strategy','Pricing Strategy','Media Day',
+    'Listing Creation & Approval','Go Live','Marketing Push','Showings & Feedback','Under Contract',
+    'Inspection Phase','Appraisal','Final Numbers','Closing Day'];
+  var NT_CHK = ['Listing docs signed','Listing media (photos/staging)','On market',
+    'Offer review and negotiation','Under contract','Inspection','Appraisal','Clear to close',
+    'Final walk-through','Closing'];
+  // checklist items ticked off by the time you reach each stage (1-based stage -> count)
+  var NT_CHK_AT = [0,1,1,2,2,3,3,3,5,6,7,8,10];
+  // SELLER_STEPS' own icons, for the zig-zag bubble trail renderSellerTrail draws
+  var NT_ICONS = ['\uD83E\uDD1D','\uD83E\uDDF0','\uD83D\uDCCA','\uD83D\uDCF8','\uD83D\uDCDD','\uD83D\uDE80',
+    '\uD83D\uDCE3','\uD83D\uDCEC','\uD83D\uDCB0','\uD83D\uDD0D','\uD83C\uDFE6','\uD83D\uDCC4','\uD83D\uDD11'];
+  var NT_DATE_KEYS = [['Contract','acceptanceDate'],['Earnest','earnestMoneyDue'],['Closing','closingDate'],
+    ['Inspection','inspectionDeadline'],['Appraisal','appraisalDeadline'],['Walkthrough','walkthroughDate'],
+    ['Financing','financingDeadline']];
+  // the client timeline's own rows, in the app's order, with the app's icons
+  var NT_TL = [['acceptanceDate','Acceptance Date','✍️'],['earnestMoneyDue','Earnest Money Due','💰'],
+    ['inspectionDeadline','Inspection Deadline','🔍'],['appraisalDeadline','Appraisal Deadline','🏦'],
+    ['financingDeadline','Buyer Financing Deadline','📄'],['walkthroughDate','Final Walkthrough','🏁'],
+    ['closingDate','Closing Date','🔑']];
+  // AI TC tasks, exactly as the app names them: [key, label, stage it becomes Now, days from acceptance]
+  var NT_TC = [
+    ['title','Open title & circulate contacts',9,3],
+    ['insp','Schedule inspection',9,6],
+    ['res','Inspection resolution / repairs',10,11],
+    ['appr','Confirm appraisal ordered',11,28],
+    ['fin','Financing check-in',11,39],
+    ['close','Closing check-in (all parties)',12,44],
+    ['walk','Final walkthrough reminder',12,45]
+  ];
+  var NT_MAIL = {
+    title:['title@sampletitle.com','1 Sample St — opening title',
+      'Hi there,\n\nWe are under contract at 1 Sample St, Anytown OH 44000. Acceptance was {acceptanceDate} and we are scheduled to close {closingDate}.\n\nSellers: Practice Client\nPurchase price: $425,000\nEarnest money due: {earnestMoneyDue}\n\nCan you open the file and send the commitment once you have it? I have copied both agents so everyone has your contact information.\n\nThanks,\nJordan'],
+    insp:['client@example.com','Scheduling your inspection',
+      'Hi there,\n\nThe buyers have until {inspectionDeadline} to complete their inspection. They are asking for access this week.\n\nPlan on being out of the house for about three hours. You do not need to do anything to prepare — leave the utilities on and make sure the attic and crawlspace are reachable.\n\nI will be there for it and will call you the moment it wraps.\n\nJordan'],
+    res:['client@example.com','Inspection results — where we stand',
+      'Hi there,\n\nThe report came back. Nothing structural, nothing that threatens the deal.\n\nThe buyers have asked for three items. My recommendation is below, with what I think each one is actually worth.\n\nWe have until {inspectionDeadline} to respond. Can you talk at 5pm today?\n\nJordan'],
+    appr:['title@sampletitle.com','Appraisal status — 1 Sample St',
+      'Hi there,\n\nChecking that the appraisal has been ordered on 1 Sample St. The deadline on our side is {appraisalDeadline}.\n\nIf it has been ordered, can you confirm the date it is scheduled for?\n\nThanks,\nJordan'],
+    fin:['lender@example.com','Financing check-in — 1 Sample St',
+      'Hi,\n\nTouching base on the loan for 1 Sample St. Loan commitment is due {financingDeadline} and we close {closingDate}.\n\nAre we still clear to hit both dates? Anything outstanding from the buyers?\n\nThanks,\nJordan'],
+    close:['client@example.com','Closing day — what to expect',
+      'Hi there,\n\nWe close {closingDate}. Here is everything you need:\n\n• Bring a government photo ID\n• Wire instructions come directly from the title company — call them to verify before sending anything\n• Final walkthrough is {walkthroughDate}\n• Leave all keys, garage remotes and mailbox keys on the counter\n\nI will be there with you. Congratulations, you two.\n\nJordan'],
+    walk:['client@example.com','Final walkthrough reminder',
+      'Hi there,\n\nThe buyers do their final walkthrough on {walkthroughDate}, the day before closing.\n\nThe house needs to be empty and broom-clean by then, with the utilities still on. That last part trips people up more than anything else.\n\nJordan']
+  };
+
+  // ── the real NestTrack client email ──
+  // Shell, copy and markup lifted from the app: nsEmailWrap (Georgia, #1D9E75 header, agent
+  // photo/name/brokerage/tagline), videoEmailBlockWithThumb, the {{DATES_TABLE}} rows built
+  // from SELLER_CONTRACT_FIELDS, and SELLER_STEP_EMAILS[9] word for word. Subjects below are
+  // the app's own subjects for all 13 seller steps.
+  var NT_AGENT = 'Jordan Avery', NT_BROKERAGE = 'Northside Realty', NT_TAG = '#YourMoveMatters';
+
+  function ntMailShell(bodyHtml){
+    return '<div style="font-family:Georgia,serif;max-width:540px;margin:0 auto;color:#1a1a1a;">'
+      + '<div style="background:#1D9E75;padding:24px 28px;border-radius:10px 10px 0 0;text-align:center;">'
+      +   '<div style="width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,0.4);margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:19px;color:#fff;font-family:Arial,sans-serif;">JA</div>'
+      +   '<div style="font-size:20px;font-weight:500;color:#fff;letter-spacing:-0.3px;">' + NT_AGENT + '</div>'
+      +   '<div style="font-size:12px;color:rgba(255,255,255,0.85);margin-top:3px;">' + NT_BROKERAGE + '</div>'
+      +   '<div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:2px;font-style:italic;">' + NT_TAG + '</div>'
+      + '</div>'
+      + '<div style="background:#fff;padding:28px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;">'
+      +   bodyHtml
+      +   '<hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0;"/>'
+      +   '<p style="font-size:12px;color:#888;margin:0;">Questions? Contact ' + NT_AGENT + ' directly or reply to this email.</p>'
+      + '</div>'
+      + '<div style="text-align:center;padding:12px 0;">'
+      +   '<p style="font-size:11px;color:#aaa;margin:0;">' + NT_AGENT + ' · (440) 555-0123 · ' + NT_BROKERAGE + '</p>'
+      +   '<p style="font-size:10px;color:#ccc;margin:4px 0 0;">Powered by Nest Track</p>'
+      + '</div></div>';
+  }
+
+  // videoEmailBlockWithThumb, with a drawn still instead of a real thumbnail
+  function ntVideoBlock(label){
+    return '<div style="margin:20px 0;text-align:center;">'
+      + '<div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#888;margin-bottom:8px;font-family:Arial,sans-serif;">&#x1F4F9; Personal Video from Your Agent</div>'
+      + '<div style="position:relative;max-width:420px;margin:0 auto;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,#0F6E56,#1D9E75);height:200px;">'
+      +   '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;background:rgba(0,0,0,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;">'
+      +     '<div style="width:0;height:0;border-top:12px solid transparent;border-bottom:12px solid transparent;border-left:20px solid #fff;margin-left:4px;"></div>'
+      +   '</div>'
+      + '</div>'
+      + '<div style="margin-top:8px;"><span style="color:#1D9E75;font-size:13px;font-weight:600;font-family:Arial,sans-serif;">&#9654; ' + label + '</span></div>'
+      + '</div>';
+  }
+
+  // {{DATES_TABLE}} — SELLER_CONTRACT_FIELDS rows, long-form dates, exactly as the app builds it
+  function ntDatesTable(){
+    var rows = '';
+    for (var i = 0; i < NT_TL.length; i++) {
+      var iso = ntDates[NT_TL[i][0]];
+      var d = new Date(iso + 'T12:00:00');
+      var str = d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+      rows += '<tr><td style="padding:8px 14px;font-size:13px;color:#444;border-bottom:1px solid #f0f0f0;">' + NT_TL[i][2] + ' ' + NT_TL[i][1] + '</td>'
+            + '<td style="padding:8px 14px;font-size:13px;font-weight:600;text-align:right;border-bottom:1px solid #f0f0f0;">' + str + '</td></tr>';
+    }
+    return '<table style="width:100%;border-collapse:collapse;margin:16px 0;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">' + rows + '</table>';
+  }
+
+  var NT_PORTAL_BOX = '<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px 18px;margin:0 0 18px;">'
+    + '<p style="font-size:13px;font-weight:600;color:#065F46;margin:0 0 6px;">&#x1F4F1; Your Nest Track Portal</p>'
+    + '<p style="font-size:13px;color:#444;line-height:1.7;margin:0 0 12px;">Everything is live in your account &#8212; your transaction timeline, each milestone with what to expect, your net sheet showing your estimated proceeds, and a direct line to ' + NT_AGENT + '.</p>'
+    + '<span style="display:inline-block;background:#1D9E75;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:600;font-family:Arial,sans-serif;">Open My Portal &#8594;</span></div>';
+
+  var NT_REVIEW_BOX = '<div style="background:#f9f9f9;border:1px solid #e5e7eb;border-radius:8px;padding:16px 18px;margin:16px 0;">'
+    + '<p style="font-size:13px;color:#444;margin:0 0 10px;">&#11088; Enjoying the experience so far? A quick Google review for ' + NT_AGENT + ' goes a long way &mdash; it only takes a minute and means the world to a small business.</p>'
+    + '<span style="display:inline-block;background:#1D9E75;color:#fff;padding:9px 18px;border-radius:6px;font-size:13px;font-weight:600;font-family:Arial,sans-serif;">Leave a Google Review &#8594;</span></div>';
+
+  function ntP(t){ return '<p style="font-size:14px;color:#444;line-height:1.7;margin:0 0 14px;">' + t + '</p>'; }
+  function ntStep(t){ return '<p style="font-size:13px;color:#444;line-height:1.8;margin:0 0 10px;">' + t + '</p>'; }
+  function ntHero(emoji, big, small){
+    return '<div style="background:#ECFDF5;border-radius:8px;padding:18px;text-align:center;margin-bottom:18px;">'
+      + '<div style="font-size:32px;margin-bottom:6px;">' + emoji + '</div>'
+      + '<div style="font-size:20px;font-weight:600;color:#065F46;margin-bottom:4px;">' + big + '</div>'
+      + '<div style="font-size:14px;color:#065F46;">' + small + '</div></div>';
+  }
+  function ntList(items){
+    var h = '<ul style="padding-left:18px;margin:10px 0 14px;">';
+    for (var i=0;i<items.length;i++) h += '<li style="font-size:13px;color:#444;line-height:1.7;margin-bottom:4px;">' + items[i] + '</li>';
+    return h + '</ul>';
+  }
+  function ntBtn(label){
+    return '<p style="margin:4px 0 0;"><span style="display:inline-block;background:#1D9E75;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:600;font-family:Arial,sans-serif;">' + label + '</span></p>';
+  }
+
+  // SELLER_STEP_EMAILS — the app's own subjects, with its bodies
+  var NT_STAGE_MAIL = [
+    ['Your seller file is open — here’s what’s ahead','Your welcome video · what to expect', function(){
+      return ntP(NT_AGENT + ' has opened your seller file in Nest Track. Your personalized selling guide, timeline, and transaction tools are all here — every step of the way.')
+        + ntP('What we cover in the initial consultation:')
+        + ntList(['Your timeline — when do you need to close?','What the home is worth in today’s market','What we do to prepare, price, and market it','Sign the Listing Agreement and Consumer Guide to Agency Relationships'])
+        + ntBtn('Open My Portal →'); }],
+    ['Step 2: Home prep — what to do and what to skip','Walking your prep list · room by room', function(){
+      return ntP(NT_AGENT + ' is putting together your home prep and listing strategy. Small, targeted improvements get big returns. Big renovations rarely do.')
+        + ntP('Highest-ROI prep (almost always worth doing):')
+        + ntList(['Deep clean — every surface, every corner','Declutter and depersonalize — buyers need to see the home, not your life','Fresh neutral paint where needed','Curb appeal — lawn, mulch, front door','Fix obvious issues — leaky faucets, broken fixtures, sticking doors'])
+        + ntBtn('Open My Portal →'); }],
+    ['Step 3: Your pricing strategy is ready','The pricing walkthrough', function(){
+      return ntP(NT_AGENT + ' has pulled every comparable sale near you and built your pricing strategy. It is in your portal now.')
+        + ntP('We will walk through two numbers together: the price that gets you the most money, and the price that gets you the fastest sale. They are rarely the same number.')
+        + ntBtn('Open My Portal →'); }],
+    ['Step 4: Media day — make it count','How to prep for photo day', function(){
+      return ntP('Photos are what get buyers through the door. Here is how to have the house ready the morning of:')
+        + ntList(['All lights on, all blinds open','Cars out of the driveway','Counters clear, trash cans out of sight','Pets somewhere else if you can manage it'])
+        + ntP('It takes about two hours. You do not need to be there.')
+        + ntBtn('Open My Portal →'); }],
+    ['Step 5: Your listing is being built','Previewing your listing', function(){
+      return ntP('Your listing is being written now — photos, description, and every detail about the home.')
+        + ntP('You will get a preview before it goes live. Read it and tell ' + NT_AGENT + ' if anything is wrong or missing; once it publishes, edits are visible to everyone.')
+        + ntBtn('Open My Portal →'); }],
+    ['You’re live — here’s how the marketing works','Your first week on market', ntHeroLive],
+    ['Showings are happening — what to expect','What to do during showing season', function(){
+      return ntP('Showings are underway. Every one gets logged in your portal, and feedback lands there as it comes in.')
+        + ntP('What helps: lights on, blinds open, out of the house, pets away. What does not help: being home. Buyers do not speak freely when the owner is there.')
+        + ntBtn('Open My Portal →'); }],
+    ['Buyers are touring your home','This week’s feedback', function(){
+      return ntP('This week’s showing feedback is in your portal.')
+        + ntP(NT_AGENT + ' reads all of it, including the unflattering parts. One opinion is noise. A pattern across several showings is worth acting on — you will get a call if one shows up.')
+        + ntBtn('Open My Portal →'); }],
+    ['🎉 You’re Under Contract — Here’s What Happens Next','What happens between now and the keys', function(){
+      return ntHero('&#x1F3E1;','Your home is under contract.','Congratulations — this is a big deal.')
+        + ntP('Here’s exactly what happens between now and closing so there are no surprises.')
+        + ntDatesTable()
+        + '<p style="font-size:14px;font-weight:600;color:#1a1a1a;margin:20px 0 12px;">What happens now — step by step:</p>'
+        + ntStep('<strong>&#x1F50D; Inspection</strong> — The buyer will have a licensed inspector walk through the property. After the inspection the buyer has a few options: they can accept the home as-is, request specific repairs or credits, or in rare cases if something truly unexpected comes up, they may choose to walk away. If they request repairs or credits, you are not obligated to agree — ' + NT_AGENT + ' will review every request with you and you can accept, reject, or counter. Most inspections resolve quickly and smoothly.')
+        + ntStep('<strong>&#x1F4DC; Title Work</strong> — The title company will reach out to begin the title search and prepare closing documents. Expect a call or email from them within a few days.')
+        + ntStep('<strong>&#x1F4D0; Appraisal</strong> — The buyer’s lender orders an independent appraisal to confirm the home is worth the contract price. ' + NT_AGENT + ' has already prepared comparable sales to support your value. If it comes in at or above price — full speed ahead. If it comes in low — we have options.')
+        + ntStep('<strong>&#x2705; Clear to Close</strong> — Once financing is fully approved, inspections are resolved, and the appraisal is done — you get the green light. This is the finish line.')
+        + '<p style="font-size:13px;color:#444;line-height:1.8;margin:0 0 18px;"><strong>&#x1F3E0; Closing Day</strong> — You’ll sign the deed and transfer documents. Funds are wired, the deed is recorded, and the home officially belongs to the buyer.</p>'
+        + NT_REVIEW_BOX + NT_PORTAL_BOX
+        + ntP('Questions at any point? ' + NT_AGENT + ' is your first call.'); }],
+    ['The Inspection is Underway — Here’s How This Works','What inspectors actually look for', function(){
+      return ntP('The buyer’s inspection is happening. Here is what to expect afterward.')
+        + ntP('The buyer can accept the home as-is, ask for specific repairs or credits, or in rare cases walk away. If they ask for something, you are not obligated to agree — ' + NT_AGENT + ' will review every request with you and you can accept, reject, or counter.')
+        + ntBtn('Open My Portal →'); }],
+    ['Appraisal ordered — here’s what it means for you','What happens if it comes in low', function(){
+      return ntP('The buyer’s lender has ordered the appraisal.')
+        + ntP('An independent appraiser confirms the home is worth the contract price. ' + NT_AGENT + ' has already sent comparable sales supporting your value. At or above price, we keep moving. Below price, we have options — and you will hear about it from ' + NT_AGENT + ' first.')
+        + ntBtn('Open My Portal →'); }],
+    ['Final numbers — review before closing','Reading your settlement statement', function(){
+      return ntP('Your closing figures are ready in your portal — what you walk away with, line by line, with every fee named.')
+        + ntP('Review them now, not at the table. If anything looks wrong, tell ' + NT_AGENT + ' today.')
+        + ntBtn('Open My Portal →'); }],
+    ['It’s Official — Your Home is Sold!','Closing day, start to finish', function(){
+      return ntHero('&#x1F389;','Your home is sold.','Congratulations — you made it.')
+        + ntP('The deed is recorded and the keys have changed hands.')
+        + ntP('From here you will keep getting your home-value digest each quarter — what homes like yours are worth, and what sold nearby. And ' + NT_AGENT + ' is still your first call, long after closing.')
+        + NT_REVIEW_BOX
+        + ntBtn('Open My Portal →'); }]
+  ];
+
+  function ntHeroLive(){
+    return ntHero('&#x1F3E0;','Your home is live.','It is officially on the market.')
+      + ntP('Your listing is syndicated, the social posts are out, and the neighborhood knows.')
+      + ntP('Every showing and every piece of feedback lands in your portal as it comes in — no guessing, no waiting on a call.')
+      + ntBtn('Open My Portal →');
+  }
+
+  var ntStage = 9;          // opens under contract, where the dates and the AI TC are live
+  var ntDates = {};
+  var ntBooted = false;     // no pop-up on first paint, only on a stage the visitor changed
+
+  function ntISO(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+  function ntAdd(base, days){ var d = new Date(base.getTime()); d.setDate(d.getDate()+days); return d; }
+  function ntFmt(iso){
+    var d = new Date(iso+'T12:00:00');
+    return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+  }
+  function ntShort(iso){
+    var d = new Date(iso+'T12:00:00');
+    // 2-digit year: seven columns have to fit the pane without the app's sideways scroll
+    return ('0'+(d.getMonth()+1)).slice(-2)+'/'+('0'+d.getDate()).slice(-2)+'/'+String(d.getFullYear()).slice(-2);
+  }
+  // Dates hang off an acceptance three days ago, so the client timeline shows a real mix of
+  // done / today / days-away whenever somebody loads the page.
+  function ntBuildDates(){
+    var today = new Date(); today.setHours(0,0,0,0);
+    var acc = ntAdd(today,-3);
+    ntDates = {
+      acceptanceDate:     ntISO(acc),
+      earnestMoneyDue:    ntISO(ntAdd(acc,3)),
+      inspectionDeadline: ntISO(ntAdd(acc,11)),
+      appraisalDeadline:  ntISO(ntAdd(acc,28)),
+      financingDeadline:  ntISO(ntAdd(acc,39)),
+      walkthroughDate:    ntISO(ntAdd(acc,45)),
+      closingDate:        ntISO(ntAdd(acc,46))
+    };
+  }
+
+  function ntRender(){
+    var i, h, today = new Date(); today.setHours(0,0,0,0);
+    var underContract = ntStage >= 9;
+
+    document.getElementById('nt-sub').innerHTML = 'Practice Client &middot; Seller &middot; Step ' + ntStage;
+    document.getElementById('nt-badge').textContent =
+      ntStage >= 13 ? 'Closed' : underContract ? 'Under Contract' : ntStage >= 6 ? 'Active' : 'Pipeline';
+
+    // date row — blank until there is a contract, exactly like the app
+    h = '';
+    for (i = 0; i < NT_DATE_KEYS.length; i++) {
+      var dv = underContract ? ntShort(ntDates[NT_DATE_KEYS[i][1]]) : '—';
+      h += '<div><div class="k">' + NT_DATE_KEYS[i][0] + '</div><div class="v">' + dv + '</div></div>';
+    }
+    document.getElementById('nt-dates').innerHTML = h;
+
+    // What's Needed
+    var ticked = NT_CHK_AT[ntStage-1] || 0;
+    h = '';
+    for (i = 0; i < NT_CHK.length; i++) {
+      h += '<li class="' + (i < ticked ? 'on' : '') + '"><span class="box">' + (i < ticked ? '✓' : '') + '</span>' + NT_CHK[i] + '</li>';
+    }
+    document.getElementById('nt-chk').innerHTML = h;
+    document.getElementById('nt-cnt').textContent = ticked + '/' + NT_CHK.length;
+
+    // AI TC — dormant until under contract, same as renderDealTC
+    var tc = document.getElementById('nt-tc');
+    if (!underContract) {
+      tc.innerHTML = '<div class="tcempty">Nothing to coordinate until the deal is under contract. Set the stage to <b>9 · Under Contract</b> and the AI TC wakes up.</div>';
+    } else {
+      h = '';
+      for (i = 0; i < NT_TC.length; i++) {
+        var t = NT_TC[i], live = ntStage >= t[2];
+        var due = new Date(ntDates.acceptanceDate + 'T12:00:00'); due.setDate(due.getDate() + t[3]);
+        var overdue = live && due < today;
+        var cls = overdue ? 'ov' : live ? 'now' : 'up';
+        var lab = overdue ? 'Overdue' : live ? 'Now' : 'Upcoming';
+        h += '<div class="tcrow"><span class="p ' + cls + '">' + lab + '</span>'
+           + '<span class="lb">' + t[1] + ' <i>· by ' + ntFmt(ntISO(due)) + '</i></span>'
+           + (live ? '<button class="dft" type="button" onclick="ntMail(\'' + t[0] + '\')">Draft</button>' : '')
+           + '<span class="tick">✓</span><span class="ex">✕</span></div>';
+      }
+      tc.innerHTML = h;
+    }
+
+    // client dashboard
+    var dcEl = document.getElementById('nt-dc');
+    if (underContract) {
+      var dc = Math.ceil((new Date(ntDates.closingDate + 'T12:00:00') - today) / 86400000);
+      dcEl.textContent = dc > 0 ? dc + ' days to closing' : dc === 0 ? 'Closing Today! 🎉' : 'Closed!';
+    } else {
+      dcEl.textContent = 'Preparing to list';
+    }
+
+    h = '';
+    if (underContract) {
+      for (i = 0; i < NT_TL.length; i++) {
+        var iso = ntDates[NT_TL[i][0]];
+        var dd  = new Date(iso + 'T12:00:00');
+        var diff = Math.ceil((dd - today) / 86400000);
+        var row = diff < 0 ? 'past' : diff === 0 ? 'today' : 'fut';
+        var tag = diff < 0 ? '<span class="tg">✓ Done</span>'
+                : diff === 0 ? '<span class="tg">Today</span>'
+                : '<span class="tg">' + diff + 'd away</span>';
+        h += '<div class="drow ' + row + '"><div class="l1"><span class="ic">' + NT_TL[i][2] + '</span>'
+           + '<span class="lb">' + NT_TL[i][1] + '</span>' + tag + '</div>'
+           + '<div class="l2">' + ntFmt(iso) + ' · tap for info</div></div>';
+      }
+    } else {
+      h = '<div class="drow fut"><div class="l1"><span class="lb" style="color:#9a9a90;font-weight:400;">'
+        + 'Dates appear here the moment the deal goes under contract — you type one, NestTrack fills the rest.'
+        + '</span></div></div>';
+    }
+    document.getElementById('nt-tl').innerHTML = h;
+
+    ntTrail();
+
+    var pct = Math.round((ntStage / NT_STEPS.length) * 100);
+    document.getElementById('nt-pname').textContent = NT_STEPS[ntStage-1];
+    document.getElementById('nt-plabel').textContent = 'Step ' + ntStage + ' of ' + NT_STEPS.length;
+    document.getElementById('nt-pfill').style.width = pct + '%';
+  }
+
+  // renderSellerTrail, rebuilt: a zig-zag of bubbles on a dashed amber path, the walked part
+  // drawn solid, the current one haloed. Same geometry and colours as the app.
+  function ntTrail(){
+    var mob = window.innerWidth <= 700;
+    var r = mob ? 30 : 28, stageW = mob ? 90 : 88, gap = mob ? 12 : 14;
+    var svgH = mob ? 160 : 150, cy0 = mob ? 48 : 50, cy1 = mob ? 106 : 96;
+    var cols = NT_STEPS.length, totalW = cols * (stageW + gap) + 16;
+    var emojiSize = mob ? 18 : 17, labelSize = mob ? 9.5 : 10;
+    var cx = function(i){ return 8 + i*(stageW+gap) + stageW/2; };
+    var cy = function(i){ return i % 2 === 0 ? cy0 : cy1; };
+    var i, svg = '<svg viewBox="0 0 ' + totalW + ' ' + svgH + '" xmlns="http://www.w3.org/2000/svg" style="display:block;width:' + totalW + 'px;min-width:' + totalW + 'px;height:' + svgH + 'px;">';
+
+    var dash = '';
+    for (i = 0; i < cols; i++) dash += (i === 0 ? 'M ' + cx(i) + ' ' + cy(i) : ' L ' + cx(i) + ' ' + cy(i));
+    svg += '<path d="' + dash + '" fill="none" stroke="#F5D0A9" stroke-width="2" stroke-dasharray="5,4"/>';
+
+    var walked = '';
+    for (i = 0; i < cols; i++) if ((i+1) <= ntStage) walked += (walked === '' ? 'M ' + cx(i) + ' ' + cy(i) : ' L ' + cx(i) + ' ' + cy(i));
+    if (walked) svg += '<path d="' + walked + '" fill="none" stroke="#D97706" stroke-width="2"/>';
+
+    for (i = 0; i < cols; i++) {
+      var x = cx(i), y = cy(i);
+      var done = (i+1) < ntStage, active = (i+1) === ntStage;
+      var fill = done ? '#D97706' : active ? '#fff' : '#FEF3C7';
+      var stroke = (done || active) ? '#D97706' : '#F59E0B';
+      var sw = active ? 2.5 : 1.5;
+      var foSize = r*2;
+      var labelY = y + (y < (mob ? 80 : 72) ? (r + 14) : -(r + 5));
+      var word = NT_STEPS[i].split(' ')[0];
+      svg += '<g>';
+      svg += '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + sw + '"/>';
+      if (active) svg += '<circle cx="' + x + '" cy="' + y + '" r="' + (r+5) + '" fill="none" stroke="#F5C97A" stroke-width="2" opacity="0.6"/>';
+      if (done) {
+        svg += '<text x="' + x + '" y="' + (y+5) + '" text-anchor="middle" font-size="' + (mob?16:13) + '" font-weight="bold" fill="#fff">\u2713</text>';
+      } else {
+        svg += '<foreignObject x="' + (x-r) + '" y="' + (y-r) + '" width="' + foSize + '" height="' + foSize + '">'
+             + '<div xmlns="http://www.w3.org/1999/xhtml" style="width:' + foSize + 'px;height:' + foSize + 'px;display:flex;align-items:center;justify-content:center;font-size:' + emojiSize + 'px;line-height:1;">' + NT_ICONS[i] + '</div></foreignObject>';
+      }
+      svg += '<text x="' + x + '" y="' + labelY + '" text-anchor="middle" font-size="' + labelSize + '" fill="' + (active ? '#92400E' : '#888') + '" font-weight="' + (active ? '600' : '400') + '">' + word + '</text>';
+      svg += '</g>';
+    }
+    document.getElementById('nt-trail').innerHTML = svg + '</svg>';
+
+    // Thirteen bubbles do not fit a client column at readable size, which is why the app
+    // scrolls this. Centre the step they are on so it never opens looking truncated.
+    var wrap = document.querySelector('.trailwrap');
+    if (wrap) {
+      var target = cx(ntStage - 1) - (wrap.clientWidth / 2);
+      wrap.scrollLeft = Math.max(0, Math.min(target, totalW - wrap.clientWidth));
+    }
+  }
+
+  function ntSetStage(v){
+    ntStage = v;
+    ntRender();
+    // The point of the whole demo: move the stage, and the client has already been told.
+    if (ntBooted) ntStageMail(v);
+  }
+  window.ntSetStage = ntSetStage;
+
+  function ntOpenMail(title, to, subject, bodyHtml, videoLabel){
+    document.getElementById('nt-mt').innerHTML = title;
+    document.getElementById('nt-mto').innerHTML = to;
+    document.getElementById('nt-msub').textContent = subject;
+    // Greeting first, then the video block, then the body — the order showEmailPreview uses.
+    var inner = '<p style="font-size:16px;font-weight:300;margin:0 0 10px;">Hi Practice,</p>'
+      + (videoLabel ? ntVideoBlock(videoLabel) : '') + bodyHtml;
+    document.getElementById('nt-mbody').innerHTML = ntMailShell(inner);
+    document.getElementById('nt-modal').classList.add('open');
+    document.querySelector('#nt-modal .mbox').scrollTop = 0;
+  }
+
+  function ntStageMail(stage){
+    var m = NT_STAGE_MAIL[stage-1]; if (!m) return;
+    ntOpenMail('📧 Sent to your client automatically',
+      'Practice Client &lt;client@example.com&gt;', m[0], m[2](), m[1]);
+  }
+
+  function ntMail(key){
+    var m = NT_MAIL[key]; if (!m) return;
+    var body = m[2].replace(/\{(\w+)\}/g, function(_, k){ return ntDates[k] ? ntFmt(ntDates[k]) : k; });
+    var html = '';
+    var paras = body.split('\n\n');
+    for (var i = 1; i < paras.length; i++) {
+      html += '<p style="font-size:14px;color:#444;line-height:1.7;margin:0 0 14px;">' + paras[i].replace(/\n/g,'<br/>') + '</p>';
+    }
+    ntOpenMail('🤖 Drafted by your AI TC', m[0], m[1], html, '');
+  }
+  window.ntMail = ntMail;
+  function ntCloseMail(){ document.getElementById('nt-modal').classList.remove('open'); }
+  window.ntCloseMail = ntCloseMail;
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') ntCloseMail(); });
+
+  (function ntInit(){
+    var sel = document.getElementById('nt-stage'), h = '', i;
+    for (i = 0; i < NT_STEPS.length; i++) {
+      h += '<option value="' + (i+1) + '"' + ((i+1) === ntStage ? ' selected' : '') + '>' + (i+1) + ' · ' + NT_STEPS[i] + '</option>';
+    }
+    sel.innerHTML = h;
+    ntBuildDates();
+    ntRender();
+    ntBooted = true;   // from here, a stage change pops the client email
+  })();
 </script>
 <!-- Account creation. Runs on THIS page, so the moment it succeeds the page already holds the
      name, email, phone and account id that steps 2 and 3 need. Same two calls the standalone
