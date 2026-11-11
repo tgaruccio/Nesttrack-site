@@ -171,6 +171,7 @@ src="https://www.facebook.com/tr?id=1940157110674752&ev=PageView&noscript=1"
   .stagerow{display:flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(255,255,255,.55);border-bottom:1px solid #F59E0B}
   .stagerow>span{font-size:10px;color:var(--t3);font-weight:700;text-transform:uppercase;flex-shrink:0}
   .stagerow select{flex:1;min-width:0;font:inherit;font-size:12px;padding:5px 6px;border:1px solid #F59E0B;border-radius:var(--rs);background:var(--sf);color:var(--t1);cursor:pointer}
+  .mobhint{display:none}
   .daterow{display:flex;overflow-x:auto;border-bottom:1px solid var(--bd);background:var(--sf2)}
   /* the app lets this row scroll sideways; on a sales page all seven need to be visible at
      once, so they share the width equally instead. */
@@ -335,6 +336,16 @@ src="https://www.facebook.com/tr?id=1940157110674752&ev=PageView&noscript=1"
     .dbtns{justify-content:stretch}
     .dbtn{flex:1}
     .offers th:nth-child(2),.offers td:nth-child(2){display:none}
+    /* The two panes stack on a phone, so the client pane is far below the control that
+       changes it. A line of warning here, and a highlight when the email closes. */
+    .mobhint{display:block;font-size:11px;font-weight:600;color:#92400E;background:#FEF3C7;
+             padding:6px 14px;border-bottom:1px solid #F59E0B;text-align:center}
+    .clic.reveal{animation:ntreveal 1.5s ease}
+  }
+  @keyframes ntreveal{
+    0%{box-shadow:0 0 0 0 rgba(217,119,6,.55)}
+    35%{box-shadow:0 0 0 7px rgba(217,119,6,.22)}
+    100%{box-shadow:0 0 0 0 rgba(217,119,6,0)}
   }
 </style>
 </head>
@@ -629,6 +640,7 @@ src="https://www.facebook.com/tr?id=1940157110674752&ev=PageView&noscript=1"
             <span>Stage</span>
             <select id="nt-stage" onchange="ntSetStage(parseInt(this.value,10))"></select>
           </div>
+          <div class="mobhint">Your client’s dashboard updates below &darr;</div>
           <div class="daterow" id="nt-dates"></div>
           <div class="dealb">
             <div class="dsum"><span>&#9989; What's Needed</span><span class="cnt" id="nt-cnt">0/10</span></div>
@@ -1007,6 +1019,7 @@ src="https://www.facebook.com/tr?id=1940157110674752&ev=PageView&noscript=1"
 
   var ntStage = 9;          // opens under contract, where the dates and the AI TC are live
   var ntDates = {};
+  var ntPendingReveal = false;
   var ntBooted = false;     // no pop-up on first paint, only on a stage the visitor changed
 
   function ntISO(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
@@ -1175,7 +1188,7 @@ src="https://www.facebook.com/tr?id=1940157110674752&ev=PageView&noscript=1"
     ntStage = v;
     ntRender();
     // The point of the whole demo: move the stage, and the client has already been told.
-    if (ntBooted) ntStageMail(v);
+    if (ntBooted) { ntPendingReveal = true; ntStageMail(v); }
   }
   window.ntSetStage = ntSetStage;
 
@@ -1208,7 +1221,22 @@ src="https://www.facebook.com/tr?id=1940157110674752&ev=PageView&noscript=1"
     ntOpenMail('🤖 Drafted by your AI TC', m[0], m[1], html, '');
   }
   window.ntMail = ntMail;
-  function ntCloseMail(){ document.getElementById('nt-modal').classList.remove('open'); }
+  function ntCloseMail(){
+    document.getElementById('nt-modal').classList.remove('open');
+    // On a phone the client pane sits a long way under the dropdown that just changed it, so
+    // dismissing the email hands them straight to the result instead of back to the control.
+    if (!ntPendingReveal) return;
+    ntPendingReveal = false;
+    if (window.innerWidth > 860) return;
+    var pane = document.querySelector('.clic');
+    if (!pane) return;
+    setTimeout(function(){
+      pane.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      pane.classList.remove('reveal');
+      void pane.offsetWidth;            // restart the animation if they step twice quickly
+      pane.classList.add('reveal');
+    }, 90);
+  }
   window.ntCloseMail = ntCloseMail;
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') ntCloseMail(); });
 
