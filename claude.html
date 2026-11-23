@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NestTrack for Claude — Help</title>
+<meta name="description" content="Connect your NestTrack account to Claude: what it can do, how to connect, and troubleshooting."/>
+<meta name="robots" content="index,follow"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0F1B33; --ink-soft:#42506B; --ink-faint:#7B8699;
+    --paper:#FBF8F3; --emerald:#1D9E75; --emerald-deep:#0B5E45;
+    --mist:#E7F1EB; --gold:#BE9C44; --line:#E4DBCD; --line-soft:#EFE9DD;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:'DM Sans',system-ui,sans-serif; color:var(--ink-soft); background:var(--paper); line-height:1.7; font-size:16px;}
+  .wrap{max-width:760px; margin:0 auto; padding:0 26px;}
+  header.nav{border-bottom:1px solid var(--line); background:var(--paper);}
+  .nav-in{display:flex; align-items:center; justify-content:space-between; height:68px;}
+  .brand{display:flex; align-items:center; gap:9px; font-family:'Fraunces',serif; font-size:21px; font-weight:500; color:var(--ink); text-decoration:none;}
+  .brand .mark{width:30px; height:30px;}
+  .nav-in a.back{font-size:14.5px; color:var(--emerald-deep); font-weight:600; text-decoration:none;}
+  main{padding:48px 0 70px;}
+  h1{font-family:'Fraunces',serif; font-size:38px; font-weight:400; color:var(--ink); letter-spacing:-0.5px; margin:0 0 8px;}
+  .updated{font-size:14px; color:var(--ink-faint); margin:0 0 36px;}
+  h2{font-family:'Fraunces',serif; font-size:23px; font-weight:500; color:var(--ink); margin:38px 0 12px;}
+  h3{font-size:16px; font-weight:600; color:var(--ink); margin:24px 0 6px;}
+  p{margin:0 0 16px;}
+  ul{margin:0 0 16px; padding-left:22px;}
+  li{margin:0 0 8px;}
+  a{color:var(--emerald-deep);}
+  strong{color:var(--ink); font-weight:600;}
+  .intro{font-size:17px; color:var(--ink-soft); background:#fff; border:1px solid var(--line); border-radius:16px; padding:22px 24px; margin:0 0 30px;}
+  footer{border-top:1px solid var(--line); padding:26px 0; font-size:13.5px; color:var(--ink-faint); text-align:center;}
+  footer a{color:var(--ink-faint);}
+  table{width:100%; border-collapse:collapse; margin:0 0 20px; background:#fff; border:1px solid var(--line); border-radius:12px; overflow:hidden; font-size:15px;}
+  th,td{text-align:left; vertical-align:top; padding:11px 14px; border-bottom:1px solid var(--line-soft);}
+  th{font-weight:600; color:var(--ink); background:var(--mist); font-size:13.5px;}
+  tr:last-child td{border-bottom:none;}
+  td:first-child{font-weight:600; color:var(--ink); white-space:nowrap;}
+  ol{margin:0 0 16px; padding-left:22px;}
+  .try{background:#fff; border:1px solid var(--line); border-radius:12px; padding:6px 20px; margin:0 0 20px;}
+  .try p{margin:12px 0; color:var(--ink);}
+  @media (max-width:560px){ td:first-child{white-space:normal;} th,td{padding:9px 10px;} h1{font-size:31px;} }
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="/">
+      <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <rect width="32" height="32" rx="9" fill="#0F1B33"/>
+        <path d="M8 21V13.5L16 8l8 5.5V21" stroke="#1D9E75" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="16" cy="18.5" r="2.4" fill="#BE9C44"/>
+      </svg>
+      NestTrack
+    </a>
+    <a class="back" href="/">← Back to site</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <h1>NestTrack for Claude</h1>
+    <p class="updated">Last updated: November 22, 2026</p>
+
+    <div class="intro">
+      Connect your NestTrack account to Claude and work your business by asking. Claude can look things up in your NestTrack and add or update your own records. It never contacts your clients.
+    </div>
+
+    <h2>What you need</h2>
+    <ul>
+      <li>A NestTrack agent or lender account</li>
+      <li>A Claude account</li>
+    </ul>
+
+    <h2>How to connect</h2>
+    <ol>
+      <li>In Claude, open the connectors directory and search for <strong>NestTrack</strong>.</li>
+      <li>Choose <strong>Connect</strong>.</li>
+      <li>Sign in to NestTrack when the page opens, then choose <strong>Allow</strong>.</li>
+    </ol>
+    <p>You only do this once. To disconnect, remove NestTrack from your connectors in Claude.</p>
+
+    <h2>What Claude can do</h2>
+    <table>
+      <tr><th>Area</th><th>Look up</th><th>Add or change</th></tr>
+      <tr><td>Clients and contacts</td><td>Find anyone by name, email or phone. See one client in full.</td><td>Add a contact. Add a dated note. Update name, phone, email, address or status.</td></tr>
+      <tr><td>To-dos</td><td>Your open list</td><td>Add, edit, mark done, delete</td></tr>
+      <tr><td>Appointments</td><td>Your schedule for the days ahead</td><td>Create, reschedule, cancel</td></tr>
+      <tr><td>Follow-ups</td><td>Who is due and how overdue</td><td></td></tr>
+      <tr><td>Deals</td><td>Open deals with stage and closing date</td><td></td></tr>
+      <tr><td>Client activity</td><td>Homes clients loved, passed on or asked to see</td><td></td></tr>
+      <tr><td>Briefings</td><td></td><td>Save a morning or afternoon briefing to your dashboard</td></tr>
+    </table>
+
+    <h2>Things to try</h2>
+    <div class="try">
+      <p>&ldquo;What&rsquo;s on my plate today?&rdquo;</p>
+      <p>&ldquo;Who am I overdue to follow up with?&rdquo;</p>
+      <p>&ldquo;Add a note to Jordan Lee: wants a first-floor bedroom.&rdquo;</p>
+      <p>&ldquo;Book a listing appointment with the Parkers on Tuesday at 6pm.&rdquo;</p>
+      <p>&ldquo;Which deals close this month?&rdquo;</p>
+    </div>
+
+    <h2>What Claude will not do</h2>
+    <ul>
+      <li><strong>Contact your clients.</strong> It cannot send an email, a text or a notification. Appointments it creates are saved without a client email. Send that from NestTrack if you want one sent.</li>
+      <li><strong>See anyone else&rsquo;s records.</strong> It only sees the account you signed in with.</li>
+      <li><strong>Delete clients or deals.</strong> It can delete a to-do and cancel an appointment, and Claude asks you first.</li>
+    </ul>
+
+    <h2>Troubleshooting</h2>
+    <ul>
+      <li><strong>Claude says to reconnect NestTrack.</strong> Your sign-in expired. Remove the connector and connect again.</li>
+      <li><strong>Claude says your time zone is not saved.</strong> Open NestTrack once on your phone or computer, then ask again.</li>
+      <li><strong>Claude says a contact already exists.</strong> Someone with that email or phone is already in your NestTrack. Ask Claude to update that person instead.</li>
+      <li><strong>A transaction task will not check off.</strong> Mark it done on the deal in NestTrack so the deal&rsquo;s checklist updates too.</li>
+      <li><strong>Claude cannot change a client&rsquo;s email.</strong> That client has a portal login under their current email. Change it on their card in NestTrack.</li>
+    </ul>
+
+    <h2>Your data</h2>
+    <p>The connector reads and writes only the records in your own NestTrack account. It stores what you ask Claude to save, such as a note, a to-do, an appointment or a briefing, and nothing else from your conversation. See our <a href="/privacy.html">privacy policy</a>.</p>
+
+    <h2>Support</h2>
+    <p>Email <a href="mailto:hi@nesttrack.io">hi@nesttrack.io</a>.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">© <span id="yr"></span> NestTrack, operated by Thomas Garuccio LLC. · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a></div>
+</footer>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
+</body>
+</html>
